@@ -47,7 +47,7 @@ function App() {
     }
     setLoading(true);
 
-    const BASE_URL = 'https://algo-back-production.up.railway.app';
+    const BASE_URL = import.meta.env.VITE_API_URL;
     const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
 
     console.log("Buscando produtos para:", searchTerm);
@@ -111,7 +111,7 @@ function App() {
   // Função para buscar k elementos via heap (testeHeap)
   const testeHeap = () => {
     setLoadingHeap(true);
-    const BASE_URL = 'https://algo-back-production.up.railway.app';
+    const BASE_URL = import.meta.env.VITE_API_URL;
     const url = `${BASE_URL}/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
 
     fetch(url)
