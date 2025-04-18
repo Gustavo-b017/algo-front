@@ -108,6 +108,7 @@ function App() {
     setCurrentPage(1);
   };
 
+  
   // Função para buscar k elementos via heap (testeHeap)
   const testeHeap = () => {
     setLoadingHeap(true);
