@@ -44,7 +44,8 @@ function App() {
       return;
     }
     setLoading(true);
-    const url = `/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
+    const url = `${import.meta.env.VITE_API_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
+
     console.log("Buscando produtos para:", searchTerm);
     fetch(url)
       .then(resp => {
@@ -106,7 +107,8 @@ function App() {
   // Função para buscar k elementos via heap (testeHeap)
   const testeHeap = () => {
     setLoadingHeap(true);
-    const url = `/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
+    const url = `${import.meta.env.VITE_API_URL}/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
+
     fetch(url)
       .then(resp => {
          if (!resp.ok) {
