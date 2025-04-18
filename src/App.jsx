@@ -23,19 +23,7 @@ function App() {
   const atualizarBusca = (termo) => {
     setSearchTerm(termo);
     setCurrentPage(1); // Reinicia para a primeira página ao atualizar a busca
-  };
-  
-  // Debounce para a busca de sugestões (200ms)
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (searchTerm) {
-        buscarProdutos();
-      }
-    }, 200);
-    return () => clearTimeout(timeoutId);
-  }, [searchTerm, buscarProdutos]);
-  
-  
+  };  
   
   // Função para buscar produtos e marcas
   const buscarProdutos = useCallback(() => {
@@ -46,7 +34,15 @@ function App() {
       return;
     }
     setLoading(true);
-
+    
+    useEffect(() => {
+      const timeoutId = setTimeout(() => {
+        if (searchTerm) {
+          buscarProdutos();
+        }
+      }, 200);
+      return () => clearTimeout(timeoutId);
+    }, [searchTerm, buscarProdutos]);
     const BASE_URL = import.meta.env.VITE_API_URL;
     const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
 
