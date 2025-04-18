@@ -34,7 +34,7 @@ function App() {
       return;
     }
     setLoading(true);
-    
+
     useEffect(() => {
       const timeoutId = setTimeout(() => {
         if (searchTerm) {
@@ -47,6 +47,8 @@ function App() {
     const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
 
     console.log("Buscando produtos para:", searchTerm);
+    console.log("→ Enviando requisição para:", url);
+
     fetch(url)
       .then(resp => {
          if (!resp.ok) {
@@ -111,6 +113,7 @@ function App() {
     const BASE_URL = import.meta.env.VITE_API_URL;
     const url = `${BASE_URL}/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
 
+    console.log("→ Resposta recebida:", text);
     fetch(url)
       .then(resp => {
          if (!resp.ok) {
