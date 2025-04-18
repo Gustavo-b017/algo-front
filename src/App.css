@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+/* Estilos para o autocomplete */
+#sugestoes {
+  position: absolute;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  width: 300px;
+  display: none;
+  z-index: 10;
+  padding: 0;
+  list-style: none;
+}
+
+#sugestoes li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+#sugestoes li:hover {
+  background: #ddd;
+}
+
+/* Esconde a seção do Heap inicialmente */
+#secao-heap {
+  display: none;
+  margin-top: 20px;
+}
