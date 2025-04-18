@@ -4,7 +4,6 @@ import ResultsTable from './components/ResultsTable';
 import Pagination from './components/Pagination';
 import HeapResults from './components/HeapResults';
 import './App.css';
-const BASE_URL = 'https://algo-back-production.up.railway.app';
 
 function App() {
   // Estados
@@ -19,13 +18,13 @@ function App() {
   const [order, setOrder] = useState('asc');
   const [loadingHeap, setLoadingHeap] = useState(false);
   const [heapResults, setHeapResults] = useState([]);
-
+  
   // Função para atualizar a busca
   const atualizarBusca = (termo) => {
     setSearchTerm(termo);
     setCurrentPage(1); // Reinicia para a primeira página ao atualizar a busca
   };
-
+  
   // Debounce para a busca de sugestões (200ms)
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -37,7 +36,7 @@ function App() {
   }, [searchTerm, buscarProdutos]);
   
   
-
+  
   // Função para buscar produtos e marcas
   const buscarProdutos = useCallback(() => {
     if (!searchTerm) {
@@ -47,6 +46,8 @@ function App() {
       return;
     }
     setLoading(true);
+    
+    const BASE_URL = 'https://algo-back-production.up.railway.app';
     const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
 
     console.log("Buscando produtos para:", searchTerm);
