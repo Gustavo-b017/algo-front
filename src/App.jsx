@@ -4,11 +4,10 @@ import ResultsTable from './components/ResultsTable';
 import Pagination from './components/Pagination';
 import HeapResults from './components/HeapResults';
 import './App.css';
-import Url from 'https://algo-back-production.up.railway.app'
+const BASE_URL = 'https://algo-back-production.up.railway.app';
 
 function App() {
   // Estados
-  const BASE_URL = 'https://algo-back-production.up.railway.app';
   const [searchTerm, setSearchTerm] = useState('');
   const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -36,6 +35,7 @@ function App() {
     }, 200);
     return () => clearTimeout(timeoutId);
   }, [searchTerm, buscarProdutos]);
+  
   
 
   // Função para buscar produtos e marcas
