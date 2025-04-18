@@ -5,8 +5,6 @@ import Pagination from './components/Pagination';
 import HeapResults from './components/HeapResults';
 import './App.css';
 
-const BASE_URL = import.meta.env.VITE_API_URL;
-
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [brands, setBrands] = useState([]);
@@ -15,25 +13,17 @@ function App() {
   const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itensPorPagina = 15;
   const [order, setOrder] = useState('asc');
   const [loadingHeap, setLoadingHeap] = useState(false);
   const [heapResults, setHeapResults] = useState([]);
+
+  const itensPorPagina = 15;
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const atualizarBusca = (termo) => {
     setSearchTerm(termo);
     setCurrentPage(1);
   };
-
-  // ✅ Hook corretamente fora da função
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (searchTerm) {
-        buscarProdutos();
-      }
-    }, 200);
-    return () => clearTimeout(timeoutId);
-  }, [searchTerm, buscarProdutos]);
 
   const buscarProdutos = useCallback(() => {
     if (!searchTerm) {
@@ -44,15 +34,17 @@ function App() {
     }
 
     setLoading(true);
-
     const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
+
     console.log("→ Buscando produtos para:", searchTerm);
     console.log("→ Enviando requisição para:", url);
 
     fetch(url)
       .then(resp => {
         if (!resp.ok) {
-          return resp.text().then(text => { throw new Error(text || `Erro ao buscar produtos (status ${resp.status})`); });
+          return resp.text().then(text => {
+            throw new Error(text || `Erro ao buscar produtos (status ${resp.status})`);
+          });
         }
         return resp.text();
       })
@@ -60,7 +52,6 @@ function App() {
         if (!text) {
           setResults([]);
           setBrands([]);
-          setLoading(false);
           return;
         }
         try {
@@ -72,15 +63,25 @@ function App() {
           setResults([]);
           setBrands([]);
         }
-        setLoading(false);
       })
       .catch(err => {
         console.error("Erro ao buscar produtos:", err);
         setResults([]);
         setBrands([]);
+      })
+      .finally(() => {
         setLoading(false);
       });
-  }, [searchTerm, order, currentPage, itensPorPagina]);
+  }, [searchTerm, order, currentPage, itensPorPagina, BASE_URL]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm) {
+        buscarProdutos();
+      }
+    }, 200);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, buscarProdutos]);
 
   useEffect(() => {
     if (selectedBrand) {
@@ -107,18 +108,20 @@ function App() {
     setLoadingHeap(true);
     const url = `${BASE_URL}/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
 
+    console.log("→ Enviando requisição Heap para:", url);
+
     fetch(url)
       .then(resp => {
         if (!resp.ok) {
-          return resp.text().then(text => { throw new Error(text || `Erro no endpoint heap (status ${resp.status})`); });
+          return resp.text().then(text => {
+            throw new Error(text || `Erro no endpoint heap (status ${resp.status})`);
+          });
         }
         return resp.text();
       })
       .then(text => {
-        console.log("→ Resposta recebida:", text);
         if (!text) {
           setHeapResults([]);
-          setLoadingHeap(false);
           return;
         }
         try {
@@ -128,11 +131,12 @@ function App() {
           console.error("Erro ao parsear JSON do heap:", error);
           setHeapResults([]);
         }
-        setLoadingHeap(false);
       })
       .catch(err => {
         console.error("Erro no endpoint heap:", err);
         setHeapResults([]);
+      })
+      .finally(() => {
         setLoadingHeap(false);
       });
   };
