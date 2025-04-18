@@ -1,209 +1,269 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Navbar from './components/Navbar';
-import ResultsTable from './components/ResultsTable';
-import Pagination from './components/Pagination';
-import HeapResults from './components/HeapResults';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
+import ResultsTable from './components/ResultsTable';
+import HeapResults from './components/HeapResults';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [brands, setBrands] = useState([]);
-  const [selectedBrand, setSelectedBrand] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [allResults, setAllResults] = useState([]);
   const [results, setResults] = useState([]);
-  const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [order, setOrder] = useState('asc');
-  const [loadingHeap, setLoadingHeap] = useState(false);
-  const [heapResults, setHeapResults] = useState([]);
+  const [mostrarResultados, setMostrarResultados] = useState(false);
+  const [availableBrands, setAvailableBrands] = useState([]);
+  const [marcaSelecionada, setMarcaSelecionada] = useState('');
+  const resultadosPorPagina = 15;
+  const wrapperRef = useRef(null);
 
-  const itensPorPagina = 15;
   const BASE_URL = import.meta.env.VITE_API_URL;
 
-  const atualizarBusca = (termo) => {
-    setSearchTerm(termo);
-    setCurrentPage(1);
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
   };
+
+  const debouncedFetchRef = useRef(
+    debounce((term) => {
+      setLoadingSuggestions(true);
+      setSuggestions(['Pesquisando...']);
+      const url = `${BASE_URL}/autocomplete?prefix=${encodeURIComponent(term)}`;
+      fetch(url)
+        .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
+        .then(data => {
+          setSuggestions(Array.isArray(data) ? data : []);
+          setLoadingSuggestions(false);
+        })
+        .catch(() => {
+          setSuggestions([]);
+          setLoadingSuggestions(false);
+        });
+    }, 200)
+  );
+
+  const buscarMarcasAutomaticamente = useCallback(async (termo) => {
+    try {
+      const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(termo)}&pagina=1&itensPorPagina=200`;
+      const resp = await fetch(url);
+      const data = await resp.json();
+      const produtos = Array.isArray(data.results) ? data.results : [];
+
+      const marcas = Array.from(
+        new Set(produtos.map(item => (item.data?.marca || item.marca)).filter(Boolean))
+      );
+
+      setAvailableBrands(marcas);
+      if (!marcas.includes(marcaSelecionada)) {
+        setMarcaSelecionada(marcas[0] || '');
+      }
+    } catch (err) {
+      console.error("Erro ao buscar marcas automaticamente", err);
+      setAvailableBrands([]);
+      setMarcaSelecionada('');
+    }
+  }, [marcaSelecionada, BASE_URL]);
+
+  useEffect(() => {
+    if (searchTerm.trim() !== '') {
+      debouncedFetchRef.current(searchTerm);
+      buscarMarcasAutomaticamente(searchTerm);
+    } else {
+      setSuggestions([]);
+      setAvailableBrands([]);
+      setMarcaSelecionada('');
+    }
+  }, [searchTerm, buscarMarcasAutomaticamente]);
 
   const buscarProdutos = useCallback(() => {
-    if (!searchTerm) {
-      setResults([]);
-      setBrands([]);
-      setSelectedBrand('');
-      return;
-    }
+    if (searchTerm.trim() === '' || marcaSelecionada.trim() === '') return;
 
     setLoading(true);
-    const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
+    setMostrarResultados(false);
 
-    console.log("→ Buscando produtos para:", searchTerm);
-    console.log("→ Enviando requisição para:", url);
+    const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&pagina=1&itensPorPagina=200`;
 
     fetch(url)
-      .then(resp => {
-        if (!resp.ok) {
-          return resp.text().then(text => {
-            throw new Error(text || `Erro ao buscar produtos (status ${resp.status})`);
-          });
-        }
-        return resp.text();
-      })
-      .then(text => {
-        if (!text) {
-          setResults([]);
-          setBrands([]);
-          return;
-        }
-        try {
-          const data = JSON.parse(text);
-          setResults(Array.isArray(data.results) ? data.results : []);
-          setBrands(Array.isArray(data.brands) ? data.brands : []);
-        } catch (error) {
-          console.error("Erro ao parsear JSON da busca:", error);
-          setResults([]);
-          setBrands([]);
-        }
+      .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
+      .then(data => {
+        const produtos = Array.isArray(data.results) ? data.results : [];
+
+        let filtrados = produtos.filter(item => {
+          const marca = item.data?.marca || item.marca || '';
+          return marca.toLowerCase() === marcaSelecionada.toLowerCase();
+        });
+
+        filtrados = filtrados.sort((a, b) => {
+          const nomeA = (a.data?.nomeProduto || a.nomeProduto || '').toLowerCase();
+          const nomeB = (b.data?.nomeProduto || b.nomeProduto || '').toLowerCase();
+          return order === 'asc' ? nomeA.localeCompare(nomeB) : nomeB.localeCompare(nomeA);
+        });
+
+        setAllResults(filtrados);
+        setCurrentPage(1);
+        setMostrarResultados(true);
+        setLoading(false);
       })
       .catch(err => {
-        console.error("Erro ao buscar produtos:", err);
-        setResults([]);
-        setBrands([]);
-      })
-      .finally(() => {
+        console.error("Erro ao buscar produtos", err);
+        setAllResults([]);
         setLoading(false);
       });
-  }, [searchTerm, order, currentPage, itensPorPagina, BASE_URL]);
+  }, [searchTerm, marcaSelecionada, order, BASE_URL]);
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (searchTerm) {
-        buscarProdutos();
+    if (searchTerm && marcaSelecionada) {
+      buscarProdutos();
+    }
+  }, [searchTerm, marcaSelecionada, order, buscarProdutos]);
+
+  useEffect(() => {
+    const start = (currentPage - 1) * resultadosPorPagina;
+    const end = start + resultadosPorPagina;
+    setResults(allResults.slice(start, end));
+  }, [allResults, currentPage]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setShowSuggestions(false);
       }
-    }, 200);
-    return () => clearTimeout(timeoutId);
-  }, [searchTerm, buscarProdutos]);
-
-  useEffect(() => {
-    if (selectedBrand) {
-      const filtered = results.filter(item => {
-        const marca = item.data ? item.data.marca : item.marca;
-        return marca === selectedBrand;
-      });
-      setFilteredResults(filtered);
-    } else {
-      setFilteredResults([]);
     }
-  }, [results, selectedBrand]);
 
-  const handleBrandSelect = (e) => {
-    setSelectedBrand(e.target.value);
-  };
-
-  const handleOrderChange = (e) => {
-    setOrder(e.target.value);
-    setCurrentPage(1);
-  };
-
-  const testeHeap = () => {
-    setLoadingHeap(true);
-    const url = `${BASE_URL}/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
-
-    console.log("→ Enviando requisição Heap para:", url);
-
-    fetch(url)
-      .then(resp => {
-        if (!resp.ok) {
-          return resp.text().then(text => {
-            throw new Error(text || `Erro no endpoint heap (status ${resp.status})`);
-          });
-        }
-        return resp.text();
-      })
-      .then(text => {
-        if (!text) {
-          setHeapResults([]);
-          return;
-        }
-        try {
-          const data = JSON.parse(text);
-          setHeapResults(Array.isArray(data) ? data : []);
-        } catch (error) {
-          console.error("Erro ao parsear JSON do heap:", error);
-          setHeapResults([]);
-        }
-      })
-      .catch(err => {
-        console.error("Erro no endpoint heap:", err);
-        setHeapResults([]);
-      })
-      .finally(() => {
-        setLoadingHeap(false);
-      });
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
+    function handleEscKey(event) {
+      if (event.key === 'Escape') {
+        setShowSuggestions(false);
+      }
     }
-  };
 
-  const nextPage = () => {
-    setCurrentPage(prev => prev + 1);
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, []);
+
+  const highlightMatch = (text, prefix) => {
+    const idx = text.toLowerCase().indexOf(prefix.toLowerCase());
+    if (idx === -1) return text;
+    return (
+      text.substring(0, idx) + '<strong>' +
+      text.substring(idx, idx + prefix.length) + '</strong>' +
+      text.substring(idx + prefix.length)
+    );
   };
 
   return (
-    <div className="container p-4">
-      <Navbar atualizarBusca={atualizarBusca} />
-      <h2>Buscar Produtos</h2>
-      <div className="d-flex mb-3">
-        <input
-          type="text"
-          className="form-control me-2"
-          placeholder="Digite o nome do produto..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select className="form-select" value={selectedBrand} onChange={handleBrandSelect}>
-          <option value="">Selecione a Marca</option>
-          {brands.map((brand, idx) => (
-            <option key={idx} value={brand}>{brand}</option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-3">
-        <label htmlFor="ordem" className="form-label">Ordem:</label>
-        <select
-          id="ordem"
-          className="form-select"
-          value={order}
-          onChange={handleOrderChange}
-        >
-          <option value="asc">Crescente</option>
-          <option value="desc">Decrescente</option>
-        </select>
-      </div>
-      {searchTerm && selectedBrand && (
-        <>
-          {loading ? (
-            <div className="text-center mt-2">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Carregando...</span>
-              </div>
+    <div className="container py-4">
+      <h2 className="mb-4">Buscar Produtos</h2>
+
+      <div className="row g-3 align-items-end">
+        <div className="col-md-6 position-relative" ref={wrapperRef}>
+          <label className="form-label">Produto:</label>
+          <div className="position-relative">
+            <input
+              type="text"
+              className="form-control pe-5"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              placeholder="Digite para pesquisar..."
+              onFocus={() => setShowSuggestions(true)}
+            />
+            <button
+              className="btn btn-sm btn-light position-absolute top-0 end-0 mt-1 me-1"
+              onClick={() => setShowSuggestions(prev => !prev)}
+              title={showSuggestions ? 'Fechar sugestões' : 'Abrir sugestões'}
+            >
+              {showSuggestions ? '✕' : '☰'}
+            </button>
+          </div>
+
+          {(showSuggestions && (searchTerm.trim() !== '' || suggestions.length > 0)) && (
+            <div
+              className="border position-absolute w-100 bg-white shadow-sm mt-1"
+              style={{ maxHeight: '250px', overflowY: 'auto', zIndex: 1050 }}
+            >
+              {loadingSuggestions ? (
+                <div className="p-2">Pesquisando...</div>
+              ) : (
+                <ul className="list-unstyled mb-0">
+                  {suggestions[0] === "Pesquisando..." ? (
+                    <li className="p-2 text-muted">{suggestions[0]}</li>
+                  ) : (
+                    suggestions.map((sug, i) => {
+                      const label = sug.data?.nomeProduto || sug.nome || sug;
+                      return (
+                        <li
+                          key={i}
+                          className="autocomplete-item px-3 py-2 border-bottom"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            setSearchTerm(label);
+                            setShowSuggestions(false);
+                          }}
+                          dangerouslySetInnerHTML={{ __html: highlightMatch(label, searchTerm) }}
+                        />
+                      );
+                    })
+                  )}
+                </ul>
+              )}
             </div>
-          ) : (
-            <>
-              <ResultsTable results={filteredResults} loading={loading} />
-              <Pagination
-                currentPage={currentPage}
-                prevPage={prevPage}
-                nextPage={nextPage}
-                totalResults={filteredResults.length}
-              />
-            </>
           )}
+        </div>
+
+        <div className="col-md-4">
+          <label className="form-label">Marca:</label>
+          <select
+            className="form-select"
+            value={marcaSelecionada}
+            onChange={e => setMarcaSelecionada(e.target.value)}
+          >
+            {availableBrands.length > 0 ? (
+              availableBrands.map((m, i) => <option key={i} value={m}>{m}</option>)
+            ) : (
+              <option disabled>Selecione um produto para ver as marcas</option>
+            )}
+          </select>
+        </div>
+
+        <div className="col-md-2">
+          <label className="form-label">Ordem:</label>
+          <select
+            className="form-select"
+            value={order}
+            onChange={e => setOrder(e.target.value)}
+          >
+            <option value="asc">Crescente</option>
+            <option value="desc">Decrescente</option>
+          </select>
+        </div>
+      </div>
+
+      {loading && <div className="mt-4">Carregando resultados...</div>}
+
+      {mostrarResultados && (
+        <>
+          <h4 className="mt-4">Resultados por página</h4>
+          <ResultsTable results={results} loading={loading} />
+          <div className="mt-3 d-flex align-items-center gap-2">
+            <button className="btn btn-secondary" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Anterior</button>
+            <span>Página {currentPage}</span>
+            <button className="btn btn-secondary" onClick={() => setCurrentPage(p => p + 1)} disabled={currentPage * resultadosPorPagina >= allResults.length}>Próxima</button>
+          </div>
+
+          <div className="mt-5">
+            <h4>Resultados com Heap (Potência ou Ano)</h4>
+            <HeapResults produto={searchTerm} marca={marcaSelecionada} />
+          </div>
         </>
       )}
-      <HeapResults heapResults={heapResults} loadingHeap={loadingHeap} onTesteHeap={testeHeap} />
     </div>
   );
 }
