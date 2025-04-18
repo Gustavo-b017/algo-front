@@ -4,9 +4,11 @@ import ResultsTable from './components/ResultsTable';
 import Pagination from './components/Pagination';
 import HeapResults from './components/HeapResults';
 import './App.css';
+import Url from 'https://algo-back-production.up.railway.app'
 
 function App() {
   // Estados
+  const BASE_URL = 'https://algo-back-production.up.railway.app';
   const [searchTerm, setSearchTerm] = useState('');
   const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -33,7 +35,8 @@ function App() {
       }
     }, 200);
     return () => clearTimeout(timeoutId);
-  }, [searchTerm]);
+  }, [searchTerm, buscarProdutos]);
+  
 
   // Função para buscar produtos e marcas
   const buscarProdutos = useCallback(() => {
@@ -44,7 +47,7 @@ function App() {
       return;
     }
     setLoading(true);
-    const url = `${import.meta.env.VITE_API_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
+    const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&ordem=${order}&pagina=${currentPage}&itensPorPagina=${itensPorPagina}`;
 
     console.log("Buscando produtos para:", searchTerm);
     fetch(url)
@@ -107,7 +110,7 @@ function App() {
   // Função para buscar k elementos via heap (testeHeap)
   const testeHeap = () => {
     setLoadingHeap(true);
-    const url = `${import.meta.env.VITE_API_URL}/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
+    const url = `${BASE_URL}/heap?produto=${encodeURIComponent(searchTerm)}&k=3&largest=true&key=hp`;
 
     fetch(url)
       .then(resp => {
