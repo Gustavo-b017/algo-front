@@ -113,7 +113,7 @@ setMostrarResultados(true);
         setAllResults([]);
         setLoading(false);
       });
-  }, [searchTerm, marcaSelecionada, order, BASE_URL]);
+  }, [searchTerm, marcaSelecionada, currentPage, order, BASE_URL]);
 
   useEffect(() => {
     if (searchTerm && marcaSelecionada) {
