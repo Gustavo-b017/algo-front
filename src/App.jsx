@@ -86,7 +86,7 @@ function App() {
     setLoading(true);
     setMostrarResultados(false);
 
-    const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&pagina=1&itensPorPagina=200`;
+    const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&marca=${encodeURIComponent(marcaSelecionada)}&pagina=${currentPage}&itensPorPagina=${resultadosPorPagina}&ordem=${order}`;
 
     fetch(url)
       .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
@@ -104,9 +104,8 @@ function App() {
           return order === 'asc' ? nomeA.localeCompare(nomeB) : nomeB.localeCompare(nomeA);
         });
 
-        setAllResults(filtrados);
-        setCurrentPage(1);
-        setMostrarResultados(true);
+        setResults(filtrados);
+setMostrarResultados(true);
         setLoading(false);
       })
       .catch(err => {
@@ -122,11 +121,7 @@ function App() {
     }
   }, [searchTerm, marcaSelecionada, order, buscarProdutos]);
 
-  useEffect(() => {
-    const start = (currentPage - 1) * resultadosPorPagina;
-    const end = start + resultadosPorPagina;
-    setResults(allResults.slice(start, end));
-  }, [allResults, currentPage]);
+  
 
   useEffect(() => {
     function handleClickOutside(event) {
