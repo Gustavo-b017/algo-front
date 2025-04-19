@@ -1,21 +1,27 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import './App.css';
+
+import SearchInput from './components/SearchInput';
+import MarcaSelector from './components/MarcaSelector';
+import OrderSelector from './components/OrderSelector';
+import Paginator from './components/Paginator';
 import ResultsTable from './components/ResultsTable';
-import HeapResults from './components/HeapResults';
+
+const HeapResults = lazy(() => import('./components/HeapResults'));
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [allResults, setAllResults] = useState([]);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [order, setOrder] = useState('asc');
-  const [mostrarResultados, setMostrarResultados] = useState(false);
+  const [showHeap, setShowHeap] = useState(false);
   const [availableBrands, setAvailableBrands] = useState([]);
   const [marcaSelecionada, setMarcaSelecionada] = useState('');
+  const [mostrarResultados, setMostrarResultados] = useState(false);
   const resultadosPorPagina = 15;
   const wrapperRef = useRef(null);
 
@@ -86,42 +92,28 @@ function App() {
     setLoading(true);
     setMostrarResultados(false);
 
-    const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&marca=${encodeURIComponent(marcaSelecionada)}&pagina=${currentPage}&itensPorPagina=${resultadosPorPagina}&ordem=${order}`;
+    const url = `${BASE_URL}/tabela?produto=${encodeURIComponent(searchTerm)}&marca=${encodeURIComponent(marcaSelecionada)}&pagina=${currentPage}&itensPorPagina=${resultadosPorPagina}&ordem=${order}`;
 
     fetch(url)
       .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
       .then(data => {
         const produtos = Array.isArray(data.results) ? data.results : [];
-
-        let filtrados = produtos.filter(item => {
-          const marca = item.data?.marca || item.marca || '';
-          return marca.toLowerCase() === marcaSelecionada.toLowerCase();
-        });
-
-        filtrados = filtrados.sort((a, b) => {
-          const nomeA = (a.data?.nomeProduto || a.nomeProduto || '').toLowerCase();
-          const nomeB = (b.data?.nomeProduto || b.nomeProduto || '').toLowerCase();
-          return order === 'asc' ? nomeA.localeCompare(nomeB) : nomeB.localeCompare(nomeA);
-        });
-
-        setResults(filtrados);
-setMostrarResultados(true);
+        setResults(produtos);
+        setMostrarResultados(true);
         setLoading(false);
       })
       .catch(err => {
         console.error("Erro ao buscar produtos", err);
-        setAllResults([]);
+        setResults([]);
         setLoading(false);
       });
-  }, [searchTerm, marcaSelecionada, currentPage, order, BASE_URL]);
+  }, [searchTerm, marcaSelecionada, order, currentPage, BASE_URL]);
 
   useEffect(() => {
     if (searchTerm && marcaSelecionada) {
       buscarProdutos();
     }
-  }, [searchTerm, marcaSelecionada, order, buscarProdutos]);
-
-  
+  }, [searchTerm, marcaSelecionada, order, currentPage, buscarProdutos]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -159,86 +151,25 @@ setMostrarResultados(true);
       <h2 className="mb-4">Buscar Produtos</h2>
 
       <div className="row g-3 align-items-end">
-        <div className="col-md-6 position-relative" ref={wrapperRef}>
-          <label className="form-label">Produto:</label>
-          <div className="position-relative">
-            <input
-              type="text"
-              className="form-control pe-5"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              placeholder="Digite para pesquisar..."
-              onFocus={() => setShowSuggestions(true)}
-            />
-            <button
-              className="btn btn-sm btn-light position-absolute top-0 end-0 mt-1 me-1"
-              onClick={() => setShowSuggestions(prev => !prev)}
-              title={showSuggestions ? 'Fechar sugestões' : 'Abrir sugestões'}
-            >
-              {showSuggestions ? '✕' : '☰'}
-            </button>
-          </div>
-
-          {(showSuggestions && (searchTerm.trim() !== '' || suggestions.length > 0)) && (
-            <div
-              className="border position-absolute w-100 bg-white shadow-sm mt-1"
-              style={{ maxHeight: '250px', overflowY: 'auto', zIndex: 1050 }}
-            >
-              {loadingSuggestions ? (
-                <div className="p-2">Pesquisando...</div>
-              ) : (
-                <ul className="list-unstyled mb-0">
-                  {suggestions[0] === "Pesquisando..." ? (
-                    <li className="p-2 text-muted">{suggestions[0]}</li>
-                  ) : (
-                    suggestions.map((sug, i) => {
-                      const label = sug.data?.nomeProduto || sug.nome || sug;
-                      return (
-                        <li
-                          key={i}
-                          className="autocomplete-item px-3 py-2 border-bottom"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => {
-                            setSearchTerm(label);
-                            setShowSuggestions(false);
-                          }}
-                          dangerouslySetInnerHTML={{ __html: highlightMatch(label, searchTerm) }}
-                        />
-                      );
-                    })
-                  )}
-                </ul>
-              )}
-            </div>
-          )}
-        </div>
-
-        <div className="col-md-4">
-          <label className="form-label">Marca:</label>
-          <select
-            className="form-select"
-            value={marcaSelecionada}
-            onChange={e => setMarcaSelecionada(e.target.value)}
-          >
-            {availableBrands.length > 0 ? (
-              availableBrands.map((m, i) => <option key={i} value={m}>{m}</option>)
-            ) : (
-              <option disabled>Selecione um produto para ver as marcas</option>
-            )}
-          </select>
-        </div>
-
-        <div className="col-md-2">
-          <label className="form-label">Ordem:</label>
-          <select
-            className="form-select"
-            value={order}
-            onChange={e => setOrder(e.target.value)}
-          >
-            <option value="asc">Crescente</option>
-            <option value="desc">Decrescente</option>
-          </select>
-        </div>
+        <SearchInput
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          showSuggestions={showSuggestions}
+          setShowSuggestions={setShowSuggestions}
+          suggestions={suggestions}
+          loadingSuggestions={loadingSuggestions}
+          wrapperRef={wrapperRef}
+          highlightMatch={highlightMatch}
+        />
+        <MarcaSelector
+          availableBrands={availableBrands}
+          marcaSelecionada={marcaSelecionada}
+          setMarcaSelecionada={setMarcaSelecionada}
+        />
+        <OrderSelector
+          order={order}
+          setOrder={setOrder}
+        />
       </div>
 
       {loading && <div className="mt-4">Carregando resultados...</div>}
@@ -246,16 +177,25 @@ setMostrarResultados(true);
       {mostrarResultados && (
         <>
           <h4 className="mt-4">Resultados por página</h4>
-          <ResultsTable results={results} loading={loading} />
-          <div className="mt-3 d-flex align-items-center gap-2">
-            <button className="btn btn-secondary" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Anterior</button>
-            <span>Página {currentPage}</span>
-            <button className="btn btn-secondary" onClick={() => setCurrentPage(p => p + 1)} disabled={currentPage * resultadosPorPagina >= allResults.length}>Próxima</button>
+          <div style={{ overflowX: "auto" }}>
+            <ResultsTable results={results} loading={loading} />
           </div>
+          <Paginator
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            total={results.length}
+            porPagina={resultadosPorPagina}
+          />
 
-          <div className="mt-5">
-            <h4>Resultados com Heap (Potência ou Ano)</h4>
-            <HeapResults produto={searchTerm} marca={marcaSelecionada} />
+          <div className="mt-4">
+            <button className="btn btn-outline-primary" onClick={() => setShowHeap(true)}>
+              Carregar análise Heap
+            </button>
+            {showHeap && (
+              <Suspense fallback={<div>Carregando Heap...</div>}>
+                <HeapResults produto={searchTerm} marca={marcaSelecionada} />
+              </Suspense>
+            )}
           </div>
         </>
       )}
