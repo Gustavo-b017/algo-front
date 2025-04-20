@@ -1,31 +1,29 @@
 
 import React from "react";
 
-function ResultsTable({ results, loading }) {
-  if (loading) return <div>Carregando...</div>;
-  if (!results.length) return <div>Nenhum resultado encontrado.</div>;
-
+function ResultsTable({ resultados }) {
   return (
-    <div className="table-responsive">
-      <table className="table table-bordered table-striped table-sm">
-        <thead className="table-light">
+    <div className="overflow-x-auto mt-4">
+      <table className="min-w-full bg-white border border-gray-300 shadow-md">
+        <thead className="bg-gray-100">
           <tr>
-            <th>Nome</th>
-            <th>Marca</th>
-            <th>Montadora</th>
-            <th>Carroceria</th>
-            <th>Ano</th>
-<th>Potência</th>
+            <th className="py-2 px-4 border-b">Nome</th>
+            <th className="py-2 px-4 border-b">Marca</th>
+            <th className="py-2 px-4 border-b">Montadora</th>
+            <th className="py-2 px-4 border-b">Carroceria</th>
+            <th className="py-2 px-4 border-b">Ano</th>
+            <th className="py-2 px-4 border-b">Potência</th>
           </tr>
         </thead>
         <tbody>
-          {results.map((item, i) => (
-            <tr key={i}>
-              <td>{item.nome}</td>
-              <td>{item.data?.marca || item.marca || "-"}</td>
-              <td>{item.preco}</td>
-              <td>{item.ano}</td>
-              <td>{item.potencia}</td>
+          {resultados.map((item, index) => (
+            <tr key={index} className="text-center">
+              <td className="py-2 px-4 border-b">{item.nome}</td>
+              <td className="py-2 px-4 border-b">{item.marca}</td>
+              <td className="py-2 px-4 border-b">{item.montadora}</td>
+              <td className="py-2 px-4 border-b">{item.carroceria}</td>
+              <td className="py-2 px-4 border-b">{item.ano}</td>
+              <td className="py-2 px-4 border-b">{item.potencia}</td>
             </tr>
           ))}
         </tbody>
