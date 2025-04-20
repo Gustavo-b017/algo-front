@@ -1,35 +1,37 @@
 
-import React from "react";
+import React from 'react';
 
 function ResultsTable({ results, loading }) {
   if (loading) return <div>Carregando...</div>;
-  if (!results.length) return <div>Nenhum resultado encontrado.</div>;
 
   return (
-    <div className="table-responsive">
-      <table className="table table-bordered table-striped table-sm">
-        <thead className="table-light">
-          <tr>
-            <th>Nome</th>
-            <th>Marca</th>
-            <th>Preço</th>
-            <th>Ano</th>
-            <th>Potência</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((item, i) => (
-            <tr key={i}>
-              <td>{item.nome}</td>
-              <td>{item.marca}</td>
-              <td>{item.preco}</td>
-              <td>{item.ano}</td>
-              <td>{item.potencia}</td>
+    <table className="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Marca</th>
+          <th>Montadora</th>
+          <th>Carroceria</th>
+          <th>Ano</th>
+          <th>Potência</th>
+        </tr>
+      </thead>
+      <tbody>
+        {results.map((item, index) => {
+          const data = item.data || {};
+          return (
+            <tr key={index}>
+              <td>{data.nomeProduto || item.nomeProduto || ''}</td>
+              <td>{data.marca || item.marca || ''}</td>
+              <td>{data.aplicacoes?.[0]?.montadora || ''}</td>
+              <td>{data.aplicacoes?.[0]?.carroceria || ''}</td>
+              <td>{data.aplicacoes?.[0]?.fabricacaoInicial || ''} - {data.aplicacoes?.[0]?.fabricacaoFinal || ''}</td>
+              <td>{data.aplicacoes?.[0]?.hp || ''}</td>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }
 

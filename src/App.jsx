@@ -58,6 +58,7 @@ function App() {
       const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(termo)}&pagina=1&itensPorPagina=200`;
       const resp = await fetch(url);
       const data = await resp.json();
+      console.log("Dados recebidos:", data);
       const produtos = Array.isArray(data.results) ? data.results : [];
 
       const marcas = Array.from(
