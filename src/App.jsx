@@ -103,6 +103,7 @@ function App() {
       .then(data => {
         const produtos = Array.isArray(data.results) ? data.results : [];
         setResults(produtos);
+        console.log("🔎 API debugInfo:", data.debugInfo);
         
         setMostrarResultados(true);
         setLoading(false);
