@@ -59,10 +59,10 @@ function App() {
       const resp = await fetch(url);
       const data = await resp.json();
       console.log("Dados recebidos:", data);
-      const produtos = Array.isArray(data.results) ? data.results : [];
+      const produtos = Array.isArray(data) ? data : [];
 
       const marcas = Array.from(
-        new Set(produtos.map(item => (item.data?.marca || item.marca)).filter(Boolean))
+        new Set(produtos.map(item => item.marca).filter(Boolean))
       );
 
       setAvailableBrands(marcas);
@@ -93,13 +93,14 @@ function App() {
     setLoading(true);
     setMostrarResultados(false);
 
-    const url = `${BASE_URL}/tabela?produto=${encodeURIComponent(searchTerm)}&marca=${encodeURIComponent(marcaSelecionada)}&pagina=${currentPage}&itensPorPagina=${resultadosPorPagina}&ordem=${order}`;
+    const url = `${BASE_URL}/buscar?produto=${encodeURIComponent(searchTerm)}&marca=${encodeURIComponent(marcaSelecionada)}&ordem=${order}`;
 
     fetch(url)
       .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
       .then(data => {
-        const produtos = Array.isArray(data.results) ? data.results : [];
+        const produtos = Array.isArray(data) ? data : [];
         setResults(produtos);
+        console.log("🔎 API debugInfo:", data.debugInfo);
         setMostrarResultados(true);
         setLoading(false);
       })
@@ -108,7 +109,7 @@ function App() {
         setResults([]);
         setLoading(false);
       });
-  }, [searchTerm, marcaSelecionada, order, currentPage, BASE_URL]);
+  }, [searchTerm, marcaSelecionada, order, BASE_URL]);
 
   useEffect(() => {
     if (searchTerm && marcaSelecionada) {
