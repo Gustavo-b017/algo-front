@@ -62,6 +62,11 @@ function AppDebug() {
 
   return (
     <div className="container py-4">
+      <div className="mt-3">
+        <button className="btn btn-primary" onClick={() => buscarProdutos()}>
+          Buscar agora
+        </button>
+      </div>
       <h2 className="mb-4">Depuração de Produtos</h2>
 
       <div className="row g-3 align-items-end">
