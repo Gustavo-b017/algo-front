@@ -59,7 +59,9 @@ function App() {
       const resp = await fetch(url);
       const data = await resp.json();
       console.log("Dados recebidos:", data);
-      const produtos = Array.isArray(data) ? data : [];
+      const produtos = Array.isArray(data.results) ? data.results : [];
+        console.log("🔎 API debugInfo:", data.debugInfo);
+        
 
       const marcas = Array.from(
         new Set(produtos.map(item => item.marca).filter(Boolean))
@@ -98,9 +100,9 @@ function App() {
     fetch(url)
       .then(resp => resp.ok ? resp.json() : Promise.reject(resp.statusText))
       .then(data => {
-        const produtos = Array.isArray(data) ? data : [];
+        const produtos = Array.isArray(data.results) ? data.results : [];
         setResults(produtos);
-        console.log("🔎 API debugInfo:", data.debugInfo);
+        
         setMostrarResultados(true);
         setLoading(false);
       })
