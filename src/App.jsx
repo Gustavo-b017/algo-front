@@ -60,7 +60,8 @@ function App() {
       const data = await resp.json();
       console.log("Dados recebidos:", data);
       const produtos = Array.isArray(data.results) ? data.results : [];
-        console.log("🔎 API debugInfo:", data.debugInfo);
+        
+        
         
 
       const marcas = Array.from(
