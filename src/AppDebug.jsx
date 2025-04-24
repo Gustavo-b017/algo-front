@@ -88,7 +88,7 @@ function AppDebug() {
         <>
           <h4 className="mt-4">Resultados</h4>
           <div style={{ overflowX: "auto" }}>
-            <ResultsTable results={results} loading={loading} />
+            <ResultsTable results={Array.isArray(results) ? results : []} loading={loading} />
           </div>
         </>
       )}
