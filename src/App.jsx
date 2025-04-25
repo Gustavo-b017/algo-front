@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   const [query, setQuery] = useState('');
   const [sugestoes, setSugestoes] = useState([]);
@@ -20,7 +22,7 @@ function App() {
   const ultimaQueryAutocomplete = useRef('');
 
   const buscarTratados = (pagina = 1) => {
-    axios.get(`/tratados?produto=${query}&marca=${marcaSelecionada}&ordem=${ordem}&pagina=${pagina}`)
+    axios.get(`${API_URL}/tratados?produto=${query}&marca=${marcaSelecionada}&ordem=${ordem}&pagina=${pagina}`)
       .then(res => {
         const data = res.data;
         setResultados(Array.isArray(data.dados) ? data.dados : []);
@@ -44,7 +46,7 @@ function App() {
 
   useEffect(() => {
     if (query) {
-      axios.get(`/buscar?produto=${query}`)
+      axios.get(`${API_URL}/buscar?produto=${query}`)
         .then(() => buscarTratados(1))
         .catch(() => setResultados([]));
     } else {
@@ -65,9 +67,9 @@ function App() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       if (query !== ultimaQueryAutocomplete.current) {
-        axios.get(`/buscar?produto=${query}`).then(() => {
+        axios.get(`${API_URL}/buscar?produto=${query}`).then(() => {
           ultimaQueryAutocomplete.current = query;
-          axios.get(`/autocomplete?prefix=${query}`)
+          axios.get(`${API_URL}/autocomplete?prefix=${query}`)
             .then(res => {
               const data = res.data?.sugestoes;
               setSugestoes(Array.isArray(data) ? data : []);
@@ -76,7 +78,7 @@ function App() {
             .finally(() => setCarregandoSugestoes(false));
         });
       } else {
-        axios.get(`/autocomplete?prefix=${query}`)
+        axios.get(`${API_URL}/autocomplete?prefix=${query}`)
           .then(res => {
             const data = res.data?.sugestoes;
             setSugestoes(Array.isArray(data) ? data : []);
@@ -93,7 +95,7 @@ function App() {
     } else {
       setCarregandoSugestoes(true);
       setMostrarSugestoes(true);
-      axios.get(`/autocomplete?prefix=${query}`)
+      axios.get(`${API_URL}/autocomplete?prefix=${query}`)
         .then(res => {
           const data = res.data?.sugestoes;
           setSugestoes(Array.isArray(data) ? data : []);
@@ -102,7 +104,6 @@ function App() {
         .finally(() => setCarregandoSugestoes(false));
     }
   };
-
   return (
     <div className="container mt-4">
       <div className="row mb-3 align-items-start">
