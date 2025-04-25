@@ -5,9 +5,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/buscar': 'http://127.0.0.1:5000',
       '/autocomplete': 'http://127.0.0.1:5000',
-      '/heap': 'http://127.0.0.1:5000'
+      '/buscar': 'http://127.0.0.1:5000',
+      '/tratados': 'http://127.0.0.1:5000'
     }
   }
 })

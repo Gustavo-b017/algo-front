@@ -1,74 +1,42 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
-/* Estilos para o autocomplete */
-#sugestoes {
-  position: absolute;
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-  width: 300px;
-  display: none;
-  z-index: 10;
-  padding: 0;
-  list-style: none;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-#sugestoes {
-  display: block !important;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-
-#sugestoes li {
-  padding: 8px;
-  cursor: pointer;
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 
-#sugestoes li:hover {
-  background: #ddd;
+.card {
+  padding: 2em;
 }
 
-/* Esconde a seção do Heap inicialmente */
-#secao-heap {
-  display: none;
-  margin-top: 20px;
-}
-.autocomplete-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-  max-height: 250px;
-  overflow-y: auto;
-  z-index: 9999;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.autocomplete-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-}
-
-.autocomplete-item:hover {
-  background-color: #f0f0f0;
-}
-
-.autocomplete-loading {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  width: 100%;
-  padding: 8px;
-  z-index: 9999;
+.read-the-docs {
+  color: #888;
 }
