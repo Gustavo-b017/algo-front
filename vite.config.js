@@ -7,7 +7,10 @@ export default defineConfig({
     proxy: {
       '/autocomplete': process.env.VITE_API_URL,
       '/buscar': process.env.VITE_API_URL,
-      '/tratados': process.env.VITE_API_URL
+      '/tratados': process.env.VITE_API_URL,
+      '/produto': process.env.VITE_API_URL,
+      '/item': process.env.VITE_API_URL,
+      '/similares': process.env.VITE_API_URL
     }
   }
 })
