@@ -15,7 +15,7 @@ function Produto() {
     async function carregarProduto() {
       if (!produto) return;
       try {
-        await axios.get(`${API_URL}/produto?codigoReferencia=${produto.codigoReferencia}&nomeProduto=${produto.nome}`);
+        await axios.get(`${API_URL}/produto?id=${produto.id}&codigoReferencia=${encodeURIComponent(produto.codigoReferencia)}&nomeProduto=${encodeURIComponent(produto.nome)}`);
         setProdutoOk(true);
       } catch (error) {
         console.error('Erro ao chamar o componente Produto:', error);
