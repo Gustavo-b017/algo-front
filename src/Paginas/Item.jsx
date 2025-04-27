@@ -31,10 +31,14 @@ function Item() {
     return <div className="text-center mt-5"><h2>Erro ao carregar detalhes do produto.</h2></div>;
   }
 
+  const dadosApli  = dados.aplicacoes;
+  
   return (
     <div className="card p-4 mb-4">
       <h2>{dados.nomeProduto}</h2>
       <p>Marca: {dados.marca}</p>
+      <p>Modelo: {dadosApli[0]?.modelo}</p>
+      <img src={dados.imagemReal} alt={dados.nomeProduto} />
     </div>
   );
 }
