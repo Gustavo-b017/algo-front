@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Item from './Item';
 import Sugestoes from './Sugestoes';
 import axios from 'axios';
+import '../Estilosao/produto.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -31,11 +32,11 @@ function Produto() {
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container produto mt-5">
       {produtoOk && (
         <>
           <Item />
-          <Sugestoes />
+          {/* <Sugestoes /> */}
         </>
       )}
     </div>

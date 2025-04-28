@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <div className="min-vh-100 bg-white">
+    <div className="min-vh-100">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/produto/:codigo" element={<Produto />} />

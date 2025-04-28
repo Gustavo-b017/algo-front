@@ -95,10 +95,6 @@ function Home() {
     }, 300);
   }, [query]);
 
-  useEffect(() => {
-    console.log('🚀 Query atualizada na Home:', query);
-  }, [query]);
-
   const toggleSugestoes = () => {
     if (mostrarSugestoes) {
       setMostrarSugestoes(false);
@@ -120,7 +116,7 @@ function Home() {
   };
 
   return (
-    <div className="container-fluid mt-5">
+    <div className="container-fluid home mt-5">
       <div className="row g-3 mb-3 align-items-start">
         <Campos 
           query={query} 

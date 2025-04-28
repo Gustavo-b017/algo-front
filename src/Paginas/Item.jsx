@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../Estilosao/item.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -7,6 +8,7 @@ function Item() {
   const [dados, setDados] = useState(null);
   const [erro, setErro] = useState(false);
   const [carregando, setCarregando] = useState(true);
+  const [hoverIndex, setHoverIndex] = useState(null); // <- Controle do hover
 
   useEffect(() => {
     async function carregarItem() {
@@ -34,7 +36,7 @@ function Item() {
   const dadosApli = dados.aplicacoes;
 
   return (
-    <div className="card p-4 mb-4 item">
+    <div className="card item">
       <div className="detalhe">
         <div className="detalheImg">
           <img src={dados.imagemReal} alt={dados.nomeProduto} />
@@ -47,28 +49,43 @@ function Item() {
       </div>
 
       <div className="Modelo">
-        <h1 className="modeloTitulo">
-          Carros em que essa peça se aplica
-        </h1>
+        <h1 className="modeloTitulo">Carros em que essa peça se aplica</h1>
 
         <div className="modeloItem">
-          <h2>Modelo</h2>
-          <div className="modeloCarro">
-            <p>Carro: {dadosApli[0]?.carroceria}</p>
-            <p>Modelo: {dadosApli[0]?.modelo}</p>
-            <p>Montadora: {dadosApli[0]?.montadora}</p>
-            <p>Versão: {dadosApli[0]?.versao}</p>
-          </div>
+          <h2>Modelos</h2>
 
-          <h2>Dados técnicos</h2>
-          <div className="modeloTeacnico">
-            <p>Motor: {dadosApli[0]?.motor}</p>
-            <p>Combustível: {dadosApli[0]?.combustivel}</p>
-            <p>Potência: {dadosApli[0]?.hp}</p>
-            <p>Cilindrada: {dadosApli[0]?.cilindros}</p>
-            <p>Linha: {dadosApli[0]?.linha}</p>
-            <p>Inicio da fabricação: {dadosApli[0]?.fabricacaoInicial}</p>
-            <p>Fim da Fabricação: {dadosApli[0]?.fabricacaoFinal}</p>
+          <div className="modeloLista">
+            {dadosApli.map((aplicacao, index) => (
+              <div
+                key={aplicacao.id || index}
+                className={`modeloCard ${hoverIndex === index ? 'hovered' : ''}`}
+                onMouseEnter={() => setHoverIndex(index)}
+                onMouseLeave={() => setHoverIndex(null)}
+              >
+                <div className="modeloCarro">
+                  <h1>Item: {index}</h1>
+                  <p>Carro: {aplicacao.carroceria}</p>
+                  <p>Modelo: {aplicacao.modelo}</p>
+                  <p>Montadora: {aplicacao.montadora}</p>
+                  <p>Versão: {aplicacao.versao}</p>
+                </div>
+
+                {hoverIndex === index && (
+                  <div className="modeloTecnico">
+                    <hr className="divisor" />
+                    <h2>Dados técnicos</h2>
+                    <p>Motor: {aplicacao.motor}</p>
+                    <p>Combustível: {aplicacao.combustivel}</p>
+                    <p>Potência: {aplicacao.hp}</p>
+                    <p>Cilindrada: {aplicacao.cilindros}</p>
+                    <p>Linha: {aplicacao.linha}</p>
+                    <p>Início da fabricação: {aplicacao.fabricacaoInicial}</p>
+                    <p>Fim da fabricação: {aplicacao.fabricacaoFinal}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+
           </div>
         </div>
       </div>
