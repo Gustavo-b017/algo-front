@@ -2,9 +2,10 @@ import React from 'react';
 
 function AutoComplete({ sugestoes, mostrarSugestoes, carregandoSugestoes, setQuery, setMostrarSugestoes, buscarTratados }) {
   const handleSelect = (s) => {
+    console.log('🚀 Selecionado no AutoComplete:', s); // feedback atualizado
     setQuery(s);
     setMostrarSugestoes(false);
-    buscarTratados(1); // Buscar novamente página 1 ao selecionar sugestão
+    buscarTratados(1);
   };
 
   return (
@@ -15,12 +16,15 @@ function AutoComplete({ sugestoes, mostrarSugestoes, carregandoSugestoes, setQue
             <li className="list-group-item text-center">Carregando...</li>
           ) : (
             sugestoes.map((s, i) => (
-              <li
-                key={i}
-                className="list-group-item list-group-item-action"
-                onClick={() => handleSelect(s)}
-              >
-                {s}
+              <li key={i} className="list-group-item p-0">
+                <button
+                  type="button"
+                  className="list-group-item list-group-item-action w-100 text-start"
+                  onClick={() => handleSelect(s)}
+                  style={{ border: 'none', background: 'transparent' }}
+                >
+                  {s}
+                </button>
               </li>
             ))
           )}

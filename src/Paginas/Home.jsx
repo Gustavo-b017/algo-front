@@ -96,6 +96,11 @@ function Home() {
     }, 300);
   }, [query]);
 
+  // AQUI: console de acompanhamento separado
+  useEffect(() => {
+    console.log('🚀 Query atualizada na Home:', query);
+  }, [query]);
+
   const toggleSugestoes = () => {
     if (mostrarSugestoes) {
       setMostrarSugestoes(false);

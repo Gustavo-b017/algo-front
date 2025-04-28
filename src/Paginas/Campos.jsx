@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function Campos({ query, setQuery, marcas, marcaSelecionada, setMarcaSelecionada, ordem, setOrdem, dropdownRef, toggleSugestoes }) {
+  useEffect(() => {
+    console.log('Query recebida no Campos:', query); // ← feedback 3
+  }, [query]);
+  
   return (
     <>
       <div className="col-lg-3 col-md-6" ref={dropdownRef}>
