@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Campos from './Campos.jsx';
-import AutoComplete from './AutoComplete.jsx';
+import Campos from './Campos.jsx'; // <-- agora o autocomplete estará dentro do Campos.jsx
 import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -96,7 +95,6 @@ function Home() {
     }, 300);
   }, [query]);
 
-  // AQUI: console de acompanhamento separado
   useEffect(() => {
     console.log('🚀 Query atualizada na Home:', query);
   }, [query]);
@@ -125,17 +123,18 @@ function Home() {
     <div className="container-fluid mt-5">
       <div className="row g-3 mb-3 align-items-start">
         <Campos 
-          query={query} setQuery={setQuery}
-          marcas={marcas} marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
-          ordem={ordem} setOrdem={setOrdem}
+          query={query} 
+          setQuery={setQuery}
+          marcas={marcas} 
+          marcaSelecionada={marcaSelecionada} 
+          setMarcaSelecionada={setMarcaSelecionada}
+          ordem={ordem} 
+          setOrdem={setOrdem}
           dropdownRef={dropdownRef}
           toggleSugestoes={toggleSugestoes}
-        />
-        <AutoComplete 
           sugestoes={sugestoes}
           mostrarSugestoes={mostrarSugestoes}
           carregandoSugestoes={carregandoSugestoes}
-          setQuery={setQuery}
           setMostrarSugestoes={setMostrarSugestoes}
           buscarTratados={buscarTratados}
         />
