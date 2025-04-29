@@ -1,0 +1,34 @@
+.toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #333;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: transform 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.toggle-btn.aberto {
+  color: black;
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.toggle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+/* Garante que o texto do input não sobreponha o botão */
+input.form-control {
+  padding-right: 40px;
+}

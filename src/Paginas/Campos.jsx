@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import '../Estilosao/campos.css';
 
 function Campos({ query, setQuery, marcas, marcaSelecionada, setMarcaSelecionada, ordem, setOrdem, dropdownRef, toggleSugestoes, sugestoes, mostrarSugestoes, carregandoSugestoes, setMostrarSugestoes, buscarTratados }) {
   useEffect(() => {
@@ -14,7 +15,7 @@ function Campos({ query, setQuery, marcas, marcaSelecionada, setMarcaSelecionada
 
   return (
     <>
-      <div className="col-lg-3 col-md-6 position-relative" ref={dropdownRef}>
+      <div className="col-lg-3 col-md-6 position-relative campo" ref={dropdownRef}>
         <div className="position-relative">
           <input
             type="text"
@@ -24,14 +25,17 @@ function Campos({ query, setQuery, marcas, marcaSelecionada, setMarcaSelecionada
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => toggleSugestoes()}
           />
+
           <button
-            className="btn btn-sm position-absolute end-0 top-0 mt-1 me-2 bg-transparent border-0"
+            type="button"
+            className={`toggle-btn ${mostrarSugestoes ? 'aberto' : ''}`}
             title="Alternar sugestões"
             onClick={toggleSugestoes}
           >
-            &#9776;
+            {mostrarSugestoes ? '✕' : '☰'}
           </button>
         </div>
+
 
         {mostrarSugestoes && (
           <ul className="list-group position-absolute w-100 z-3 mt-1" style={{ maxHeight: '300px', overflowY: 'auto' }}>

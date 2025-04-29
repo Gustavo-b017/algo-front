@@ -4,11 +4,13 @@
   padding: 0;
   list-style: none;
   text-decoration: none;
+  /* color: white; */
   /* border: 1px solid red; */
+  /* overflow-x: hidden; */
 }
 
 body {
-  background: linear-gradient(to bottom right, #743425, #24794e, #1a1c77);
+  background: linear-gradient(to bottom right, #272727, #666968, #272727);
 }
 
 .home.container-fluid {
