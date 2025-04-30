@@ -1,9 +1,10 @@
 import React from 'react';
+import '../Estilosao/tabela.css';
 
 function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarTratados, handleLinhaClick, carregandoTabela }) {
   if (carregandoTabela) {
     return (
-      <div className="text-center mt-5">
+      <div className="tabela-carregando">
         <h1>Carregando dados...</h1>
       </div>
     );
@@ -11,9 +12,9 @@ function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarT
 
   return (
     <>
-      <div className="table-responsive w-100">
-        <table className="table table-striped table-hover">
-          <thead className="table-light">
+      <div className="tabela-container">
+        <table className="tabela">
+          <thead>
             <tr>
               <th>Nome</th>
               <th>Marca</th>
@@ -24,7 +25,12 @@ function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarT
           </thead>
           <tbody>
             {resultados.map((item, i) => (
-              <tr key={i} style={{ cursor: 'pointer' }} onClick={() => handleLinhaClick(item)}>
+              <tr
+                key={i}
+                className={i % 2 === 0 ? 'linha-par' : 'linha-impar'}
+                onClick={() => handleLinhaClick(item)}
+                style={{ cursor: 'pointer' }}
+              >
                 <td>{item.nome}</td>
                 <td>{item.marca}</td>
                 <td>{item.potencia}</td>
@@ -36,20 +42,24 @@ function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarT
         </table>
       </div>
 
-      <div className="d-flex justify-content-between">
+      <div className="tabela-controle">
         <button
-          className="btn btn-secondary"
           disabled={paginaAtual === 1}
           onClick={() => buscarTratados(paginaAtual - 1)}
         >
-          Página Anterior
+          {'<'} Voltar 
         </button>
+
+        <div className="paginacao-info">
+            Página {paginaAtual} de {totalPaginas}
+        </div>
+
         <button
-          className="btn btn-secondary bg-primary"
+          className="botao-proximo"
           disabled={!temMaisPaginas}
           onClick={() => buscarTratados(paginaAtual + 1)}
         >
-          Próxima Página
+          Próxima {'>'}
         </button>
       </div>
     </>

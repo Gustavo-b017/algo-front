@@ -116,8 +116,8 @@ function Home() {
   };
 
   return (
-    <div className="container-fluid home">
-      <div className="row align-items-start">
+    <div className="home container-fluid">
+      <div className="row">
         <Campos
           query={query}
           setQuery={setQuery}

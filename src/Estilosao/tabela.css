@@ -1,0 +1,119 @@
+/* Componente que envolve a tabela (faz o overflow funcionar) */
+.tabela-container {
+  overflow-x: auto;
+  margin-bottom: 3rem;
+
+  /* Tabela em si */
+  table {
+    padding: 30px;
+    min-width: 500px;
+    width: 95vw;
+    margin: 0 auto;
+    font-family: sans-serif;
+    font-size: 0.95rem;
+
+    /* Cabeçalho */
+    thead th {
+      background-color: transparent;
+      padding: 10px;
+      border-bottom: 2px solid #ccc;
+    }
+  }
+
+  /* Linhas */
+  tr.linha-par {
+    background-color: #1b334d;
+    /* azul claro */
+  }
+
+  tr.linha-impar {
+    background-color: #7e3e9c00;
+    /* vermelho claro */
+  }
+
+  /* Células */
+  .tabela td {
+    padding: 10px;
+    min-width: 100px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  /* Hover */
+  & tr:hover {
+    background-color: #0e1a27;
+  }
+}
+
+/* Carregando */
+.tabela-carregando {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Controles de paginação */
+.tabela-controle {
+  display: flex;
+  width: 95vw;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  button {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    background-color: #ccc;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #2a4f77;
+      color: #fff;
+    }
+
+    &:disabled {
+      background-color: #9999998f;
+      cursor: not-allowed;
+    }
+
+    &.botao-proximo {
+      background-color: #3b6b9e;
+      color: #fff;
+
+      &:hover {
+        background-color: #1b334d;
+      }
+    }
+
+    &.botao-proximo:disabled {
+      background-color: #1b334d8c;
+    }
+  }
+
+  /* Página info central */
+  .paginacao-info {
+    text-align: center;
+    flex: 1;
+  }
+}
+
+
+
+
+@media (max-width: 550px) {
+  thead th {
+    text-align: center;
+  }
+
+  .tabela td {
+    text-align: center;
+  }
+
+  .tabela-controle {
+    width: 100%;
+  }
+}
