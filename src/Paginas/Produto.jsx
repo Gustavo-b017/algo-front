@@ -15,6 +15,7 @@ function Produto() {
   useEffect(() => {
     async function carregarProduto() {
       if (!produto) return;
+      console.log("🔍 Parâmetros do produto:", produto);
       try {
         await axios.get(`${API_URL}/produto?id=${produto.id}&codigoReferencia=${encodeURIComponent(produto.codigoReferencia)}&nomeProduto=${encodeURIComponent(produto.nome)}`);
         setProdutoOk(true);
