@@ -12,25 +12,25 @@
   flex-wrap: wrap;
   gap: 30px;
   align-items: flex-start;
-  
+
   .item-imagem img {
     width: 100%;
     max-width: 320px;
     border-radius: 8px;
     object-fit: contain;
   }
-  
+
   .item-info {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    
+
     .item-nome {
       font-size: 1.8rem;
       font-weight: 600;
     }
-    
+
     .item-marca,
     .item-ref {
       font-size: 1.1rem;
@@ -41,73 +41,108 @@
 
 .item-aplicacoes {
   width: 100%;
-}
 
-.secao-titulo {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.aplicacoes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-.aplicacao-card {
-  background-color: transparent;
-  border-radius: 8px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.aplicacao-card:hover {
-  background-color: transparent;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.aplicacao-header {
-  font-size: 0.95rem;
-  color: #222;
-}
-
-.aplicacao-detalhes {
-  margin-top: 12px;
-  font-size: 0.9rem;
-  color: #000;
-}
-
-.aplicacao-detalhes p {
-  margin: 4px 0;
-}
-
-.aplicacao-detalhes hr {
-  margin: 10px 0;
-  border: none;
-  border-top: 1px solid #000;
+  .secao-titulo {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
 }
 
 .aplicacoes-scroll-limitada {
-  max-height: 520px; /* altura aproximada de 2 cards grandes */
+  max-height: 520px;
+  /* altura aproximada de 2 cards grandes */
   overflow-y: auto;
   padding-right: 8px;
+
+  /* Scroll discreto */
+  .aplicacoes-scroll-limitada::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .aplicacoes-scroll-limitada::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 200, 200, 0.5);
+    border-radius: 4px;
+  }
+
+  .aplicacoes-scroll-limitada::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .aplicacoes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+
+    .aplicacao-card {
+      background-color: transparent;
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      .aplicacao-card:hover {
+        background-color: transparent;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .aplicacao-header {
+        font-size: 0.95rem;
+        color: #222;
+      }
+
+      .aplicacao-detalhes {
+        margin-top: 12px;
+        font-size: 0.9rem;
+        color: #000;
+
+        p {
+          margin: 4px 0;
+        }
+
+        hr {
+          margin: 10px 0;
+          border: none;
+          border-top: 1px solid #ddd;
+        }
+      }
+    }
+  }
 }
 
-/* Scroll discreto */
-.aplicacoes-scroll-limitada::-webkit-scrollbar {
-  width: 6px;
+/* barra de rolamento estilizada */
+.aplicacoes-scroll-limitada {
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
+  
+  /* Chrome, Edge, Safari */
+  .aplicacoes-scroll-limitada::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent; /* canal da barra */
+  }
+  
+  .aplicacoes-scroll-limitada::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05); /* fundo branco com transparência */
+  }
+  
+  .aplicacoes-scroll-limitada::-webkit-scrollbar-thumb {
+    background-color: #ddd; /* cor do "thumb" */
+    border-radius: 10px;
+    border: 2px solid transparent; /* espaço para o efeito arredondado */
+    background-clip: content-box;
+  }
+  
+  /* Setas (botões de rolagem) */
+  .aplicacoes-scroll-limitada::-webkit-scrollbar-button {
+    height: 12px;
+    background-color: #ddd;
+    border-radius: 4px;
+  }
 }
 
-.aplicacoes-scroll-limitada::-webkit-scrollbar-thumb {
-  background-color: rgba(200, 200, 200, 0.5);
-  border-radius: 4px;
-}
-
-.aplicacoes-scroll-limitada::-webkit-scrollbar-track {
-  background: transparent;
-}
 
 
 /* Responsividade */
