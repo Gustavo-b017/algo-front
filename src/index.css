@@ -5,6 +5,8 @@
   list-style: none;
   text-decoration: none;
   color: #fff;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
   /* border: 1px solid red; */
 }
 

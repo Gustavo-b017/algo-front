@@ -37,7 +37,10 @@ function Produto() {
       {produtoOk && (
         <>
           <Item />
-          {/* <Sugestoes /> */}
+
+          <hr/>
+
+          <Sugestoes />
         </>
       )}
     </div>

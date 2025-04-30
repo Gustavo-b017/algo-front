@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../Estilosao/sugestao.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -19,7 +20,7 @@ function Sugestoes() {
       } finally {
         setCarregando(false);
       }
-    }, 500); // delay de 500ms antes de buscar
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -29,26 +30,49 @@ function Sugestoes() {
   }
 
   if (erro || !dados || (dados.similares.length === 0 && dados.produtosParcialmenteSimilares.length === 0)) {
-    return <div className="text-center mt-5"><h2>Sem sugestões visíveis.</h2></div>;
+    return null;
   }
 
-  const dadosParciais  = dados.produtosParcialmenteSimilares;
+  const similares = dados.similares || [];
+  const parciais = dados.produtosParcialmenteSimilares || [];
 
   return (
-    <div className="card p-4 mb-4">
-      <h3>Sugestões</h3>
-      {/* <p>Modelo: {dadosParciais[0]?.nomeProduto}</p> */}
-      {dadosParciais.length > 0 && (
-        <ul>
-          {dados.produtosParcialmenteSimilares.map((produto, index) => (
-            <div>
-              <li key={index}>{produto.nomeProduto}</li>
-              <li key={index}>{produto.marca}</li>
+    <div className="sugestoes-container">
+      {similares.length > 0 && (
+        <div className="sugestoes-bloco">
+          <h2 className="secao-titulo">Produtos Similares</h2>
+          <div className="aplicacoes-scroll-limitada">
+            <div className="aplicacoes-grid">
+              {similares.map((produto, index) => (
+                <div key={index} className="aplicacao-card">
+                  <div className="aplicacao-header">
+                    <p><strong>Ref:</strong> {produto.codigoReferencia}</p>
+                    <p><strong>Marca:</strong> {produto.marca}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </ul>
+          </div>
+        </div>
       )}
-      <p>filhos: {dados.produtosSistemasFilhos} </p>
+
+      {parciais.length > 0 && (
+        <div className="sugestoes-bloco">
+          <h2 className="secao-titulo">Produtos Parcialmente Similares</h2>
+          <div className="aplicacoes-scroll-limitada">
+            <div className="aplicacoes-grid">
+              {parciais.map((produto, index) => (
+                <div key={index} className="aplicacao-card">
+                  <div className="aplicacao-header">
+                    <p>{produto.nomeProduto}</p>
+                    <p><strong>Marca:</strong> {produto.marca}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
