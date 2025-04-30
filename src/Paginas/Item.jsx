@@ -33,63 +33,58 @@ function Item() {
     return <div className="text-center mt-5"><h2>Erro ao carregar detalhes do produto.</h2></div>;
   }
 
-  const dadosApli = dados.aplicacoes;
-
   return (
-    <div className="card item">
-      <div className="detalhe">
-        <div className="detalheImg">
+    <div className="item-container">
+      <div className="item-topo">
+        <div className="item-imagem">
           <img src={dados.imagemReal} alt={dados.nomeProduto} />
         </div>
 
-        <div className="detalheInfos">
-          <h2>{dados.nomeProduto}</h2>
-          <p>Marca: {dados.marca}</p>
+        <div className="item-info">
+          <h1 className="item-nome">{dados.nomeProduto}</h1>
+          <p className="item-marca">Marca: <strong>{dados.marca}</strong></p>
+          <p className="item-ref">Família: <strong>{dados.familia.descricao}</strong></p>
+          <p className="item-ref">Referência OEM: <strong>{dados.familia?.subFamiliaDescricao}</strong></p>
         </div>
       </div>
 
-      <div className="Modelo">
-        <h1 className="modeloTitulo">Carros em que essa peça se aplica</h1>
+      <div className="item-aplicacoes">
+        <h2 className="secao-titulo">Modelos Compatíveis</h2>
 
-        <div className="modeloItem">
-          <h2>Modelos</h2>
-
-          <div className="modeloLista">
-            {dadosApli.map((aplicacao, index) => (
+        <div className="aplicacoes-scroll-limitada">
+          <div className="aplicacoes-grid">
+            {dados.aplicacoes.map((aplicacao, index) => (
               <div
                 key={aplicacao.id || index}
-                className={`modeloCard ${hoverIndex === index ? 'hovered' : ''}`}
+                className={`aplicacao-card ${hoverIndex === index ? 'ativo' : ''}`}
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(null)}
               >
-                <div className="modeloCarro">
-                  <h1>Item: {index}</h1>
-                  <p>Carro: {aplicacao.carroceria}</p>
-                  <p>Modelo: {aplicacao.modelo}</p>
-                  <p>Montadora: {aplicacao.montadora}</p>
-                  <p>Versão: {aplicacao.versao}</p>
+                <div className="aplicacao-header">
+                  <p><strong>{aplicacao.modelo}</strong> - {aplicacao.versao}</p>
+                  <p>{aplicacao.carroceria} | {aplicacao.montadora}</p>
                 </div>
 
                 {hoverIndex === index && (
-                  <div className="modeloTecnico">
-                    <hr className="divisor" />
-                    <h2>Dados técnicos</h2>
-                    <p>Motor: {aplicacao.motor}</p>
-                    <p>Combustível: {aplicacao.combustivel}</p>
-                    <p>Potência: {aplicacao.hp}</p>
-                    <p>Cilindrada: {aplicacao.cilindros}</p>
-                    <p>Linha: {aplicacao.linha}</p>
-                    <p>Início da fabricação: {aplicacao.fabricacaoInicial}</p>
-                    <p>Fim da fabricação: {aplicacao.fabricacaoFinal}</p>
+                  <div className="aplicacao-detalhes">
+                    <hr />
+                    <p><strong>Motor:</strong> {aplicacao.motor}</p>
+                    <p><strong>Combustível:</strong> {aplicacao.combustivel}</p>
+                    <p><strong>Potência:</strong> {aplicacao.hp}</p>
+                    <p><strong>Cilindros:</strong> {aplicacao.cilindros}</p>
+                    <p><strong>Linha:</strong> {aplicacao.linha}</p>
+                    <p><strong>Início:</strong> {aplicacao.fabricacaoInicial}</p>
+                    <p><strong>Fim:</strong> {aplicacao.fabricacaoFinal}</p>
                   </div>
                 )}
               </div>
             ))}
-
           </div>
         </div>
       </div>
+
     </div>
+
   );
 }
 
