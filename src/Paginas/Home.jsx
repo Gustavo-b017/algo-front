@@ -116,15 +116,15 @@ function Home() {
   };
 
   return (
-    <div className="container-fluid home mt-5">
-      <div className="row g-3 mb-3 align-items-start">
-        <Campos 
-          query={query} 
+    <div className="container-fluid home">
+      <div className="row align-items-start">
+        <Campos
+          query={query}
           setQuery={setQuery}
-          marcas={marcas} 
-          marcaSelecionada={marcaSelecionada} 
+          marcas={marcas}
+          marcaSelecionada={marcaSelecionada}
           setMarcaSelecionada={setMarcaSelecionada}
-          ordem={ordem} 
+          ordem={ordem}
           setOrdem={setOrdem}
           dropdownRef={dropdownRef}
           toggleSugestoes={toggleSugestoes}
@@ -135,7 +135,7 @@ function Home() {
           buscarTratados={buscarTratados}
         />
       </div>
-      <Tabela 
+      <Tabela
         resultados={resultados}
         paginaAtual={paginaAtual}
         totalPaginas={totalPaginas}

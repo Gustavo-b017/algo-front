@@ -32,7 +32,7 @@ function Produto() {
   }
 
   return (
-    <div className="container produto">
+    <div className="container">
       {produtoOk && (
         <>
           <Item />

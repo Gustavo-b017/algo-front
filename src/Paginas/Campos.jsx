@@ -1,7 +1,22 @@
 import React, { useEffect } from 'react';
 import '../Estilosao/campos.css';
 
-function Campos({ query, setQuery, marcas, marcaSelecionada, setMarcaSelecionada, ordem, setOrdem, dropdownRef, toggleSugestoes, sugestoes, mostrarSugestoes, carregandoSugestoes, setMostrarSugestoes, buscarTratados }) {
+function Campos({
+  query,
+  setQuery,
+  marcas,
+  marcaSelecionada,
+  setMarcaSelecionada,
+  ordem,
+  setOrdem,
+  dropdownRef,
+  toggleSugestoes,
+  sugestoes,
+  mostrarSugestoes,
+  carregandoSugestoes,
+  setMostrarSugestoes,
+  buscarTratados
+}) {
   useEffect(() => {
     console.log('Query recebida no Campos:', query);
   }, [query]);
@@ -14,18 +29,19 @@ function Campos({ query, setQuery, marcas, marcaSelecionada, setMarcaSelecionada
   };
 
   return (
-    <>
-      <div className="col-lg-3 col-md-6 position-relative campo" ref={dropdownRef}>
-        <div className="position-relative">
+    <div className="campos-grid">
+
+      <div className="busca">
+
+        <div className="campo-busca" ref={dropdownRef}>
           <input
             type="text"
-            className="form-control pe-5"
+            className="campo-input"
             placeholder="Buscar..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => toggleSugestoes()}
+            onFocus={toggleSugestoes}
           />
-
           <button
             type="button"
             className={`toggle-btn ${mostrarSugestoes ? 'aberto' : ''}`}
@@ -34,55 +50,57 @@ function Campos({ query, setQuery, marcas, marcaSelecionada, setMarcaSelecionada
           >
             {mostrarSugestoes ? '✕' : '☰'}
           </button>
+
+          {mostrarSugestoes && (
+            <ul className="sugestoes-list">
+              {carregandoSugestoes ? (
+                <li className="loading">Carregando...</li>
+              ) : (
+                sugestoes.map((s, i) => (
+                  <li key={i} className="sugestao">
+                    <button
+                      type="button"
+                      onClick={() => handleSelect(s)}
+                    >
+                      {s}
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      <div className="marca-opcao">
+
+        <div className="campo-marcas">
+          <select
+            className="select-input"
+            value={marcaSelecionada}
+            onChange={(e) => setMarcaSelecionada(e.target.value)}
+          >
+            <option value="">Todas as Marcas</option>
+            {marcas.map((m, i) => (
+              <option key={i} value={m}>{m}</option>
+            ))}
+          </select>
         </div>
 
-
-        {mostrarSugestoes && (
-          <ul className="list-group position-absolute w-100 z-3 mt-1" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-            {carregandoSugestoes ? (
-              <li className="list-group-item text-center">Carregando...</li>
-            ) : (
-              sugestoes.map((s, i) => (
-                <li key={i} className="list-group-item p-0">
-                  <button
-                    type="button"
-                    className="list-group-item list-group-item-action w-100 text-start"
-                    onClick={() => handleSelect(s)}
-                    style={{ border: 'none', background: 'transparent' }}
-                  >
-                    {s}
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
-        )}
+        <div className="campo-ordem">
+          <select
+            className="select-input"
+            value={ordem}
+            onChange={(e) => setOrdem(e.target.value)}
+          >
+            <option value="asc">Crescente</option>
+            <option value="desc">Decrescente</option>
+          </select>
+        </div>
       </div>
+    </div>
 
-      <div className="col-md-4">
-        <select
-          className="form-select"
-          value={marcaSelecionada}
-          onChange={(e) => setMarcaSelecionada(e.target.value)}
-        >
-          <option value="">Todas as Marcas</option>
-          {marcas.map((m, i) => (
-            <option key={i} value={m}>{m}</option>
-          ))}
-        </select>
-      </div>
 
-      <div className="col-md-4">
-        <select
-          className="form-select"
-          value={ordem}
-          onChange={(e) => setOrdem(e.target.value)}
-        >
-          <option value="asc">Crescente</option>
-          <option value="desc">Decrescente</option>
-        </select>
-      </div>
-    </>
   );
 }
 

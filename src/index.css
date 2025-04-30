@@ -4,17 +4,23 @@
   padding: 0;
   list-style: none;
   text-decoration: none;
-  /* color: white; */
+  color: #fff;
   /* border: 1px solid red; */
-  /* overflow-x: hidden; */
 }
 
 body {
-  background: linear-gradient(to bottom right, #272727, #666968, #272727);
+  background: linear-gradient(to bottom right, #272727, #666968, #272727) no-repeat fixed;
+  min-height: 100vh;
 }
 
 .home.container-fluid {
   padding: 0;
+  margin: 0;
   border: none;
   background: none;
+  width: 100%;
+
+  .row {
+    margin: 0;
+  }
 }
