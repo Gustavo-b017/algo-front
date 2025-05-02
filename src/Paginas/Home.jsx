@@ -4,7 +4,8 @@ import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = 'http://127.0.0.1:5000/';
 
 function Home() {
   const [query, setQuery] = useState('');
@@ -112,8 +113,16 @@ function Home() {
   };
 
   const handleLinhaClick = (produto) => {
-    navigate(`/produto/${encodeURIComponent(produto.codigo)}`, { state: { produto } });
+    if (produto && produto.codigoReferencia) {
+      const query = `codigoReferencia=${encodeURIComponent(produto.codigoReferencia)}&id=${produto.id}&nomeProduto=${encodeURIComponent(produto.nome)}`;
+      navigate(`/produto/${query}`, { state: { produto } });
+
+    } else {
+      console.error('Produto inválido ao tentar navegar:', produto);
+      alert('Não foi possível acessar o produto selecionado.');
+    }
   };
+
 
   return (
     <div className="home container-fluid">
