@@ -19,6 +19,7 @@ export default defineConfig({
       '/item': 'http://127.0.0.1:5000/',
       '/similares': 'http://127.0.0.1:5000/',
       '/lojas': 'http://127.0.0.1:5000/',
+      '/rota-entrega': 'http://127.0.0.1:5000/',
     }
   }
 })
