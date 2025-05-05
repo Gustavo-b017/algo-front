@@ -6,9 +6,10 @@ import axios from 'axios';
 import '../Estilosao/produto.css';
 import Distancia from './Distancia';
 import Entregas from './Entregas';
+import Filho from './Filho';
 
 // const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'http://127.0.0.1:5000/';
+const API_URL = 'http://127.0.0.1:5000';
 
 function Produto() {
   const location = useLocation();
@@ -18,7 +19,6 @@ function Produto() {
   useEffect(() => {
     async function carregarProduto() {
       if (!produto) return;
-      console.log("🔍 Parâmetros do produto:", produto);
       try {
         await axios.get(`${API_URL}/produto?id=${produto.id}&codigoReferencia=${encodeURIComponent(produto.codigoReferencia)}&nomeProduto=${encodeURIComponent(produto.nome)}`);
         setProdutoOk(true);
@@ -41,15 +41,20 @@ function Produto() {
         <>
           <Item />
 
-          <hr/>
+          <hr />
+
+          <Filho />
+
+          <hr />
 
           <Distancia />
 
-          <hr/>
+          <hr />
 
           <Entregas />
 
-          <hr/>
+          <hr />
+
           <Sugestoes />
         </>
       )}

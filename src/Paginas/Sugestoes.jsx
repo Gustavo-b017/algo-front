@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../Estilosao/sugestao.css';
 
 // const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'http://127.0.0.1:5000/';
+const API_URL = 'http://127.0.0.1:5000';
 
 function Sugestoes() {
   const [dados, setDados] = useState(null);
