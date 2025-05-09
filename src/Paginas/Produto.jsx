@@ -4,9 +4,7 @@ import Item from './Item';
 import Sugestoes from './Sugestoes';
 import axios from 'axios';
 import '../Estilosao/produto.css';
-import Distancia from './Distancia';
 import Entregas from './Entregas';
-import Filho from './Filho';
 
 // const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
@@ -43,19 +41,11 @@ function Produto() {
 
           <hr />
 
-          <Filho />
-
-          <hr />
-
-          <Distancia />
+          <Sugestoes />
 
           <hr />
 
           <Entregas />
-
-          <hr />
-
-          <Sugestoes />
         </>
       )}
     </div>
