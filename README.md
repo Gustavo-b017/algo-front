@@ -65,6 +65,6 @@ npm install
 npm run dev
 ```
 A aplicação abrirá normalmente em `http://localhost:5173`
-
+****
 *Obrigado!*
 
