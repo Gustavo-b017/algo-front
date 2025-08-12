@@ -1,3 +1,12 @@
+:root {
+  --azul: #022e4c;
+  --vermelho: #ce0f2d;
+  --branco: #ffffff;
+  --cinza_claro: #e5e5e5;
+  --cinza_escuro: #666968;
+  --rosa: #ff007f;
+}
+
 /* Componente que envolve a tabela (faz o overflow funcionar) */
 .tabela-container {
   overflow-x: auto;
@@ -5,42 +14,45 @@
 
   /* Tabela em si */
   table {
-    padding: 30px;
+    border-collapse: collapse;
+    padding: 100%;
     min-width: 500px;
-    width: 95vw;
-    margin: 0 auto;
+    width: 95%;
+    margin: 0 2.5% 0 2.5%;
     font-family: sans-serif;
-    font-size: 0.95rem;
-
+    font-size: 0.9rem;
     /* Cabeçalho */
     thead th {
       background-color: transparent;
+      color: var(--vermelho);
       padding: 10px;
-      border-bottom: 2px solid #ccc;
+      border-bottom: 2px solid #cccccc;
     }
   }
 
   /* Linhas */
   tr.linha-par {
-    background-color: #1b334d;
-    /* azul claro */
+    background-color:var(--cinza_claro);
   }
 
   tr.linha-impar {
-    background-color: #7e3e9c00;
-    /* vermelho claro */
+    background-color: var(--branco);
   }
 
   /* Células */
   .tabela td {
     padding: 10px;
     min-width: 100px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--azul);
   }
 
   /* Hover */
-  & tr:hover {
-    background-color: #0e1a27;
+  & tr:hover{
+    background-color: var(--azul);
+  }
+
+  & tr:hover td {
+    color: var(--branco);
   }
 }
 
@@ -64,33 +76,34 @@
   button {
     padding: 8px 16px;
     font-size: 0.95rem;
-    background-color: #ccc;
-    color: #000;
+    background-color: var(--vermelho);
+    color: var(--branco);
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
 
     &:hover {
-      background-color: #2a4f77;
-      color: #fff;
+      background-color: var(--azul);
+      transition: 0.2s;
+      color: var(--branco);
     }
 
     &:disabled {
-      background-color: #9999998f;
+      background-color: var(--cinza_escuro);
       cursor: not-allowed;
     }
 
     &.botao-proximo {
-      background-color: #3b6b9e;
+      background-color: var(--azul);
       color: #fff;
 
       &:hover {
-        background-color: #1b334d;
+        background-color: var(--vermelho);
       }
     }
 
     &.botao-proximo:disabled {
-      background-color: #1b334d8c;
+      background-color: var(--cinza_escuro);
     }
   }
 
@@ -105,15 +118,26 @@
 
 
 @media (max-width: 550px) {
-  thead th {
-    text-align: center;
+  
+  .tabela-container {
+    margin: 0 auto 3rem auto;
   }
 
-  .tabela td {
-    text-align: center;
+  .tabela td, .tabela th {
+    padding: 4px;
+    font-size: 0.8rem;
+    word-break: break-word;
   }
 
   .tabela-controle {
-    width: 100%;
+    flex-direction: row;
+    align-items: stretch;
   }
+  .tabela-controle button {
+    width: 25%;
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
+
+
 }

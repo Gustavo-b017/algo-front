@@ -1,5 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../Estilosao/campos.css';
+
+function CustomSelect({ options, value, onChange, placeholder = "Selecione uma opção" }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedLabel = options.find(opt => opt.value === value)?.label || placeholder;
+  
+  return (
+    <div className={`custom-select${open ? ' open' : ''}`} ref={ref}>
+      <div
+        className="custom-select-selected"
+        onClick={() => setOpen(!open)}
+      >
+        {selectedLabel}
+      </div>
+      <ul className="custom-select-options">
+        {options.map((opt, i) => (
+          <li
+            key={i}
+            className={opt.value === value ? 'selected' : ''}
+            onClick={() => {
+              onChange(opt.value);
+              setOpen(false);
+            }}
+          >
+            {opt.label}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function Campos({
   query,
@@ -22,17 +62,25 @@ function Campos({
   }, [query]);
 
   const handleSelect = (s) => {
-    console.log('🚀 Selecionado no AutoComplete:', s);
     setQuery(s);
     setMostrarSugestoes(false);
     buscarTratados(1);
   };
 
+  // Prepare options for custom select
+  const marcaOptions = [
+    { value: '', label: 'Todas as Marcas' },
+    ...marcas.map(m => ({ value: m, label: m }))
+  ];
+  const ordemOptions = [
+    { value: 'asc', label: 'Crescente' },
+    { value: 'desc', label: 'Decrescente' }
+  ];
+
   return (
     <div className="campos-grid">
 
       <div className="busca">
-
         <div className="campo-busca" ref={dropdownRef}>
           <input
             type="text"
@@ -72,35 +120,26 @@ function Campos({
         </div>
       </div>
 
-      <div className="marca-opcao">
-
+      <div className="filtros">
         <div className="campo-marcas">
-          <select
+          <CustomSelect
             className="select-input"
+            options={marcaOptions}
             value={marcaSelecionada}
-            onChange={(e) => setMarcaSelecionada(e.target.value)}
-          >
-            <option value="">Todas as Marcas</option>
-            {marcas.map((m, i) => (
-              <option key={i} value={m}>{m}</option>
-            ))}
-          </select>
+            onChange={setMarcaSelecionada}
+            placeholder="Todas as Marcas"
+          />
         </div>
-
         <div className="campo-ordem">
-          <select
-            className="select-input"
+          <CustomSelect
+            options={ordemOptions}
             value={ordem}
-            onChange={(e) => setOrdem(e.target.value)}
-          >
-            <option value="asc">Crescente</option>
-            <option value="desc">Decrescente</option>
-          </select>
+            onChange={setOrdem}
+            placeholder="Ordem"
+          />
         </div>
       </div>
     </div>
-
-
   );
 }
 

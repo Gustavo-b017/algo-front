@@ -4,14 +4,14 @@
   padding: 0;
   list-style: none;
   text-decoration: none;
-  color: #fff;
+  color: #022e4c;
   scrollbar-width: thin;
   scrollbar-color: #ddd transparent;
   /* border: 1px solid red; */
 }
 
 body {
-  background: linear-gradient(to bottom right, #272727, #666968, #272727) no-repeat fixed;
+  background: #ffff;
   min-height: 100vh;
 }
 
