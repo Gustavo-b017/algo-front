@@ -136,7 +136,7 @@ function Home() {
   const toggleSugestoes = () => setMostrarSugestoes(!mostrarSugestoes);
 
   return (
-    <div className="home container-fluid">
+    <div className="container-fluid ">
       <div className="row">
         <Campos
           query={query} setQuery={setQuery}
