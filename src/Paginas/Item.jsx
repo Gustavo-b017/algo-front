@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../Estilosao/item.css';
-import Distancia from './Distancia';
 
 // const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
@@ -47,10 +46,7 @@ function Item() {
           <p className="item-marca">Marca: <strong>{dados.marca}</strong></p>
           <p className="item-ref">Família: <strong>{dados.familia.descricao}</strong></p>
           <p className="item-ref">Referência OEM: <strong>{dados.familia?.subFamiliaDescricao}</strong></p>
-        </div>
-
-        <Distancia />
-        
+        </div>        
       </div>
 
       <div className="item-aplicacoes">
