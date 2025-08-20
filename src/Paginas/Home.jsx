@@ -124,8 +124,9 @@ function Home() {
         const params = new URLSearchParams({
             id: produto.id,
             codigoReferencia: produto.codigoReferencia,
-            nomeProduto: produto.nome,
+            nomeProduto: produto.nome, // <-- Verifique se esta linha está exatamente assim
         });
+        // A rota deve ser "/produto" para corresponder ao App.jsx
         navigate(`/produto?${params.toString()}`, { state: { produto } });
     } else {
         console.error('Produto inválido:', produto);
