@@ -26,7 +26,7 @@ function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarT
           <tbody>
             {resultados.map((item, i) => (
               <tr
-                key={i}
+                key={`${item.id}-${i}`}
                 className={i % 2 === 0 ? 'linha-par' : 'linha-impar'}
                 onClick={() => handleLinhaClick(item)}
                 style={{ cursor: 'pointer' }}

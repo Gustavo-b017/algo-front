@@ -41,9 +41,12 @@ function CustomSelect({ options, value, onChange, placeholder = "Selecione uma o
   );
 }
 
+
 function Campos({
   query,
   setQuery,
+  placa,
+  setPlaca,
   marcas,
   marcaSelecionada,
   setMarcaSelecionada,
@@ -57,9 +60,6 @@ function Campos({
   setMostrarSugestoes,
   buscarTratados
 }) {
-  useEffect(() => {
-    console.log('Query recebida no Campos:', query);
-  }, [query]);
 
   const handleSelect = (s) => {
     setQuery(s);
@@ -67,7 +67,6 @@ function Campos({
     buscarTratados(1);
   };
 
-  // Prepare options for custom select
   const marcaOptions = [
     { value: '', label: 'Todas as Marcas' },
     ...marcas.map(m => ({ value: m, label: m }))
@@ -81,11 +80,12 @@ function Campos({
     <div className="campos-grid">
 
       <div className="busca">
+        {/* Campo de busca por produto */}
         <div className="campo-busca" ref={dropdownRef}>
           <input
             type="text"
             className="campo-input"
-            placeholder="Buscar..."
+            placeholder="Buscar por produto..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={toggleSugestoes}
@@ -106,10 +106,7 @@ function Campos({
               ) : (
                 sugestoes.map((s, i) => (
                   <li key={i} className="sugestao">
-                    <button
-                      type="button"
-                      onClick={() => handleSelect(s)}
-                    >
+                    <button type="button" onClick={() => handleSelect(s)}>
                       {s}
                     </button>
                   </li>
@@ -118,6 +115,18 @@ function Campos({
             </ul>
           )}
         </div>
+
+        {/* --- NOVO CAMPO ADICIONADO AQUI --- */}
+        <div className="campo-placa" style={{ minWidth: '180px' }}>
+          <input
+            type="text"
+            className="campo-input"
+            placeholder="Placa do veículo"
+            value={placa}
+            onChange={(e) => setPlaca(e.target.value.toUpperCase())}
+          />
+        </div>
+
       </div>
 
       <div className="filtros">

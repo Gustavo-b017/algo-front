@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Campos from './Campos.jsx'; // <-- agora o autocomplete estará dentro do Campos.jsx
+import Campos from './Campos.jsx';
 import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -9,38 +9,86 @@ const API_URL = 'http://127.0.0.1:5000';
 
 function Home() {
   const [query, setQuery] = useState('');
+  const [placa, setPlaca] = useState('DME8I14');
+  const [marcaSelecionada, setMarcaSelecionada] = useState('');
+  const [ordem, setOrdem] = useState('asc');
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  
+  const [resultados, setResultados] = useState([]);
+  const [marcas, setMarcas] = useState([]);
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const [temMaisPaginas, setTemMaisPaginas] = useState(false);
+  const [mensagemBusca, setMensagemBusca] = useState('');
+  const [tipoMensagem, setTipoMensagem] = useState('info');
+  const [carregandoTabela, setCarregandoTabela] = useState(false);
+  
   const [sugestoes, setSugestoes] = useState([]);
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
   const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
-  const [marcas, setMarcas] = useState([]);
-  const [marcaSelecionada, setMarcaSelecionada] = useState('');
-  const [ordem, setOrdem] = useState('asc');
-  const [resultados, setResultados] = useState([]);
-  const [paginaAtual, setPaginaAtual] = useState(1);
-  const [totalPaginas, setTotalPaginas] = useState(1);
-  const [temMaisPaginas, setTemMaisPaginas] = useState(false);
-  const [carregandoTabela, setCarregandoTabela] = useState(false);
 
   const dropdownRef = useRef(null);
   const debounceRef = useRef(null);
-  const ultimaQueryAutocomplete = useRef('');
   const navigate = useNavigate();
 
-  const buscarTratados = (pagina = 1) => {
+  // Função única para buscar dados
+  const buscarProdutos = (pagina = 1) => {
+    if (!query) return;
+
     setCarregandoTabela(true);
-    axios.get(`${API_URL}/tratados?produto=${query}&marca=${marcaSelecionada}&ordem=${ordem}&pagina=${pagina}`)
+    setMensagemBusca('');
+
+    const params = new URLSearchParams({
+      produto: query,
+      placa: placa,
+      marca: marcaSelecionada,
+      ordem: ordem,
+      pagina: pagina,
+    });
+
+    axios.get(`${API_URL}/pesquisar?${params.toString()}`)
       .then(res => {
         const data = res.data;
-        setResultados(Array.isArray(data.dados) ? data.dados : []);
+        setResultados(data.dados || []);
+        setMarcas(data.marcas || []);
         setPaginaAtual(data.pagina || 1);
         setTotalPaginas(data.total_paginas || 1);
         setTemMaisPaginas(data.proxima_pagina || false);
-        setMarcas(Array.isArray(data.marcas) ? data.marcas : []);
+        
+        if (data.mensagem_busca) {
+          setMensagemBusca(data.mensagem_busca);
+          setTipoMensagem(data.tipo_mensagem || 'info');
+        }
       })
-      .catch(() => setResultados([]))
+      .catch(() => {
+        setResultados([]);
+        setMarcas([]);
+      })
       .finally(() => setCarregandoTabela(false));
   };
 
+  // Efeito principal que dispara a busca
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (query) {
+        buscarProdutos(1);
+      } else {
+        setResultados([]);
+        setMarcas([]);
+        setMensagemBusca('');
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [query, placa, marcaSelecionada, ordem]);
+
+  // Efeito para buscar outras páginas
+  const buscarPagina = (novaPagina) => {
+    if(query) {
+      buscarProdutos(novaPagina);
+    }
+  }
+
+  // --- LÓGICA DO CLIQUE FORA RESTAURADA ---
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -51,105 +99,74 @@ function Home() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Lógica do Autocomplete
   useEffect(() => {
-    if (query) {
-      axios.get(`${API_URL}/buscar?produto=${query}`)
-        .then(() => buscarTratados(1))
-        .catch(() => setResultados([]));
-    } else {
-      setResultados([]);
-    }
-  }, [query]);
+    if (!query) {
+      setSugestoes([]);
+      setMostrarSugestoes(false);
+      return;
+    };
 
-  useEffect(() => {
-    if (query) buscarTratados(paginaAtual);
-  }, [marcaSelecionada, ordem]);
-
-  useEffect(() => {
-    if (!query) return;
     setCarregandoSugestoes(true);
     setMostrarSugestoes(true);
-    setSugestoes([]);
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      if (query !== ultimaQueryAutocomplete.current) {
-        axios.get(`${API_URL}/buscar?produto=${query}`).then(() => {
-          ultimaQueryAutocomplete.current = query;
-          axios.get(`${API_URL}/autocomplete?prefix=${query}`)
-            .then(res => {
-              const data = res.data?.sugestoes;
-              setSugestoes(Array.isArray(data) ? data : []);
-            })
-            .catch(() => setSugestoes([]))
-            .finally(() => setCarregandoSugestoes(false));
-        });
-      } else {
         axios.get(`${API_URL}/autocomplete?prefix=${query}`)
-          .then(res => {
-            const data = res.data?.sugestoes;
-            setSugestoes(Array.isArray(data) ? data : []);
-          })
+          .then(res => setSugestoes(res.data?.sugestoes || []))
           .catch(() => setSugestoes([]))
           .finally(() => setCarregandoSugestoes(false));
-      }
     }, 300);
   }, [query]);
-
-  const toggleSugestoes = () => {
-    if (mostrarSugestoes) {
-      setMostrarSugestoes(false);
-    } else {
-      setCarregandoSugestoes(true);
-      setMostrarSugestoes(true);
-      axios.get(`${API_URL}/autocomplete?prefix=${query}`)
-        .then(res => {
-          const data = res.data?.sugestoes;
-          setSugestoes(Array.isArray(data) ? data : []);
-        })
-        .catch(() => setSugestoes([]))
-        .finally(() => setCarregandoSugestoes(false));
-    }
-  };
-
+  
   const handleLinhaClick = (produto) => {
     if (produto && produto.codigoReferencia) {
-      const query = `codigoReferencia=${encodeURIComponent(produto.codigoReferencia)}&id=${produto.id}&nomeProduto=${encodeURIComponent(produto.nome)}`;
-      navigate(`/produto/${query}`, { state: { produto } });
-
+        const params = new URLSearchParams({
+            id: produto.id,
+            codigoReferencia: produto.codigoReferencia,
+            nomeProduto: produto.nome,
+        });
+        navigate(`/produto?${params.toString()}`, { state: { produto } });
     } else {
-      console.error('Produto inválido ao tentar navegar:', produto);
-      alert('Não foi possível acessar o produto selecionado.');
+        console.error('Produto inválido:', produto);
+        alert('Não foi possível acessar o produto selecionado.');
     }
   };
 
+  const toggleSugestoes = () => setMostrarSugestoes(!mostrarSugestoes);
 
   return (
     <div className="home container-fluid">
       <div className="row">
         <Campos
-          query={query}
-          setQuery={setQuery}
+          query={query} setQuery={setQuery}
+          placa={placa} setPlaca={setPlaca}
           marcas={marcas}
-          marcaSelecionada={marcaSelecionada}
-          setMarcaSelecionada={setMarcaSelecionada}
-          ordem={ordem}
-          setOrdem={setOrdem}
+          marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
+          ordem={ordem} setOrdem={setOrdem}
+          sugestoes={sugestoes}
+          // --- PROPS RESTAURADAS ---
           dropdownRef={dropdownRef}
           toggleSugestoes={toggleSugestoes}
-          sugestoes={sugestoes}
           mostrarSugestoes={mostrarSugestoes}
           carregandoSugestoes={carregandoSugestoes}
           setMostrarSugestoes={setMostrarSugestoes}
-          buscarTratados={buscarTratados}
+          buscarTratados={() => buscarProdutos(1)}
         />
       </div>
+      
+      {mensagemBusca && (
+        <div className={`alert alert-${tipoMensagem}`} style={{ maxWidth: '90vw', margin: '0 auto 1rem auto', textAlign: 'center' }}>
+          {mensagemBusca}
+        </div>
+      )}
+
       <Tabela
         resultados={resultados}
         paginaAtual={paginaAtual}
+        buscarTratados={buscarPagina}
         totalPaginas={totalPaginas}
         temMaisPaginas={temMaisPaginas}
-        buscarTratados={buscarTratados}
         handleLinhaClick={handleLinhaClick}
         carregandoTabela={carregandoTabela}
       />
