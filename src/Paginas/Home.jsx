@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Header from './Header.jsx'; // NOVO IMPORT
+import Filtro from './Filtro.jsx';
+import Cascata from "./Cascata.jsx";
 import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -169,28 +171,58 @@ function Home() {
     navigate(`/produto?${params.toString()}`);
   };
 
+  // Props para o Campos.jsx
+  query, setQuery, placa, setPlaca, marcas, marcaSelecionada,
+    setMarcaSelecionada, ordem, setOrdem, sugestoes, mostrarSugestoes,
+    carregandoSugestoes, setMostrarSugestoes, dropdownRef,
+
+    // Props para o Cascata.jsx
+    listaMontadoras, montadoraSelecionada, handleMontadoraChange, carregandoCascata,
+    listaFamilias, familiaSelecionada, handleFamiliaChange
+
   return (
     <div className="container-fluid">
-      <div className="row">
-        <Header
-          listaMontadoras={listaMontadoras}
-          montadoraSelecionada={montadoraSelecionada}
-          handleMontadoraChange={handleMontadoraChange}
-          carregandoCascata={carregandoCascata}
-          listaFamilias={listaFamilias}
-          familiaSelecionada={familiaSelecionada}
-          handleFamiliaChange={handleFamiliaChange}
-          query={query} setQuery={setQuery}
-          placa={placa} setPlaca={setPlaca}
-          marcas={marcas}
-          marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
-          ordem={ordem} setOrdem={setOrdem}
-          sugestoes={sugestoes}
-          mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
-          carregandoSugestoes={carregandoSugestoes}
-          dropdownRef={dropdownRef}
-        />
-      </div>
+      <Header
+        listaMontadoras={listaMontadoras}
+        montadoraSelecionada={montadoraSelecionada}
+        handleMontadoraChange={handleMontadoraChange}
+        carregandoCascata={carregandoCascata}
+        listaFamilias={listaFamilias}
+        familiaSelecionada={familiaSelecionada}
+        handleFamiliaChange={handleFamiliaChange}
+        query={query} setQuery={setQuery}
+        placa={placa} setPlaca={setPlaca}
+        marcas={marcas}
+        marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
+        ordem={ordem} setOrdem={setOrdem}
+        sugestoes={sugestoes}
+        mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
+        carregandoSugestoes={carregandoSugestoes}
+        dropdownRef={dropdownRef}
+      />
+
+
+      <Filtro
+        query={query} setQuery={setQuery}
+        placa={placa} setPlaca={setPlaca}
+        marcas={marcas}
+        marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
+        ordem={ordem} setOrdem={setOrdem}
+        sugestoes={sugestoes}
+        mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
+        carregandoSugestoes={carregandoSugestoes}
+        dropdownRef={dropdownRef}
+      />
+
+      <Cascata
+        listaMontadoras={listaMontadoras}
+        montadoraSelecionada={montadoraSelecionada}
+        handleMontadoraChange={handleMontadoraChange}
+        carregandoCascata={carregandoCascata}
+        listaFamilias={listaFamilias}
+        familiaSelecionada={familiaSelecionada}
+        handleFamiliaChange={handleFamiliaChange}
+      />
 
       <Tabela
         resultados={resultados}

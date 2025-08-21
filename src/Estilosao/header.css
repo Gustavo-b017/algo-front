@@ -1,89 +1,59 @@
-:root {
-  --azul: #022e4c;
-  --vermelho: #ce0f2d;
-  --cinza_claro: #d7d8d8;
-  --cinza_escuro: #666968;
-}
-
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 auto;
-  padding: 50px 98px 10px 10px;
-  background: #fff;
-  box-sizing: border-box;
-  width: 100%;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 98px;
+    background: #fff;
+    box-sizing: border-box;
+    gap: 30px;
+    width: 100%;
 }
 
 .menu-btn img {
-  width: 54px;
-  height: 37px;
-  margin-right: 2px;
-  cursor: pointer;
+    width: 53px;
+    height: 35px;
 }
 
 .header .logo img {
-  display: flex;
-  align-items: center;
-  margin-right: 16px;
-  width: 75px;
-  height: 62px;
+    width: 75px;
+    height: 62px;
 }
 
-
-.header .search-container {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  max-width: 600px;
-  margin-right: 24px;
-}
-
-.header .search-input {
-  flex: 1;
-  padding: 10px 16px;
-  border: 2px solid #16384c;
-  border-radius: 8px;
-  font-size: 16px;
-  outline: none;
-}
-
-.header .search-icon {
-  margin-left: -32px;
-  color: #16384c;
-  font-size: 20px;
+.header .header-busca {
+    flex: 1;
+    padding-right: 100px;
 }
 
 .header-actions {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-
-.menu-btn, .cadastro-btn, .carrinho-btn {
-  background: none;
-  border: none;
-  color: #16384c;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.cadastro-btn .user-icon {
-  font-size: 22px;
-}
-
-.carrinho-btn .cart-icon {
-  font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
 }
 
 .cadastro-btn {
-  font-weight: 600;
+    width: 36px;
+    height: 36px;
 }
 
 .carrinho-btn {
-  font-weight: 600;
+    width: 45px;
+    height: 43px;
+}
+
+button {
+    display: flex;
+    background: none;
+    border: none;
+    color: var(--azul);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    align-items: center;
+    gap: 5px;
+
+}
+
+button:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s;
 }
