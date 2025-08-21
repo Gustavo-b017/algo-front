@@ -20,7 +20,7 @@ function Item({ dadosItem }) {
       <div className="item-topo">
         <div className="item-imagem">
           {/* Usamos uma verificação para a imagem, caso ela não exista */}
-          <img src={dados.imagemReal || 'caminho/para/imagem/padrao.png'} alt={dados.nomeProduto} />
+          <img src={dados.imagemReal} alt={dados.nomeProduto} />
         </div>
 
         <div className="item-info">
@@ -43,7 +43,8 @@ function Item({ dadosItem }) {
                 onMouseLeave={() => setHoverIndex(null)}
               >
                 <div className="aplicacao-header">
-                  <p><strong>{aplicacao.modelo}</strong> - {aplicacao.versao}</p>
+                  <img src={aplicacao.imagem} alt={aplicacao.nome} className="aplicacao-imagem" />
+                  <p><strong>{aplicacao.modelo} -</strong>  {aplicacao.versao}</p>
                   <p>{aplicacao.carroceria} | {aplicacao.montadora}</p>
                 </div>
 
