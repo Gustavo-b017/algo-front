@@ -1,3 +1,5 @@
+/* src/Estilosao/tabela.css */
+
 :root {
   --azul: #022e4c;
   --vermelho: #ce0f2d;
@@ -6,73 +8,65 @@
   --cinza_escuro: #666968;
 }
 
-/* Componente que envolve a tabela (faz o overflow funcionar) */
-.tabela-container {
-  overflow-x: auto;
-  margin-bottom: 3rem;
-
-  /* Tabela em si */
-  table {
-    border-collapse: collapse;
-    padding: 100%;
-    min-width: 500px;
-    width: 95%;
-    margin: 0 2.5% 0 2.5%;
-    font-family: sans-serif;
-    font-size: 0.9rem;
-    /* Cabeçalho */
-    thead th {
-      background-color: transparent;
-      color: var(--vermelho);
-      padding: 10px;
-      border-bottom: 2px solid #cccccc;
-    }
-  }
-
-  /* Linhas */
-  tr.linha-par {
-    background-color:var(--cinza_claro);
-  }
-
-  tr.linha-impar {
-    background-color: var(--branco);
-  }
-
-  /* Células */
-  .tabela td {
-    padding: 10px;
-    min-width: 100px;
-    border-bottom: 1px solid var(--azul);
-  }
-
-  /* Hover */
-  & tr:hover{
-    background-color: var(--azul);
-  }
-
-  & tr:hover td {
-    color: var(--branco);
-  }
+/* Container para a grade de cards */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Carregando */
-.tabela-carregando {
-  text-align: center;
-  margin-top: 2rem;
+/* Estilo individual de cada card de produto */
+.produto-card {
+    background-color: var(--branco);
+    border: 1px solid var(--cinza_claro);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.produto-imagem {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+.produto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.produto-card h3 {
+    font-size: 1.2rem;
+    color: var(--azul);
+    margin-bottom: 10px;
+    word-break: break-word;
+}
+
+.produto-card p {
+    font-size: 0.9rem;
+    color: var(--cinza_escuro);
+    margin: 4px 0;
 }
 
 /* Controles de paginação */
 .tabela-controle {
   display: flex;
-  width: 95vw;
-  margin: 0 auto;
-  justify-content: space-between;
+  max-width: 1200px;
+  margin: 20px auto;
+  justify-content: center;
   align-items: center;
   padding: 10px 0;
   flex-wrap: wrap;
   gap: 10px;
+}
 
-  button {
+.tabela-controle button {
     padding: 8px 16px;
     font-size: 0.95rem;
     background-color: var(--vermelho);
@@ -80,63 +74,41 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-
-    &:hover {
-      background-color: var(--azul);
-      transition: 0.2s;
-      color: var(--branco);
-    }
-
-    &:disabled {
-      background-color: var(--cinza_escuro);
-      cursor: not-allowed;
-    }
-
-    &.botao-proximo {
-      background-color: var(--azul);
-      color: #fff;
-
-      &:hover {
-        background-color: var(--vermelho);
-      }
-    }
-
-    &.botao-proximo:disabled {
-      background-color: var(--cinza_escuro);
-    }
-  }
-
-  /* Página info central */
-  .paginacao-info {
-    text-align: center;
-    flex: 1;
-  }
 }
 
+.tabela-controle button:hover {
+    background-color: var(--azul);
+    transition: 0.2s;
+    color: var(--branco);
+}
 
+.tabela-controle button:disabled {
+    background-color: var(--cinza_escuro);
+    cursor: not-allowed;
+}
 
+.tabela-controle .botao-proximo {
+    background-color: var(--azul);
+    color: #fff;
+}
 
-@media (max-width: 550px) {
-  
-  .tabela-container {
-    margin: 0 auto 3rem auto;
-  }
+.tabela-controle .botao-proximo:hover {
+    background-color: var(--vermelho);
+}
 
-  .tabela td, .tabela th {
-    padding: 4px;
-    font-size: 0.8rem;
-    word-break: break-word;
-  }
+.tabela-controle .botao-proximo:disabled {
+    background-color: var(--cinza_escuro);
+}
 
-  .tabela-controle {
-    flex-direction: row;
-    align-items: stretch;
-  }
-  .tabela-controle button {
-    width: 25%;
-    font-size: 0.9rem;
-    padding: 8px 0;
-  }
+.paginacao-info {
+    text-align: center;
+    flex: 1;
+    color: var(--azul);
+}
 
-
+/* Estilos para o estado de carregamento */
+.tabela-carregando {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--azul);
 }
