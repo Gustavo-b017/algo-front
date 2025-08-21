@@ -7,6 +7,7 @@ import Campos from './Campos.jsx';
 import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header.jsx';
 
 const API_URL = 'http://127.0.0.1:5000';
 
@@ -139,24 +140,8 @@ function Home() {
   return (
     <div className="container-fluid">
       <div className="row">
-        <h4 style={{ textAlign: 'center', margin: '20px 0', color: 'black' }}>Busca por Veículo</h4>
-        <Montadora
-          listaMontadoras={listaMontadoras}
-          valorSelecionado={montadoraSelecionada.id}
-          onChange={handleMontadoraChange}
-          carregando={carregandoCascata}
-        />
+        <Header/>
 
-        <Familia
-          listaFamilias={listaFamilias}
-          montadoraId={montadoraSelecionada.id}
-          valorSelecionadoId={familiaSelecionada.id} // <-- Correção 1
-          onChange={handleFamiliaChange}             // <-- Correção 2
-          carregando={carregandoCascata}
-        />
-
-        <hr style={{ margin: '30px auto', borderColor: 'black' }} />
-        <h4 style={{ textAlign: 'center', margin: '20px 0', color: 'black' }}>Busca por Texto</h4>
         <Campos
           query={query} setQuery={setQuery}
           placa={placa} setPlaca={setPlaca}
@@ -176,6 +161,21 @@ function Home() {
         handleLinhaClick={handleLinhaClick}
         carregandoTabela={carregandoTabela}
       />
+
+      <Montadora
+          listaMontadoras={listaMontadoras}
+          valorSelecionado={montadoraSelecionada.id}
+          onChange={handleMontadoraChange}
+          carregando={carregandoCascata}
+        />
+
+        <Familia
+          listaFamilias={listaFamilias}
+          montadoraId={montadoraSelecionada.id}
+          valorSelecionadoId={familiaSelecionada.id} // <-- Correção 1
+          onChange={handleFamiliaChange}             // <-- Correção 2
+          carregando={carregandoCascata}
+        />
     </div>
   );
 }
