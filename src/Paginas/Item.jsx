@@ -1,61 +1,38 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+// src/Paginas/Item.jsx
+
+import React, { useState } from 'react';
 import '../Estilosao/item.css';
-import Distancia from './Distancia';
 
-// const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'http://127.0.0.1:5000';
+// O componente agora recebe os dados diretamente via props
+function Item({ dadosItem }) {
+  const [hoverIndex, setHoverIndex] = useState(null);
 
-function Item() {
-  const [dados, setDados] = useState(null);
-  const [erro, setErro] = useState(false);
-  const [carregando, setCarregando] = useState(true);
-  const [hoverIndex, setHoverIndex] = useState(null); // <- Controle do hover
-
-  useEffect(() => {
-    async function carregarItem() {
-      try {
-        const res = await axios.get(`${API_URL}/item`);
-        setDados(res.data);
-      } catch (error) {
-        console.error('Erro ao carregar detalhes do produto:', error);
-        setErro(true);
-      } finally {
-        setCarregando(false);
-      }
-    }
-    carregarItem();
-  }, []);
-
-  if (carregando) {
-    return <div className="text-center mt-5"><h1>Carregando...</h1></div>;
+  // Se, por alguma razão, os dados não chegarem, mostramos uma mensagem.
+  if (!dadosItem) {
+    return <div className="text-center mt-5"><h2>Informações do item não disponíveis.</h2></div>;
   }
 
-  if (erro) {
-    return <div className="text-center mt-5"><h2>Erro ao carregar detalhes do produto.</h2></div>;
-  }
+  // Renomeamos a variável para 'dados' para não ter de mudar o JSX
+  const dados = dadosItem;
 
   return (
     <div className="item-container">
       <div className="item-topo">
         <div className="item-imagem">
-          <img src={dados.imagemReal} alt={dados.nomeProduto} />
+          {/* Usamos uma verificação para a imagem, caso ela não exista */}
+          <img src={dados.imagemReal || 'caminho/para/imagem/padrao.png'} alt={dados.nomeProduto} />
         </div>
 
         <div className="item-info">
           <h1 className="item-nome">{dados.nomeProduto}</h1>
           <p className="item-marca">Marca: <strong>{dados.marca}</strong></p>
-          <p className="item-ref">Família: <strong>{dados.familia.descricao}</strong></p>
+          <p className="item-ref">Família: <strong>{dados.familia?.descricao}</strong></p>
           <p className="item-ref">Referência OEM: <strong>{dados.familia?.subFamiliaDescricao}</strong></p>
         </div>
-
-        <Distancia />
-        
       </div>
 
       <div className="item-aplicacoes">
         <h2 className="secao-titulo">Modelos Compatíveis</h2>
-
         <div className="aplicacoes-scroll-limitada">
           <div className="aplicacoes-grid">
             {dados.aplicacoes.map((aplicacao, index) => (
@@ -87,9 +64,7 @@ function Item() {
           </div>
         </div>
       </div>
-
     </div>
-
   );
 }
 

@@ -1,142 +1,104 @@
-import React, { useEffect, useState, useRef } from 'react';
+// src/Paginas/Campos.jsx
+
+import React, { useRef } from 'react';
 import '../Estilosao/campos.css';
 
-function CustomSelect({ options, value, onChange, placeholder = "Selecione uma opção" }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef();
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const selectedLabel = options.find(opt => opt.value === value)?.label || placeholder;
-  
+// Componente para os seletores customizados
+function CustomSelect({ options, value, onChange, placeholder }) {
+  // ... (O código do CustomSelect pode ser o mesmo que você já tinha)
   return (
-    <div className={`custom-select${open ? ' open' : ''}`} ref={ref}>
-      <div
-        className="custom-select-selected"
-        onClick={() => setOpen(!open)}
-      >
-        {selectedLabel}
-      </div>
-      <ul className="custom-select-options">
-        {options.map((opt, i) => (
-          <li
-            key={i}
-            className={opt.value === value ? 'selected' : ''}
-            onClick={() => {
-              onChange(opt.value);
-              setOpen(false);
-            }}
-          >
-            {opt.label}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <select className="custom-select-selected" value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="">{placeholder}</option>
+      {options.map(opt => (
+        <option key={opt.value} value={opt.value}>{opt.label}</option>
+      ))}
+    </select>
   );
 }
 
 function Campos({
-  query,
-  setQuery,
-  marcas,
-  marcaSelecionada,
-  setMarcaSelecionada,
-  ordem,
-  setOrdem,
-  dropdownRef,
-  toggleSugestoes,
-  sugestoes,
-  mostrarSugestoes,
-  carregandoSugestoes,
+  query, setQuery,
+  placa, setPlaca,
+  marcas = [],
+  marcaSelecionada, setMarcaSelecionada,
+  ordem, setOrdem,
+  sugestoes = [],
+  mostrarSugestoes = false,
+  carregandoSugestoes = false,
   setMostrarSugestoes,
-  buscarTratados
 }) {
-  useEffect(() => {
-    console.log('Query recebida no Campos:', query);
-  }, [query]);
+  const dropdownRef = useRef(null);
 
-  const handleSelect = (s) => {
-    setQuery(s);
-    setMostrarSugestoes(false);
-    buscarTratados(1);
+  const handleSelect = (sugestao) => {
+    setQuery(sugestao);
+    if (setMostrarSugestoes) {
+      setMostrarSugestoes(false);
+    }
   };
 
-  // Prepare options for custom select
-  const marcaOptions = [
-    { value: '', label: 'Todas as Marcas' },
-    ...marcas.map(m => ({ value: m, label: m }))
-  ];
+  // Prepara as opções para os seletores
+  const marcaOptions = marcas.map(m => ({ value: m, label: m }));
   const ordemOptions = [
     { value: 'asc', label: 'Crescente' },
     { value: 'desc', label: 'Decrescente' }
   ];
 
   return (
-    <div className="campos-grid">
-
+    <div className="campos-grid" style={{width: '90vw', margin: '0 auto'}}>
       <div className="busca">
+        {/* Campo de busca por produto com autocomplete */}
         <div className="campo-busca" ref={dropdownRef}>
           <input
             type="text"
             className="campo-input"
-            placeholder="Buscar..."
+            placeholder="Buscar por nome do produto..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onFocus={toggleSugestoes}
+            onFocus={() => setMostrarSugestoes && setMostrarSugestoes(true)}
           />
-          <button
-            type="button"
-            className={`toggle-btn ${mostrarSugestoes ? 'aberto' : ''}`}
-            title="Alternar sugestões"
-            onClick={toggleSugestoes}
-          >
-            {mostrarSugestoes ? '✕' : '☰'}
-          </button>
-
-          {mostrarSugestoes && (
+          {mostrarSugestoes && query && (
             <ul className="sugestoes-list">
-              {carregandoSugestoes ? (
-                <li className="loading">Carregando...</li>
-              ) : (
-                sugestoes.map((s, i) => (
-                  <li key={i} className="sugestao">
-                    <button
-                      type="button"
-                      onClick={() => handleSelect(s)}
-                    >
-                      {s}
-                    </button>
-                  </li>
-                ))
-              )}
+              {carregandoSugestoes ? <li className="loading">Carregando...</li>
+                : sugestoes.length > 0 ? (
+                  sugestoes.map((s, i) => (
+                    <li key={i} className="sugestao" onClick={() => handleSelect(s)}>
+                      <button type="button">{s}</button>
+                    </li>
+                  ))
+                ) : <li className="loading">Nenhuma sugestão.</li>
+              }
             </ul>
           )}
         </div>
-      </div>
-
-      <div className="filtros">
-        <div className="campo-marcas">
-          <CustomSelect
-            className="select-input"
-            options={marcaOptions}
-            value={marcaSelecionada}
-            onChange={setMarcaSelecionada}
-            placeholder="Todas as Marcas"
-          />
+        {/* Campo de Placa */}
+        <div className="campo-placa">
+            <input
+                type="text"
+                className="campo-input"
+                placeholder="Placa (opcional)"
+                value={placa}
+                onChange={(e) => setPlaca(e.target.value.toUpperCase())}
+            />
         </div>
+      </div>
+      <div className="filtros">
+        {/* Seletor de Marcas */}
+        <div className="campo-marcas">
+            <CustomSelect
+                options={marcaOptions}
+                value={marcaSelecionada}
+                onChange={setMarcaSelecionada}
+                placeholder="Todas as Marcas"
+            />
+        </div>
+        {/* Seletor de Ordem */}
         <div className="campo-ordem">
-          <CustomSelect
-            options={ordemOptions}
-            value={ordem}
-            onChange={setOrdem}
-            placeholder="Ordem"
-          />
+            <CustomSelect
+                options={ordemOptions}
+                value={ordem}
+                onChange={setOrdem}
+                placeholder="Ordem"
+            />
         </div>
       </div>
     </div>
