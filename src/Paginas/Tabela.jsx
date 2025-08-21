@@ -2,7 +2,7 @@
 import React from 'react';
 import '../Estilosao/tabela.css';
 
-function Tabela({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela }) {
+function Tabela({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage }) {
   if (carregandoTabela) {
     return (
       <div className="tabela-carregando">
@@ -15,6 +15,11 @@ function Tabela({ resultados, paginaAtual, totalPaginas, buscarTratados, handleL
 
   return (
     <>
+      {feedbackMessage && ( // Exibe a mensagem apenas se ela existir
+        <div className="alert alert-info text-center" role="alert">
+          {feedbackMessage}
+        </div>
+      )}
       <div className="tabela-container">
         <table className="tabela">
           <thead>

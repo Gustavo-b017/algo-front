@@ -8,6 +8,7 @@ import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
 
 function Home() {
@@ -33,6 +34,8 @@ function Home() {
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [carregandoTabela, setCarregandoTabela] = useState(false);
 
+  const [feedbackMessage, setFeedbackMessage] = useState(''); // NOVO ESTADO
+
   const dropdownRef = useRef(null);
   const isClearingRef = useRef(false); // NOVO REF
   const navigate = useNavigate();
@@ -41,6 +44,8 @@ function Home() {
   const buscarResultados = (config) => {
     setCarregandoTabela(true);
     let params = new URLSearchParams({ pagina: config.pagina });
+    // Limpar a mensagem antes de uma nova busca
+    setFeedbackMessage('');
 
     if (config.tipo === 'guiada') {
       params.append('montadora_nome', config.montadora_nome);
@@ -59,6 +64,7 @@ function Home() {
         setMarcas(res.data.marcas || []);
         setPaginaAtual(res.data.pagina || 1);
         setTotalPaginas(res.data.total_paginas || 1);
+        setFeedbackMessage(res.data.mensagem || ''); // SALVA A MENSAGEM DO BACKEND
       })
       .catch(err => console.error("Erro na busca", err))
       .finally(() => setCarregandoTabela(false));
@@ -218,6 +224,7 @@ function Home() {
         totalPaginas={totalPaginas}
         handleLinhaClick={handleLinhaClick}
         carregandoTabela={carregandoTabela}
+        feedbackMessage={feedbackMessage} // PASSA A MENSAGEM COMO PROP
         buscarTratados={(pagina) => buscarResultados({
           tipo: (query || placa) ? 'texto' : 'guiada',
           pagina: pagina,
