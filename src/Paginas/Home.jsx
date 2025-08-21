@@ -1,193 +1,172 @@
+// src/Paginas/Home.jsx
+
 import React, { useState, useEffect, useRef } from 'react';
+import Montadora from './Montadora.jsx';
+import Familia from './Familia.jsx';
 import Campos from './Campos.jsx';
 import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Montadora from './Montadora.jsx';
-import Modelo from './Familia.jsx';
-import Familia from './Familia.jsx';
 
-// const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
 
 function Home() {
+  // --- Estados ---
+  const [listaMontadoras, setListaMontadoras] = useState([]);
+  const [listaFamilias, setListaFamilias] = useState([]);
+  const [montadoraSelecionada, setMontadoraSelecionada] = useState({ id: '', nome: '' });
+  const [familiaId, setFamiliaId] = useState('');
+  const [carregandoCascata, setCarregandoCascata] = useState(true);
+
+  // Estados da Busca por Texto
   const [query, setQuery] = useState('');
   const [placa, setPlaca] = useState('DME8I14');
+  const [marcas, setMarcas] = useState([]); // Lista de marcas para o seletor
   const [marcaSelecionada, setMarcaSelecionada] = useState('');
   const [ordem, setOrdem] = useState('asc');
-  const [paginaAtual, setPaginaAtual] = useState(1);
-
-  const [resultados, setResultados] = useState([]);
-  const [marcas, setMarcas] = useState([]);
-  const [totalPaginas, setTotalPaginas] = useState(1);
-  const [temMaisPaginas, setTemMaisPaginas] = useState(false);
-  const [mensagemBusca, setMensagemBusca] = useState('');
-  const [tipoMensagem, setTipoMensagem] = useState('info');
-  const [carregandoTabela, setCarregandoTabela] = useState(false);
-
   const [sugestoes, setSugestoes] = useState([]);
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
   const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
 
-  const [montadoraId, setMontadoraId] = useState('');
-
-  const [familiaId, setFamiliaId] = useState('');
-
-  const dropdownRef = useRef(null);
-  const debounceRef = useRef(null);
+  const [resultados, setResultados] = useState([]);
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const [carregandoTabela, setCarregandoTabela] = useState(false);
+  
   const navigate = useNavigate();
 
-  // Função única para buscar dados
-  const buscarProdutos = (pagina = 1) => {
-    if (!query) return;
+  // --- Efeitos ---
+  // Busca dados da cascata (uma vez)
+  useEffect(() => {
+    async function carregarDadosCascata() {
+      try {
+        const [resMontadoras, resFamilias] = await Promise.all([
+          axios.get(`${API_URL}/montadoras`),
+          axios.get(`${API_URL}/familias`)
+        ]);
+        setListaMontadoras(resMontadoras.data);
+        setListaFamilias(resFamilias.data);
+      } catch (error) {
+        console.error("Erro ao carregar dados da cascata", error);
+      } finally {
+        setCarregandoCascata(false);
+      }
+    }
+    carregarDadosCascata();
+  }, []);
 
-    setCarregandoTabela(true);
-    setMensagemBusca('');
+  // Dispara a BUSCA GUIADA
+  useEffect(() => {
+    if (montadoraSelecionada.id && familiaId) {
+      setQuery(''); 
+      buscarResultados({ tipo: 'guiada', pagina: 1 });
+    }
+  }, [montadoraSelecionada, familiaId]);
 
-    const params = new URLSearchParams({
-      produto: query,
-      placa: placa,
-      marca: marcaSelecionada,
-      ordem: ordem,
-      pagina: pagina,
-    });
-
-    axios.get(`${API_URL}/pesquisar?${params.toString()}`)
-      .then(res => {
-        const data = res.data;
-        setResultados(data.dados || []);
-        setMarcas(data.marcas || []);
-        setPaginaAtual(data.pagina || 1);
-        setTotalPaginas(data.total_paginas || 1);
-        setTemMaisPaginas(data.proxima_pagina || false);
-
-        if (data.mensagem_busca) {
-          setMensagemBusca(data.mensagem_busca);
-          setTipoMensagem(data.tipo_mensagem || 'info');
-        }
-      })
-      .catch(() => {
-        setResultados([]);
-        setMarcas([]);
-      })
-      .finally(() => setCarregandoTabela(false));
-  };
-
-  // Efeito principal que dispara a busca
+  // Dispara a BUSCA POR TEXTO
   useEffect(() => {
     const timer = setTimeout(() => {
       if (query) {
-        buscarProdutos(1);
+        setMontadoraSelecionada({ id: '', nome: '' });
+        setFamiliaId('');
+        buscarResultados({ tipo: 'texto', pagina: 1 });
       } else {
         setResultados([]);
-        setMarcas([]);
-        setMensagemBusca('');
       }
     }, 500);
-
     return () => clearTimeout(timer);
-  }, [query, placa, marcaSelecionada, ordem]);
+  }, [query, placa, marcaSelecionada, ordem]); // Agora depende de todos os filtros
 
-  // Efeito para buscar outras páginas
-  const buscarPagina = (novaPagina) => {
-    if (query) {
-      buscarProdutos(novaPagina);
-    }
-  }
-
-  // --- LÓGICA DO CLIQUE FORA RESTAURADA ---
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setMostrarSugestoes(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Lógica do Autocomplete
+  // Lógica do AUTOCOMPLETE
   useEffect(() => {
     if (!query) {
       setSugestoes([]);
       setMostrarSugestoes(false);
       return;
-    };
-
-    setCarregandoSugestoes(true);
-    setMostrarSugestoes(true);
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
+    }
+    const timer = setTimeout(() => {
+      setCarregandoSugestoes(true);
       axios.get(`${API_URL}/autocomplete?prefix=${query}`)
         .then(res => setSugestoes(res.data?.sugestoes || []))
         .catch(() => setSugestoes([]))
         .finally(() => setCarregandoSugestoes(false));
     }, 300);
+    return () => clearTimeout(timer);
   }, [query]);
+  
+  // --- Funções ---
+  const buscarResultados = (config) => {
+    setCarregandoTabela(true);
+    let params = new URLSearchParams({ pagina: config.pagina });
 
-  const handleLinhaClick = (produto) => {
-    if (produto && produto.codigoReferencia) {
-      const params = new URLSearchParams({
-        id: produto.id,
-        codigoReferencia: produto.codigoReferencia,
-        nomeProduto: produto.nome, // <-- Verifique se esta linha está exatamente assim
-      });
-      // A rota deve ser "/produto" para corresponder ao App.jsx
-      navigate(`/produto?${params.toString()}`, { state: { produto } });
+    if (config.tipo === 'guiada') {
+      params.append('montadora_nome', montadoraSelecionada.nome);
+      params.append('familia_id', familiaId);
     } else {
-      console.error('Produto inválido:', produto);
-      alert('Não foi possível acessar o produto selecionado.');
+      params.append('termo', query);
+      params.append('placa', placa);
+      params.append('marca', marcaSelecionada);
+      params.append('ordem', ordem);
     }
+
+    axios.get(`${API_URL}/pesquisar?${params.toString()}`)
+      .then(res => {
+        setResultados(res.data.dados || []);
+        setMarcas(res.data.marcas || []); // Atualiza as marcas disponíveis
+        setPaginaAtual(res.data.pagina || 1);
+        setTotalPaginas(res.data.total_paginas || 1);
+      })
+      .catch(err => console.error("Erro na busca", err))
+      .finally(() => setCarregandoTabela(false));
+  };
+  
+  const handleMontadoraChange = (id, nome) => {
+    setMontadoraSelecionada({ id, nome });
+    setFamiliaId('');
+    setResultados([]);
   };
 
-  const toggleSugestoes = () => setMostrarSugestoes(!mostrarSugestoes);
+  const handleLinhaClick = (produto) => {
+    const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
+    navigate(`/produto?${params.toString()}`);
+  };
 
   return (
-    <div className="container-fluid ">
+    <div className="container-fluid">
       <div className="row">
-
+        <h4 style={{textAlign: 'center', margin: '20px 0', color: 'black'}}>Busca por Veículo</h4>
         <Montadora
-          valorSelecionado={montadoraId}
-          onChange={setMontadoraId}
+          listaMontadoras={listaMontadoras}
+          valorSelecionado={montadoraSelecionada.id}
+          onChange={handleMontadoraChange}
+          carregando={carregandoCascata}
         />
-
         <Familia
-          montadoraId={montadoraId}
+          listaFamilias={listaFamilias}
+          montadoraId={montadoraSelecionada.id}
           valorSelecionado={familiaId}
           onChange={setFamiliaId}
+          carregando={carregandoCascata}
         />
-
-
-        <Campos
+        
+        <hr style={{margin: '30px auto', borderColor: 'black'}}/>
+        <h4 style={{textAlign: 'center', margin: '20px 0', color: 'black'}}>Busca por Texto</h4>
+        <Campos 
           query={query} setQuery={setQuery}
           placa={placa} setPlaca={setPlaca}
           marcas={marcas}
           marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
           ordem={ordem} setOrdem={setOrdem}
           sugestoes={sugestoes}
-          // --- PROPS RESTAURADAS ---
-          dropdownRef={dropdownRef}
-          toggleSugestoes={toggleSugestoes}
-          mostrarSugestoes={mostrarSugestoes}
+          mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
           carregandoSugestoes={carregandoSugestoes}
-          setMostrarSugestoes={setMostrarSugestoes}
-          buscarTratados={() => buscarProdutos(1)}
         />
       </div>
-
-      {mensagemBusca && (
-        <div className={`alert alert-${tipoMensagem}`} style={{ maxWidth: '90vw', margin: '0 auto 1rem auto', textAlign: 'center' }}>
-          {mensagemBusca}
-        </div>
-      )}
 
       <Tabela
         resultados={resultados}
         paginaAtual={paginaAtual}
-        buscarTratados={buscarPagina}
         totalPaginas={totalPaginas}
-        temMaisPaginas={temMaisPaginas}
         handleLinhaClick={handleLinhaClick}
         carregandoTabela={carregandoTabela}
       />
