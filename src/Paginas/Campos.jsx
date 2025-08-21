@@ -44,8 +44,6 @@ function CustomSelect({ options, value, onChange, placeholder = "Selecione uma o
 function Campos({
   query,
   setQuery,
-  placa, // <-- Recebe a placa
-  setPlaca, // <-- Recebe o setter da placa
   marcas,
   marcaSelecionada,
   setMarcaSelecionada,

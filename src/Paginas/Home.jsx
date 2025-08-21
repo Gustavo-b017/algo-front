@@ -35,7 +35,10 @@ function Home() {
     if (!query) return;
 
     setCarregandoTabela(true);
-    setMensagemBusca('');
+    // Limpa a mensagem apenas se for uma nova busca (página 1)
+    if (pagina === 1) {
+        setMensagemBusca('');
+    }
 
     const params = new URLSearchParams({
       produto: query,
@@ -81,14 +84,20 @@ function Home() {
     return () => clearTimeout(timer);
   }, [query, placa, marcaSelecionada, ordem]);
 
-  // Efeito para buscar outras páginas
+  // Função para buscar outras páginas, atualizando o estado da página
   const buscarPagina = (novaPagina) => {
-    if(query) {
-      buscarProdutos(novaPagina);
-    }
+    setPaginaAtual(novaPagina);
   }
 
-  // --- LÓGICA DO CLIQUE FORA RESTAURADA ---
+  // Efeito que reage à mudança da página para buscar os dados
+  useEffect(() => {
+    if (query && paginaAtual > 0) {
+        buscarProdutos(paginaAtual);
+    }
+  }, [paginaAtual]);
+
+
+  // Lógica do clique fora
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -112,21 +121,21 @@ function Home() {
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-        axios.get(`${API_URL}/autocomplete?prefix=${query}`)
+        // --- PARÂMETRO DA PLACA ADICIONADO AQUI ---
+        axios.get(`${API_URL}/autocomplete?prefix=${query}&placa=${placa}`)
           .then(res => setSugestoes(res.data?.sugestoes || []))
           .catch(() => setSugestoes([]))
           .finally(() => setCarregandoSugestoes(false));
     }, 300);
-  }, [query]);
+  }, [query, placa]); // Depende da query e da placa
   
   const handleLinhaClick = (produto) => {
     if (produto && produto.codigoReferencia) {
         const params = new URLSearchParams({
             id: produto.id,
             codigoReferencia: produto.codigoReferencia,
-            nomeProduto: produto.nome, // <-- Verifique se esta linha está exatamente assim
+            nomeProduto: produto.nome,
         });
-        // A rota deve ser "/produto" para corresponder ao App.jsx
         navigate(`/produto?${params.toString()}`, { state: { produto } });
     } else {
         console.error('Produto inválido:', produto);
@@ -135,6 +144,11 @@ function Home() {
   };
 
   const toggleSugestoes = () => setMostrarSugestoes(!mostrarSugestoes);
+  
+  const handleSelectSugestao = (sugestao) => {
+    setQuery(sugestao);
+    setMostrarSugestoes(false);
+  };
 
   return (
     <div className="container-fluid ">
@@ -146,13 +160,12 @@ function Home() {
           marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
           ordem={ordem} setOrdem={setOrdem}
           sugestoes={sugestoes}
-          // --- PROPS RESTAURADAS ---
           dropdownRef={dropdownRef}
           toggleSugestoes={toggleSugestoes}
           mostrarSugestoes={mostrarSugestoes}
           carregandoSugestoes={carregandoSugestoes}
-          setMostrarSugestoes={setMostrarSugestoes}
-          buscarTratados={() => buscarProdutos(1)}
+          // Passa a função correta para o Campos poder usar ao selecionar uma sugestão
+          handleSelectSugestao={handleSelectSugestao}
         />
       </div>
       
@@ -165,7 +178,7 @@ function Home() {
       <Tabela
         resultados={resultados}
         paginaAtual={paginaAtual}
-        buscarTratados={buscarPagina}
+        buscarTratados={buscarPagina} // buscarPagina agora é a função correta
         totalPaginas={totalPaginas}
         temMaisPaginas={temMaisPaginas}
         handleLinhaClick={handleLinhaClick}
