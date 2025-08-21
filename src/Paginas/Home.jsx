@@ -33,7 +33,8 @@ function Home() {
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [carregandoTabela, setCarregandoTabela] = useState(false);
 
-  const dropdownRef = useRef(null); // A referência para o componente Campos
+  const dropdownRef = useRef(null);
+  const isClearingRef = useRef(false); // NOVO REF
   const navigate = useNavigate();
 
   // --- Funções ---
@@ -86,6 +87,9 @@ function Home() {
   // Efeito 2: Dispara a BUSCA GUIADA (Cascata)
   useEffect(() => {
     if (montadoraSelecionada.id && familiaSelecionada.id) {
+      // Usa o ref para evitar que a limpeza do estado da query dispare a busca por texto
+      isClearingRef.current = true;
+
       // Limpa os estados da busca por texto
       setQuery('');
       setPlaca('');
@@ -104,6 +108,12 @@ function Home() {
 
   // Efeito 3: Dispara a BUSCA POR TEXTO (debounce para performance)
   useEffect(() => {
+    // Se o ref for true, significa que o estado está sendo limpo por outro efeito, então saímos
+    if (isClearingRef.current) {
+      isClearingRef.current = false;
+      return;
+    }
+
     const timer = setTimeout(() => {
       if (query || placa) {
         // Limpa os estados da busca por cascata
@@ -142,7 +152,7 @@ function Home() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Efeito 5: Lógica de fechar a caixa de sugestões ao clicar fora (ESSA É A LÓGICA QUE FALTAVA)
+  // Efeito 5: Lógica de fechar a caixa de sugestões ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
