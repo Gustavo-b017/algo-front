@@ -15,7 +15,7 @@ function Home() {
   const [listaMontadoras, setListaMontadoras] = useState([]);
   const [listaFamilias, setListaFamilias] = useState([]);
   const [montadoraSelecionada, setMontadoraSelecionada] = useState({ id: '', nome: '' });
-  const [familiaId, setFamiliaId] = useState('');
+  const [familiaSelecionada, setFamiliaSelecionada] = useState({ id: '', nome: '' });
   const [carregandoCascata, setCarregandoCascata] = useState(true);
 
   // Estados da Busca por Texto
@@ -32,7 +32,7 @@ function Home() {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [carregandoTabela, setCarregandoTabela] = useState(false);
-  
+
   const navigate = useNavigate();
 
   // --- Efeitos ---
@@ -55,13 +55,13 @@ function Home() {
     carregarDadosCascata();
   }, []);
 
-  // Dispara a BUSCA GUIADA
+  // Dispara a BUSCA GUIADA (Atualizado)
   useEffect(() => {
-    if (montadoraSelecionada.id && familiaId) {
-      setQuery(''); 
+    if (montadoraSelecionada.id && familiaSelecionada.id) {
+      setQuery('');
       buscarResultados({ tipo: 'guiada', pagina: 1 });
     }
-  }, [montadoraSelecionada, familiaId]);
+  }, [montadoraSelecionada, familiaSelecionada]);
 
   // Dispara a BUSCA POR TEXTO
   useEffect(() => {
@@ -93,7 +93,7 @@ function Home() {
     }, 300);
     return () => clearTimeout(timer);
   }, [query]);
-  
+
   // --- Funções ---
   const buscarResultados = (config) => {
     setCarregandoTabela(true);
@@ -101,7 +101,8 @@ function Home() {
 
     if (config.tipo === 'guiada') {
       params.append('montadora_nome', montadoraSelecionada.nome);
-      params.append('familia_id', familiaId);
+      params.append('familia_id', familiaSelecionada.id);
+      params.append('familia_nome', familiaSelecionada.nome); // <-- MUDANÇA: enviamos o nome
     } else {
       params.append('termo', query);
       params.append('placa', placa);
@@ -119,11 +120,15 @@ function Home() {
       .catch(err => console.error("Erro na busca", err))
       .finally(() => setCarregandoTabela(false));
   };
-  
+
   const handleMontadoraChange = (id, nome) => {
     setMontadoraSelecionada({ id, nome });
-    setFamiliaId('');
+    setFamiliaSelecionada({ id: '', nome: '' }); // <-- MUDANÇA
     setResultados([]);
+  };
+
+  const handleFamiliaChange = (id, nome) => { // <-- NOVA FUNÇÃO
+    setFamiliaSelecionada({ id, nome });
   };
 
   const handleLinhaClick = (produto) => {
@@ -134,24 +139,25 @@ function Home() {
   return (
     <div className="container-fluid">
       <div className="row">
-        <h4 style={{textAlign: 'center', margin: '20px 0', color: 'black'}}>Busca por Veículo</h4>
+        <h4 style={{ textAlign: 'center', margin: '20px 0', color: 'black' }}>Busca por Veículo</h4>
         <Montadora
           listaMontadoras={listaMontadoras}
           valorSelecionado={montadoraSelecionada.id}
           onChange={handleMontadoraChange}
           carregando={carregandoCascata}
         />
+
         <Familia
           listaFamilias={listaFamilias}
           montadoraId={montadoraSelecionada.id}
-          valorSelecionado={familiaId}
-          onChange={setFamiliaId}
+          valorSelecionadoId={familiaSelecionada.id} // <-- Correção 1
+          onChange={handleFamiliaChange}             // <-- Correção 2
           carregando={carregandoCascata}
         />
-        
-        <hr style={{margin: '30px auto', borderColor: 'black'}}/>
-        <h4 style={{textAlign: 'center', margin: '20px 0', color: 'black'}}>Busca por Texto</h4>
-        <Campos 
+
+        <hr style={{ margin: '30px auto', borderColor: 'black' }} />
+        <h4 style={{ textAlign: 'center', margin: '20px 0', color: 'black' }}>Busca por Texto</h4>
+        <Campos
           query={query} setQuery={setQuery}
           placa={placa} setPlaca={setPlaca}
           marcas={marcas}
