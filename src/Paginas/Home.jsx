@@ -21,7 +21,7 @@ function Home() {
   // Estados da Busca por Texto
   const [query, setQuery] = useState('');
   const [placa, setPlaca] = useState('DME8I14');
-  const [marcas, setMarcas] = useState([]); // Lista de marcas para o seletor
+  const [marcas, setMarcas] = useState([]);
   const [marcaSelecionada, setMarcaSelecionada] = useState('');
   const [ordem, setOrdem] = useState('asc');
   const [sugestoes, setSugestoes] = useState([]);
@@ -33,10 +33,38 @@ function Home() {
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [carregandoTabela, setCarregandoTabela] = useState(false);
 
+  const dropdownRef = useRef(null); // A referência para o componente Campos
   const navigate = useNavigate();
 
+  // --- Funções ---
+  const buscarResultados = (config) => {
+    setCarregandoTabela(true);
+    let params = new URLSearchParams({ pagina: config.pagina });
+
+    if (config.tipo === 'guiada') {
+      params.append('montadora_nome', config.montadora_nome);
+      params.append('familia_id', config.familia_id);
+      params.append('familia_nome', config.familia_nome);
+    } else {
+      params.append('termo', config.termo);
+      params.append('placa', config.placa);
+      params.append('marca', config.marca);
+      params.append('ordem', config.ordem);
+    }
+
+    axios.get(`${API_URL}/pesquisar?${params.toString()}`)
+      .then(res => {
+        setResultados(res.data.dados || []);
+        setMarcas(res.data.marcas || []);
+        setPaginaAtual(res.data.pagina || 1);
+        setTotalPaginas(res.data.total_paginas || 1);
+      })
+      .catch(err => console.error("Erro na busca", err))
+      .finally(() => setCarregandoTabela(false));
+  };
+
   // --- Efeitos ---
-  // Busca dados da cascata (uma vez)
+  // Efeito 1: Busca dados da cascata (uma vez)
   useEffect(() => {
     async function carregarDadosCascata() {
       try {
@@ -55,29 +83,49 @@ function Home() {
     carregarDadosCascata();
   }, []);
 
-  // Dispara a BUSCA GUIADA (Atualizado)
+  // Efeito 2: Dispara a BUSCA GUIADA (Cascata)
   useEffect(() => {
     if (montadoraSelecionada.id && familiaSelecionada.id) {
+      // Limpa os estados da busca por texto
       setQuery('');
-      buscarResultados({ tipo: 'guiada', pagina: 1 });
+      setPlaca('');
+      setMarcaSelecionada('');
+      setOrdem('asc');
+
+      buscarResultados({
+        tipo: 'guiada',
+        pagina: 1,
+        montadora_nome: montadoraSelecionada.nome,
+        familia_id: familiaSelecionada.id,
+        familia_nome: familiaSelecionada.nome
+      });
     }
   }, [montadoraSelecionada, familiaSelecionada]);
 
-  // Dispara a BUSCA POR TEXTO
+  // Efeito 3: Dispara a BUSCA POR TEXTO (debounce para performance)
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (query) {
+      if (query || placa) {
+        // Limpa os estados da busca por cascata
         setMontadoraSelecionada({ id: '', nome: '' });
-        setFamiliaId('');
-        buscarResultados({ tipo: 'texto', pagina: 1 });
+        setFamiliaSelecionada({ id: '', nome: '' });
+
+        buscarResultados({
+          tipo: 'texto',
+          pagina: 1,
+          termo: query,
+          placa: placa,
+          marca: marcaSelecionada,
+          ordem: ordem
+        });
       } else {
         setResultados([]);
       }
     }, 500);
     return () => clearTimeout(timer);
-  }, [query, placa, marcaSelecionada, ordem]); // Agora depende de todos os filtros
+  }, [query, placa, marcaSelecionada, ordem]);
 
-  // Lógica do AUTOCOMPLETE
+  // Efeito 4: Lógica do AUTOCOMPLETE
   useEffect(() => {
     if (!query) {
       setSugestoes([]);
@@ -94,40 +142,24 @@ function Home() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  // --- Funções ---
-  const buscarResultados = (config) => {
-    setCarregandoTabela(true);
-    let params = new URLSearchParams({ pagina: config.pagina });
+  // Efeito 5: Lógica de fechar a caixa de sugestões ao clicar fora (ESSA É A LÓGICA QUE FALTAVA)
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setMostrarSugestoes(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-    if (config.tipo === 'guiada') {
-      params.append('montadora_nome', montadoraSelecionada.nome);
-      params.append('familia_id', familiaSelecionada.id);
-      params.append('familia_nome', familiaSelecionada.nome); // <-- MUDANÇA: enviamos o nome
-    } else {
-      params.append('termo', query);
-      params.append('placa', placa);
-      params.append('marca', marcaSelecionada);
-      params.append('ordem', ordem);
-    }
-
-    axios.get(`${API_URL}/pesquisar?${params.toString()}`)
-      .then(res => {
-        setResultados(res.data.dados || []);
-        setMarcas(res.data.marcas || []); // Atualiza as marcas disponíveis
-        setPaginaAtual(res.data.pagina || 1);
-        setTotalPaginas(res.data.total_paginas || 1);
-      })
-      .catch(err => console.error("Erro na busca", err))
-      .finally(() => setCarregandoTabela(false));
-  };
-
+  // --- Handlers ---
   const handleMontadoraChange = (id, nome) => {
     setMontadoraSelecionada({ id, nome });
-    setFamiliaSelecionada({ id: '', nome: '' }); // <-- MUDANÇA
-    setResultados([]);
+    setFamiliaSelecionada({ id: '', nome: '' });
   };
 
-  const handleFamiliaChange = (id, nome) => { // <-- NOVA FUNÇÃO
+  const handleFamiliaChange = (id, nome) => {
     setFamiliaSelecionada({ id, nome });
   };
 
@@ -150,8 +182,8 @@ function Home() {
         <Familia
           listaFamilias={listaFamilias}
           montadoraId={montadoraSelecionada.id}
-          valorSelecionadoId={familiaSelecionada.id} // <-- Correção 1
-          onChange={handleFamiliaChange}             // <-- Correção 2
+          valorSelecionadoId={familiaSelecionada.id}
+          onChange={handleFamiliaChange}
           carregando={carregandoCascata}
         />
 
@@ -166,6 +198,7 @@ function Home() {
           sugestoes={sugestoes}
           mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
           carregandoSugestoes={carregandoSugestoes}
+          dropdownRef={dropdownRef}
         />
       </div>
 
@@ -175,6 +208,17 @@ function Home() {
         totalPaginas={totalPaginas}
         handleLinhaClick={handleLinhaClick}
         carregandoTabela={carregandoTabela}
+        buscarTratados={(pagina) => buscarResultados({
+          tipo: (query || placa) ? 'texto' : 'guiada',
+          pagina: pagina,
+          termo: query,
+          placa: placa,
+          marca: marcaSelecionada,
+          ordem: ordem,
+          montadora_nome: montadoraSelecionada.nome,
+          familia_id: familiaSelecionada.id,
+          familia_nome: familiaSelecionada.nome
+        })}
       />
     </div>
   );
