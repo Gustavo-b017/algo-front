@@ -1,7 +1,8 @@
+// src/Paginas/Tabela.jsx
 import React from 'react';
 import '../Estilosao/tabela.css';
 
-function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarTratados, handleLinhaClick, carregandoTabela }) {
+function Tabela({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela }) {
   if (carregandoTabela) {
     return (
       <div className="tabela-carregando">
@@ -9,6 +10,8 @@ function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarT
       </div>
     );
   }
+
+  const temMaisPaginas = paginaAtual < totalPaginas;
 
   return (
     <>
@@ -26,7 +29,7 @@ function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarT
           <tbody>
             {resultados.map((item, i) => (
               <tr
-                key={i}
+                key={`${item.id}-${i}`}
                 className={i % 2 === 0 ? 'linha-par' : 'linha-impar'}
                 onClick={() => handleLinhaClick(item)}
                 style={{ cursor: 'pointer' }}
@@ -47,11 +50,11 @@ function Tabela({ resultados, paginaAtual, totalPaginas, temMaisPaginas, buscarT
           disabled={paginaAtual === 1}
           onClick={() => buscarTratados(paginaAtual - 1)}
         >
-          {'<'} Voltar 
+          {'<'} Voltar
         </button>
 
         <div className="paginacao-info">
-            Página {paginaAtual} de {totalPaginas}
+          Página {paginaAtual} de {totalPaginas}
         </div>
 
         <button

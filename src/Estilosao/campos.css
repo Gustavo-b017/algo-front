@@ -40,7 +40,7 @@
   min-width: 0;
   gap: 10px;
   margin: 0 auto;
-
+  
   .campo-marcas,
   .campo-ordem {
     position: relative;
@@ -110,11 +110,10 @@ input, .custom-select-selected {
 
 li {
   border-bottom: 1px solid var(--cinza_escuro);
-  padding: 0.5rem 0.75rem;
   cursor: pointer;
   color: var(--azul);
   transition: background 0.2s, color 0.2s;
-    
+  
   &:last-child {
     border-bottom: none;
   }
@@ -124,16 +123,16 @@ li {
     padding: 0.5rem 1rem;
     font-style: italic;
   }
-
+  
   &:hover {
-  background: var(--azul);
-  color: #fff;
+    background: var(--azul);
+    color: #fff;
   }
   
   button {
     color: var(--azul);
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: .6rem 1.2rem;
     border: none;
     background: transparent;
     text-align: left;

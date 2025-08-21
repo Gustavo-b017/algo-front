@@ -1,146 +1,138 @@
+// src/Paginas/Campos.jsx
+
 import React, { useEffect, useState, useRef } from 'react';
 import '../Estilosao/campos.css';
 
-function CustomSelect({ options, value, onChange, placeholder = "Selecione uma opção" }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef();
+// Componente para os seletores customizados
+function CustomSelect({ options, value, onChange, placeholder }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef();
 
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
-  const selectedLabel = options.find(opt => opt.value === value)?.label || placeholder;
-  
-  return (
-    <div className={`custom-select${open ? ' open' : ''}`} ref={ref}>
-      <div
-        className="custom-select-selected"
-        onClick={() => setOpen(!open)}
-      >
-        {selectedLabel}
-      </div>
-      <ul className="custom-select-options">
-        {options.map((opt, i) => (
-          <li
-            key={i}
-            className={opt.value === value ? 'selected' : ''}
-            onClick={() => {
-              onChange(opt.value);
-              setOpen(false);
-            }}
-          >
-            {opt.label}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    const selectedLabel = options.find(opt => opt.value === value)?.label || placeholder;
+    
+    return (
+        <div className={`custom-select${open ? ' open' : ''}`} ref={ref}>
+            <div
+                className="custom-select-selected"
+                onClick={() => setOpen(!open)}
+            >
+                {selectedLabel}
+            </div>
+            <ul className="custom-select-options">
+                {options.map((opt, i) => (
+                    <li
+                        key={i}
+                        className={opt.value === value ? 'selected' : ''}
+                        onClick={() => {
+                            onChange(opt.value);
+                            setOpen(false);
+                        }}
+                    >
+                        {opt.label}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
 
 function Campos({
-  query,
-  setQuery,
-  marcas,
-  marcaSelecionada,
-  setMarcaSelecionada,
-  ordem,
-  setOrdem,
-  dropdownRef,
-  toggleSugestoes,
-  sugestoes,
-  mostrarSugestoes,
-  carregandoSugestoes,
-  setMostrarSugestoes,
-  buscarTratados
+    query, setQuery,
+    placa, setPlaca,
+    marcas = [],
+    marcaSelecionada, setMarcaSelecionada,
+    ordem, setOrdem,
+    sugestoes = [],
+    mostrarSugestoes = false,
+    carregandoSugestoes = false,
+    setMostrarSugestoes,
+    dropdownRef
 }) {
-  useEffect(() => {
-    console.log('Query recebida no Campos:', query);
-  }, [query]);
+    const handleSelect = (sugestao) => {
+        setQuery(sugestao);
+        setMostrarSugestoes(false);
+    };
 
-  const handleSelect = (s) => {
-    setQuery(s);
-    setMostrarSugestoes(false);
-    buscarTratados(1);
-  };
+    const marcaOptions = marcas.map(m => ({ value: m, label: m }));
+    const ordemOptions = [
+        { value: 'asc', label: 'Crescente' },
+        { value: 'desc', label: 'Decrescente' }
+    ];
 
-  // Prepare options for custom select
-  const marcaOptions = [
-    { value: '', label: 'Todas as Marcas' },
-    ...marcas.map(m => ({ value: m, label: m }))
-  ];
-  const ordemOptions = [
-    { value: 'asc', label: 'Crescente' },
-    { value: 'desc', label: 'Decrescente' }
-  ];
-
-  return (
-    <div className="campos-grid">
-
-      <div className="busca">
-        <div className="campo-busca" ref={dropdownRef}>
-          <input
-            type="text"
-            className="campo-input"
-            placeholder="Buscar..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={toggleSugestoes}
-          />
-          <button
-            type="button"
-            className={`toggle-btn ${mostrarSugestoes ? 'aberto' : ''}`}
-            title="Alternar sugestões"
-            onClick={toggleSugestoes}
-          >
-            {mostrarSugestoes ? '✕' : '☰'}
-          </button>
-
-          {mostrarSugestoes && (
-            <ul className="sugestoes-list">
-              {carregandoSugestoes ? (
-                <li className="loading">Carregando...</li>
-              ) : (
-                sugestoes.map((s, i) => (
-                  <li key={i} className="sugestao">
+    return (
+        <div className="campos-grid" style={{width: '90vw', margin: '0 auto'}}>
+            <div className="busca">
+                <div className="campo-busca" ref={dropdownRef}>
+                    <input
+                        type="text"
+                        className="campo-input"
+                        placeholder="Buscar por nome do produto..."
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onFocus={() => setMostrarSugestoes(true)}
+                    />
                     <button
-                      type="button"
-                      onClick={() => handleSelect(s)}
+                        type="button"
+                        className={`toggle-btn ${mostrarSugestoes ? 'aberto' : ''}`}
+                        title="Alternar sugestões"
+                        onClick={() => setMostrarSugestoes(!mostrarSugestoes)}
                     >
-                      {s}
+                        {mostrarSugestoes ? '✕' : '☰'}
                     </button>
-                  </li>
-                ))
-              )}
-            </ul>
-          )}
+                    {mostrarSugestoes && query && (
+                        <ul className="sugestoes-list">
+                            {carregandoSugestoes ? <li className="loading">Carregando...</li>
+                                : sugestoes.length > 0 ? (
+                                    sugestoes.map((s, i) => (
+                                        <li key={i} className="sugestao">
+                                            <button type="button" onClick={() => handleSelect(s)}>
+                                                {s}
+                                            </button>
+                                        </li>
+                                    ))
+                                ) : <li className="loading">Nenhuma sugestão.</li>
+                            }
+                        </ul>
+                    )}
+                </div>
+                <div className="campo-placa">
+                    <input
+                        type="text"
+                        className="campo-input"
+                        placeholder="Placa (opcional)"
+                        value={placa}
+                        onChange={(e) => setPlaca(e.target.value.toUpperCase())}
+                    />
+                </div>
+            </div>
+            <div className="filtros">
+                <div className="campo-marcas">
+                    <CustomSelect
+                        options={marcaOptions}
+                        value={marcaSelecionada}
+                        onChange={setMarcaSelecionada}
+                        placeholder="Todas as Marcas"
+                    />
+                </div>
+                <div className="campo-ordem">
+                    <CustomSelect
+                        options={ordemOptions}
+                        value={ordem}
+                        onChange={setOrdem}
+                        placeholder="Ordem"
+                    />
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div className="filtros">
-        <div className="campo-marcas">
-          <CustomSelect
-            className="select-input"
-            options={marcaOptions}
-            value={marcaSelecionada}
-            onChange={setMarcaSelecionada}
-            placeholder="Todas as Marcas"
-          />
-        </div>
-        <div className="campo-ordem">
-          <CustomSelect
-            options={ordemOptions}
-            value={ordem}
-            onChange={setOrdem}
-            placeholder="Ordem"
-          />
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default Campos;

@@ -9,7 +9,8 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/produto/:codigo" element={<Produto />} />
+        {/* Correção: a rota agora é apenas "/produto" */}
+        <Route path="/produto" element={<Produto />} />
       </Routes>
     </div>
   );

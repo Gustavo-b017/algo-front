@@ -1,51 +1,64 @@
+// src/Paginas/Produto.jsx
+
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Item from './Item';
 import Sugestoes from './Sugestoes';
 import axios from 'axios';
 import '../Estilosao/produto.css';
-import Entregas from './Entregas';
 
 const API_URL = import.meta.env.VITE_API_URL;
 // const API_URL = 'http://127.0.0.1:5000';
 
 function Produto() {
-  const location = useLocation();
-  const produto = location.state?.produto;
-  const [produtoOk, setProdutoOk] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [dadosCompletos, setDadosCompletos] = useState(null); // Estado para guardar TODA a resposta
+  const [erro, setErro] = useState(null);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    async function carregarProduto() {
-      if (!produto) return;
+    const id = searchParams.get('id');
+    const nomeProduto = searchParams.get('nomeProduto');
+
+    async function carregarDetalhes() {
+      if (!id || !nomeProduto) {
+        setErro('Parâmetros inválidos para carregar o produto.');
+        setCarregando(false);
+        return;
+      }
       try {
-        await axios.get(`${API_URL}/produto?id=${produto.id}&codigoReferencia=${encodeURIComponent(produto.codigoReferencia)}&nomeProduto=${encodeURIComponent(produto.nome)}`);
-        setProdutoOk(true);
+        const params = new URLSearchParams({ id, nomeProduto });
+        // Chamamos a nossa nova e eficiente rota!
+        const res = await axios.get(`${API_URL}/produto_detalhes?${params.toString()}`);
+        setDadosCompletos(res.data); // Guardamos a resposta completa no estado
       } catch (error) {
-        console.error('Erro ao chamar o componente Produto:', error);
-        alert('Erro ao chamar o componente Produto.');
+        console.error('Erro ao carregar detalhes do produto:', error);
+        setErro('Não foi possível carregar os detalhes do produto.');
+      } finally {
+        setCarregando(false);
       }
     }
-    setProdutoOk(false);
-    carregarProduto();
-  }, [produto]);
+    
+    carregarDetalhes();
+  }, [searchParams]);
 
-  if (!produto) {
-    return <div className="container mt-5">Produto não encontrado.</div>;
+  if (carregando) {
+    return <div className="text-center mt-5"><h1>Carregando produto...</h1></div>;
+  }
+  
+  if (erro) {
+    return <div className="container mt-5 text-center"><h2>{erro}</h2></div>;
   }
 
   return (
     <div className="container">
-      {produtoOk && (
+      {dadosCompletos && (
         <>
-          <Item />
-
+          {/* Passamos os dados do item via props */}
+          <Item dadosItem={dadosCompletos.item} />
           <hr />
-
-          <Sugestoes />
-
-          <hr />
-
-          <Entregas />
+          {/* Passamos os dados dos similares via props */}
+          <Sugestoes dadosSimilares={dadosCompletos.similares} />
         </>
       )}
     </div>
