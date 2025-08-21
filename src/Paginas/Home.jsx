@@ -3,6 +3,9 @@ import Campos from './Campos.jsx';
 import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Montadora from './Montadora.jsx';
+import Modelo from './Familia.jsx';
+import Familia from './Familia.jsx';
 
 // const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
@@ -13,7 +16,7 @@ function Home() {
   const [marcaSelecionada, setMarcaSelecionada] = useState('');
   const [ordem, setOrdem] = useState('asc');
   const [paginaAtual, setPaginaAtual] = useState(1);
-  
+
   const [resultados, setResultados] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [totalPaginas, setTotalPaginas] = useState(1);
@@ -21,10 +24,14 @@ function Home() {
   const [mensagemBusca, setMensagemBusca] = useState('');
   const [tipoMensagem, setTipoMensagem] = useState('info');
   const [carregandoTabela, setCarregandoTabela] = useState(false);
-  
+
   const [sugestoes, setSugestoes] = useState([]);
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
   const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
+
+  const [montadoraId, setMontadoraId] = useState('');
+
+  const [familiaId, setFamiliaId] = useState('');
 
   const dropdownRef = useRef(null);
   const debounceRef = useRef(null);
@@ -35,10 +42,7 @@ function Home() {
     if (!query) return;
 
     setCarregandoTabela(true);
-    // Limpa a mensagem apenas se for uma nova busca (página 1)
-    if (pagina === 1) {
-        setMensagemBusca('');
-    }
+    setMensagemBusca('');
 
     const params = new URLSearchParams({
       produto: query,
@@ -56,7 +60,7 @@ function Home() {
         setPaginaAtual(data.pagina || 1);
         setTotalPaginas(data.total_paginas || 1);
         setTemMaisPaginas(data.proxima_pagina || false);
-        
+
         if (data.mensagem_busca) {
           setMensagemBusca(data.mensagem_busca);
           setTipoMensagem(data.tipo_mensagem || 'info');
@@ -84,20 +88,14 @@ function Home() {
     return () => clearTimeout(timer);
   }, [query, placa, marcaSelecionada, ordem]);
 
-  // Função para buscar outras páginas, atualizando o estado da página
+  // Efeito para buscar outras páginas
   const buscarPagina = (novaPagina) => {
-    setPaginaAtual(novaPagina);
+    if (query) {
+      buscarProdutos(novaPagina);
+    }
   }
 
-  // Efeito que reage à mudança da página para buscar os dados
-  useEffect(() => {
-    if (query && paginaAtual > 0) {
-        buscarProdutos(paginaAtual);
-    }
-  }, [paginaAtual]);
-
-
-  // Lógica do clique fora
+  // --- LÓGICA DO CLIQUE FORA RESTAURADA ---
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -121,38 +119,46 @@ function Home() {
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-        // --- PARÂMETRO DA PLACA ADICIONADO AQUI ---
-        axios.get(`${API_URL}/autocomplete?prefix=${query}&placa=${placa}`)
-          .then(res => setSugestoes(res.data?.sugestoes || []))
-          .catch(() => setSugestoes([]))
-          .finally(() => setCarregandoSugestoes(false));
+      axios.get(`${API_URL}/autocomplete?prefix=${query}`)
+        .then(res => setSugestoes(res.data?.sugestoes || []))
+        .catch(() => setSugestoes([]))
+        .finally(() => setCarregandoSugestoes(false));
     }, 300);
-  }, [query, placa]); // Depende da query e da placa
-  
+  }, [query]);
+
   const handleLinhaClick = (produto) => {
     if (produto && produto.codigoReferencia) {
-        const params = new URLSearchParams({
-            id: produto.id,
-            codigoReferencia: produto.codigoReferencia,
-            nomeProduto: produto.nome,
-        });
-        navigate(`/produto?${params.toString()}`, { state: { produto } });
+      const params = new URLSearchParams({
+        id: produto.id,
+        codigoReferencia: produto.codigoReferencia,
+        nomeProduto: produto.nome, // <-- Verifique se esta linha está exatamente assim
+      });
+      // A rota deve ser "/produto" para corresponder ao App.jsx
+      navigate(`/produto?${params.toString()}`, { state: { produto } });
     } else {
-        console.error('Produto inválido:', produto);
-        alert('Não foi possível acessar o produto selecionado.');
+      console.error('Produto inválido:', produto);
+      alert('Não foi possível acessar o produto selecionado.');
     }
   };
 
   const toggleSugestoes = () => setMostrarSugestoes(!mostrarSugestoes);
-  
-  const handleSelectSugestao = (sugestao) => {
-    setQuery(sugestao);
-    setMostrarSugestoes(false);
-  };
 
   return (
     <div className="container-fluid ">
       <div className="row">
+
+        <Montadora
+          valorSelecionado={montadoraId}
+          onChange={setMontadoraId}
+        />
+
+        <Familia
+          montadoraId={montadoraId}
+          valorSelecionado={familiaId}
+          onChange={setFamiliaId}
+        />
+
+
         <Campos
           query={query} setQuery={setQuery}
           placa={placa} setPlaca={setPlaca}
@@ -160,15 +166,16 @@ function Home() {
           marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
           ordem={ordem} setOrdem={setOrdem}
           sugestoes={sugestoes}
+          // --- PROPS RESTAURADAS ---
           dropdownRef={dropdownRef}
           toggleSugestoes={toggleSugestoes}
           mostrarSugestoes={mostrarSugestoes}
           carregandoSugestoes={carregandoSugestoes}
-          // Passa a função correta para o Campos poder usar ao selecionar uma sugestão
-          handleSelectSugestao={handleSelectSugestao}
+          setMostrarSugestoes={setMostrarSugestoes}
+          buscarTratados={() => buscarProdutos(1)}
         />
       </div>
-      
+
       {mensagemBusca && (
         <div className={`alert alert-${tipoMensagem}`} style={{ maxWidth: '90vw', margin: '0 auto 1rem auto', textAlign: 'center' }}>
           {mensagemBusca}
@@ -178,7 +185,7 @@ function Home() {
       <Tabela
         resultados={resultados}
         paginaAtual={paginaAtual}
-        buscarTratados={buscarPagina} // buscarPagina agora é a função correta
+        buscarTratados={buscarPagina}
         totalPaginas={totalPaginas}
         temMaisPaginas={temMaisPaginas}
         handleLinhaClick={handleLinhaClick}
