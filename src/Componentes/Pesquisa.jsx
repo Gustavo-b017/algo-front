@@ -1,5 +1,3 @@
-// src/Paginas/Campos.jsx
-
 import React, { useEffect, useState, useRef } from 'react';
 import '../Estilosao/campos.css';
 

@@ -1,7 +1,11 @@
 // src/Paginas/Home.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
-import Header from './Header.jsx'; // NOVO IMPORT
+
+import Header from '../Componentes/Header.jsx';
+import Banner from '../Componentes/Banner.jsx';
+import Categorias from '../Componentes/Categorias.jsx';
+
 import Filtro from './Filtro.jsx';
 import Cascata from "./Cascata.jsx";
 import Tabela from './Tabela.jsx';
@@ -201,6 +205,8 @@ function Home() {
         dropdownRef={dropdownRef}
       />
 
+      <Banner />
+      <Categorias />
 
       <Filtro
         query={query} setQuery={setQuery}
