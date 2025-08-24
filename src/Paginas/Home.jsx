@@ -5,6 +5,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Header from '../Componentes/Header.jsx';
 import Banner from '../Componentes/Banner.jsx';
 import Categorias from '../Componentes/Categorias.jsx';
+import ProdutosDestaque from '../Componentes/ProdutosDestaque.jsx';
+import Marcas from '../Componentes/Marcas.jsx';
 
 import Filtro from './Filtro.jsx';
 import Cascata from "./Cascata.jsx";
@@ -207,6 +209,7 @@ function Home() {
 
       <Banner />
       <Categorias />
+      <ProdutosDestaque handleLinhaClick={handleLinhaClick} />
 
       <Filtro
         query={query} setQuery={setQuery}
@@ -249,6 +252,8 @@ function Home() {
           familia_nome: familiaSelecionada.nome
         })}
       />
+
+      <Marcas />
     </div>
   );
 }
