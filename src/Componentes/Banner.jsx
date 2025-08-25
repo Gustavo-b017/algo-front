@@ -2,7 +2,7 @@ import "../Estilosao/header.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import banner from "../Imagens/banner1.svg";
+import banner from "../imagens/banner1.svg";
 
 function Banner() {
     return (
