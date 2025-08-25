@@ -1,7 +1,7 @@
 // src/Paginas/Item.jsx
 
 import React, { useState } from 'react';
-import '../Estilosao/item.css';
+import '/public/style/item.css';
 
 // O componente agora recebe os dados diretamente via props
 function Item({ dadosItem }) {

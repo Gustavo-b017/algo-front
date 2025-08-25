@@ -1,7 +1,7 @@
 // src/Paginas/Campos.jsx
 
 import React, { useEffect, useState, useRef } from 'react';
-import '../Estilosao/campos.css';
+import '/public/style/campos.css';
 
 // Componente para os seletores customizados
 function CustomSelect({ options, value, onChange, placeholder }) {
@@ -17,7 +17,7 @@ function CustomSelect({ options, value, onChange, placeholder }) {
     }, []);
 
     const selectedLabel = options.find(opt => opt.value === value)?.label || placeholder;
-    
+
     return (
         <div className={`custom-select${open ? ' open' : ''}`} ref={ref}>
             <div
@@ -68,7 +68,7 @@ function Filtro({
     ];
 
     return (
-        <div className="campos-grid" style={{width: '90vw', margin: '0 auto'}}>
+        <div className="campos-grid" style={{ width: '90vw', margin: '0 auto' }}>
             <div className="filtros">
                 <div className="campo-marcas">
                     <CustomSelect

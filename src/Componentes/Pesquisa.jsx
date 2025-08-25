@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import '../Estilosao/campos.css';
+import '/public/style/campos.css';
 
 // Componente para os seletores customizados
 function CustomSelect({ options, value, onChange, placeholder }) {

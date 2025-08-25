@@ -1,16 +1,16 @@
-import "../Estilosao/marcas.scss";
-import bmw from "../imagens/marcas_logo/bmw.png";
-import ford from "../imagens/marcas_logo/ford.png";
-import honda from "../imagens/marcas_logo/honda.png";
-import hyundai from "../imagens/marcas_logo/hyundai.png";
-import infiniti from "../imagens/marcas_logo/infiniti.png";
-import kia from "../imagens/marcas_logo/kia.png";
-import lexus from "../imagens/marcas_logo/lexus.png";
-import mazda from "../imagens/marcas_logo/mazda.png";
-import mercedez from "../imagens/marcas_logo/mercedes-benz.png";
-import mitsubishi from "../imagens/marcas_logo/mitsubishi.png";
-import toyota from "../imagens/marcas_logo/toyota.png";
-import volkswagen from "../imagens/marcas_logo/volkswagen.png"
+import "/public/style/marcas.scss";
+import bmw from "/public/imagens/marcas_logo/bmw.png";
+import ford from "/public/imagens/marcas_logo/ford.png";
+import honda from "/public/imagens/marcas_logo/honda.png";
+import hyundai from "/public/imagens/marcas_logo/hyundai.png";
+import infiniti from "/public/imagens/marcas_logo/infiniti.png";
+import kia from "/public/imagens/marcas_logo/kia.png";
+import lexus from "/public/imagens/marcas_logo/lexus.png";
+import mazda from "/public/imagens/marcas_logo/mazda.png";
+import mercedez from "/public/imagens/marcas_logo/mercedes-benz.png";
+import mitsubishi from "/public/imagens/marcas_logo/mitsubishi.png";
+import toyota from "/public/imagens/marcas_logo/toyota.png";
+import volkswagen from "/public/imagens/marcas_logo/volkswagen.png"
 
 const brand_list = [
     { name: "Honda", id: 1, src: honda },
