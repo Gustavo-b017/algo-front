@@ -1,7 +1,7 @@
 // src/Paginas/Sugestoes.jsx
 
 import React from 'react';
-import '../Estilosao/sugestao.css';
+import '/public/style/sugestao.css';
 
 // O componente recebe os dados diretamente do componente pai
 function Sugestoes({ dadosSimilares }) {

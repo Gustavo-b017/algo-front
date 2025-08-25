@@ -1,16 +1,16 @@
-import "../Estilosao/header.css";
+import "/public/style/header.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import banner from "../imagens/banner1.svg";
+import banner from "/public/imagens/banner1.svg";
 
 function Banner() {
     return (
-        <div className="Banner" style={{ 
+        <div className="Banner" style={{
             margin: "0 98px",
-            flex: "1", 
+            flex: "1",
             borderRadius: "16px",
-            }}>
+        }}>
             <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
