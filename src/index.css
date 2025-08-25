@@ -1,7 +1,14 @@
+:root {
+    --azul: #022e4c;
+    --vermelho: #ce0f2d;
+    --cinza_claro: #d7d8d8;
+    --cinza_escuro: #666968;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding-left: 0;
   list-style: none;
   text-decoration: none;
   color: #022e4c;
@@ -11,7 +18,7 @@
 }
 
 body {
-  /* background: linear-gradient(to bottom right, #92a6bb, #2d3f50); */
+  margin: 0;
   background: white;
   min-height: 100vh;
 }

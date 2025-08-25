@@ -1,14 +1,19 @@
 // src/Paginas/Home.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
-import Montadora from './Montadora.jsx';
-import Familia from './Familia.jsx';
-import Campos from './Campos.jsx';
+
+import Header from '../Componentes/Header.jsx';
+import Banner from '../Componentes/Banner.jsx';
+import Categorias from '../Componentes/Categorias.jsx';
+import ProdutosDestaque from '../Componentes/ProdutosDestaque.jsx';
+import Marcas from '../Componentes/Marcas.jsx';
+
+import Filtro from './Filtro.jsx';
+import Cascata from "./Cascata.jsx";
 import Tabela from './Tabela.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-// const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
 
 function Home() {
@@ -33,18 +38,16 @@ function Home() {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [carregandoTabela, setCarregandoTabela] = useState(false);
-
-  const [feedbackMessage, setFeedbackMessage] = useState(''); // NOVO ESTADO
+  const [feedbackMessage, setFeedbackMessage] = useState('');
 
   const dropdownRef = useRef(null);
-  const isClearingRef = useRef(false); // NOVO REF
+  const isClearingRef = useRef(false);
   const navigate = useNavigate();
 
   // --- Funções ---
   const buscarResultados = (config) => {
     setCarregandoTabela(true);
     let params = new URLSearchParams({ pagina: config.pagina });
-    // Limpar a mensagem antes de uma nova busca
     setFeedbackMessage('');
 
     if (config.tipo === 'guiada') {
@@ -64,14 +67,13 @@ function Home() {
         setMarcas(res.data.marcas || []);
         setPaginaAtual(res.data.pagina || 1);
         setTotalPaginas(res.data.total_paginas || 1);
-        setFeedbackMessage(res.data.mensagem || ''); // SALVA A MENSAGEM DO BACKEND
+        setFeedbackMessage(res.data.mensagem || '');
       })
       .catch(err => console.error("Erro na busca", err))
       .finally(() => setCarregandoTabela(false));
   };
 
   // --- Efeitos ---
-  // Efeito 1: Busca dados da cascata (uma vez)
   useEffect(() => {
     async function carregarDadosCascata() {
       try {
@@ -90,13 +92,9 @@ function Home() {
     carregarDadosCascata();
   }, []);
 
-  // Efeito 2: Dispara a BUSCA GUIADA (Cascata)
   useEffect(() => {
     if (montadoraSelecionada.id && familiaSelecionada.id) {
-      // Usa o ref para evitar que a limpeza do estado da query dispare a busca por texto
       isClearingRef.current = true;
-
-      // Limpa os estados da busca por texto
       setQuery('');
       setPlaca('');
       setMarcaSelecionada('');
@@ -112,9 +110,7 @@ function Home() {
     }
   }, [montadoraSelecionada, familiaSelecionada]);
 
-  // Efeito 3: Dispara a BUSCA POR TEXTO (debounce para performance)
   useEffect(() => {
-    // Se o ref for true, significa que o estado está sendo limpo por outro efeito, então saímos
     if (isClearingRef.current) {
       isClearingRef.current = false;
       return;
@@ -122,7 +118,6 @@ function Home() {
 
     const timer = setTimeout(() => {
       if (query || placa) {
-        // Limpa os estados da busca por cascata
         setMontadoraSelecionada({ id: '', nome: '' });
         setFamiliaSelecionada({ id: '', nome: '' });
 
@@ -141,7 +136,6 @@ function Home() {
     return () => clearTimeout(timer);
   }, [query, placa, marcaSelecionada, ordem]);
 
-  // Efeito 4: Lógica do AUTOCOMPLETE
   useEffect(() => {
     if (!query) {
       setSugestoes([]);
@@ -158,7 +152,6 @@ function Home() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Efeito 5: Lógica de fechar a caixa de sugestões ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -184,39 +177,61 @@ function Home() {
     navigate(`/produto?${params.toString()}`);
   };
 
+  // Props para o Campos.jsx
+  query, setQuery, placa, setPlaca, marcas, marcaSelecionada,
+    setMarcaSelecionada, ordem, setOrdem, sugestoes, mostrarSugestoes,
+    carregandoSugestoes, setMostrarSugestoes, dropdownRef,
+
+    // Props para o Cascata.jsx
+    listaMontadoras, montadoraSelecionada, handleMontadoraChange, carregandoCascata,
+    listaFamilias, familiaSelecionada, handleFamiliaChange
+
   return (
     <div className="container-fluid">
-      <div className="row">
-        <h4 style={{ textAlign: 'center', margin: '20px 0', color: 'black' }}>Busca por Veículo</h4>
-        <Montadora
-          listaMontadoras={listaMontadoras}
-          valorSelecionado={montadoraSelecionada.id}
-          onChange={handleMontadoraChange}
-          carregando={carregandoCascata}
-        />
+      <Header
+        listaMontadoras={listaMontadoras}
+        montadoraSelecionada={montadoraSelecionada}
+        handleMontadoraChange={handleMontadoraChange}
+        carregandoCascata={carregandoCascata}
+        listaFamilias={listaFamilias}
+        familiaSelecionada={familiaSelecionada}
+        handleFamiliaChange={handleFamiliaChange}
+        query={query} setQuery={setQuery}
+        placa={placa} setPlaca={setPlaca}
+        marcas={marcas}
+        marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
+        ordem={ordem} setOrdem={setOrdem}
+        sugestoes={sugestoes}
+        mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
+        carregandoSugestoes={carregandoSugestoes}
+        dropdownRef={dropdownRef}
+      />
 
-        <Familia
-          listaFamilias={listaFamilias}
-          montadoraId={montadoraSelecionada.id}
-          valorSelecionadoId={familiaSelecionada.id}
-          onChange={handleFamiliaChange}
-          carregando={carregandoCascata}
-        />
+      <Banner />
+      <Categorias />
+      <ProdutosDestaque handleLinhaClick={handleLinhaClick} />
 
-        <hr style={{ margin: '30px auto', borderColor: 'black' }} />
-        <h4 style={{ textAlign: 'center', margin: '20px 0', color: 'black' }}>Busca por Texto</h4>
-        <Campos
-          query={query} setQuery={setQuery}
-          placa={placa} setPlaca={setPlaca}
-          marcas={marcas}
-          marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
-          ordem={ordem} setOrdem={setOrdem}
-          sugestoes={sugestoes}
-          mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
-          carregandoSugestoes={carregandoSugestoes}
-          dropdownRef={dropdownRef}
-        />
-      </div>
+      <Filtro
+        query={query} setQuery={setQuery}
+        placa={placa} setPlaca={setPlaca}
+        marcas={marcas}
+        marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
+        ordem={ordem} setOrdem={setOrdem}
+        sugestoes={sugestoes}
+        mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
+        carregandoSugestoes={carregandoSugestoes}
+        dropdownRef={dropdownRef}
+      />
+
+      <Cascata
+        listaMontadoras={listaMontadoras}
+        montadoraSelecionada={montadoraSelecionada}
+        handleMontadoraChange={handleMontadoraChange}
+        carregandoCascata={carregandoCascata}
+        listaFamilias={listaFamilias}
+        familiaSelecionada={familiaSelecionada}
+        handleFamiliaChange={handleFamiliaChange}
+      />
 
       <Tabela
         resultados={resultados}
@@ -224,7 +239,7 @@ function Home() {
         totalPaginas={totalPaginas}
         handleLinhaClick={handleLinhaClick}
         carregandoTabela={carregandoTabela}
-        feedbackMessage={feedbackMessage} // PASSA A MENSAGEM COMO PROP
+        feedbackMessage={feedbackMessage}
         buscarTratados={(pagina) => buscarResultados({
           tipo: (query || placa) ? 'texto' : 'guiada',
           pagina: pagina,
@@ -237,6 +252,8 @@ function Home() {
           familia_nome: familiaSelecionada.nome
         })}
       />
+
+      <Marcas />
     </div>
   );
 }

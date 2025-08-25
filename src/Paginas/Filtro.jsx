@@ -44,7 +44,7 @@ function CustomSelect({ options, value, onChange, placeholder }) {
     );
 }
 
-function Campos({
+function Filtro({
     query, setQuery,
     placa, setPlaca,
     marcas = [],
@@ -69,50 +69,6 @@ function Campos({
 
     return (
         <div className="campos-grid" style={{width: '90vw', margin: '0 auto'}}>
-            <div className="busca">
-                <div className="campo-busca" ref={dropdownRef}>
-                    <input
-                        type="text"
-                        className="campo-input"
-                        placeholder="Buscar por nome do produto..."
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        onFocus={() => setMostrarSugestoes(true)}
-                    />
-                    <button
-                        type="button"
-                        className={`toggle-btn ${mostrarSugestoes ? 'aberto' : ''}`}
-                        title="Alternar sugestões"
-                        onClick={() => setMostrarSugestoes(!mostrarSugestoes)}
-                    >
-                        {mostrarSugestoes ? '✕' : '☰'}
-                    </button>
-                    {mostrarSugestoes && query && (
-                        <ul className="sugestoes-list">
-                            {carregandoSugestoes ? <li className="loading">Carregando...</li>
-                                : sugestoes.length > 0 ? (
-                                    sugestoes.map((s, i) => (
-                                        <li key={i} className="sugestao">
-                                            <button type="button" onClick={() => handleSelect(s)}>
-                                                {s}
-                                            </button>
-                                        </li>
-                                    ))
-                                ) : <li className="loading">Nenhuma sugestão.</li>
-                            }
-                        </ul>
-                    )}
-                </div>
-                <div className="campo-placa">
-                    <input
-                        type="text"
-                        className="campo-input"
-                        placeholder="Placa (opcional)"
-                        value={placa}
-                        onChange={(e) => setPlaca(e.target.value.toUpperCase())}
-                    />
-                </div>
-            </div>
             <div className="filtros">
                 <div className="campo-marcas">
                     <CustomSelect
@@ -135,4 +91,4 @@ function Campos({
     );
 }
 
-export default Campos;
+export default Filtro;
