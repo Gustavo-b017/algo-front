@@ -1,4 +1,4 @@
-import "../Estilosao/marcas.scss";
+import "/public/style/marcas.scss";
 import bmw from "/public/imagens/marcas_logo/bmw.png";
 import ford from "/public/imagens/marcas_logo/ford.png";
 import honda from "/public/imagens/marcas_logo/honda.png";

@@ -1,7 +1,7 @@
 // src/Paginas/ProdutosDestaque.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../Estilosao/ProdutosDestaque.scss";
+import "/public/style/produtosDestaque.scss";
 
 const API_URL = "http://127.0.0.1:5000";
 
@@ -10,11 +10,11 @@ function ProdutosDestaque({ handleLinhaClick }) {
 
   useEffect(() => {
     axios.get(`${API_URL}/produtos`, {
-        params: { query: "disco de freio" } // 🔥 aqui você fixa o termo
-        })
-        .then((res) => setProdutos(res.data || []))
-        .catch((err) => console.error("Erro ao carregar destaques:", err));
-   }, []);
+      params: { query: "disco de freio" } // 🔥 aqui você fixa o termo
+    })
+      .then((res) => setProdutos(res.data || []))
+      .catch((err) => console.error("Erro ao carregar destaques:", err));
+  }, []);
 
 
   if (!produtos.length) return null;

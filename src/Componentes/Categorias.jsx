@@ -1,4 +1,4 @@
-import "../Estilosao/categorias.scss";
+import "/public/style/categorias.scss";
 import battery_icon from "/public/imagens/icones/battery.png";
 import wheel_icon from "/public/imagens/icones/wheel.png";
 import headlight_icon from "/public/imagens/icones/headlight.png";

@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import Item from './Item';
 import Sugestoes from './Sugestoes';
 import axios from 'axios';
-import '../Estilosao/produto.css';
+import '/public/style/produto.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 // const API_URL = 'http://127.0.0.1:5000';
@@ -38,14 +38,14 @@ function Produto() {
         setCarregando(false);
       }
     }
-    
+
     carregarDetalhes();
   }, [searchParams]);
 
   if (carregando) {
     return <div className="text-center mt-5"><h1>Carregando produto...</h1></div>;
   }
-  
+
   if (erro) {
     return <div className="container mt-5 text-center"><h2>{erro}</h2></div>;
   }

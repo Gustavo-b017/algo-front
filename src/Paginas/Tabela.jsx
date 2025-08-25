@@ -1,7 +1,7 @@
 // src/Paginas/Tabela.jsx
 
 import React from 'react';
-import '../Estilosao/tabela.css';
+import '/public/style/tabela.css';
 
 function Tabela({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage }) {
   if (carregandoTabela) {
