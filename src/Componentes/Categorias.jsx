@@ -1,13 +1,13 @@
 import "../Estilosao/categorias.scss";
-import battery_icon from "../imagens/icones/battery.png";
-import wheel_icon from "../imagens/icones/wheel.png";
-import headlight_icon from "../imagens/icones/headlight.png";
-import padlock_icon from "../imagens/icones/padlock.png"
-import car_icon from "../imagens/icones/car-2.png"
-import support_icon from "../imagens/icones/support.png"
-import oil_icon from "../imagens/icones/engine-oil.png"
-import steering_icon from "../imagens/icones/steering_wheel.png"
-import motocycle_icon from "../imagens/icones/motocycle.png"
+import battery_icon from "/public/imagens/icones/battery.png";
+import wheel_icon from "/public/imagens/icones/wheel.png";
+import headlight_icon from "/public/imagens/icones/headlight.png";
+import padlock_icon from "/public/imagens/icones/padlock.png"
+import car_icon from "/public/imagens/icones/car-2.png"
+import support_icon from "/public/imagens/icones/support.png"
+import oil_icon from "/public/imagens/icones/engine-oil.png"
+import steering_icon from "/public/imagens/icones/steering_wheel.png"
+import motocycle_icon from "/public/imagens/icones/motocycle.png"
 
 const category_list = [
     { name: "Baterias e Acessórios", id: 1, src: battery_icon },
