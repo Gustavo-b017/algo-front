@@ -1,0 +1,42 @@
+.brands_container {
+    display:flexbox;
+    padding: 60px;
+    margin: 0 98px;
+
+    button {
+        display: block;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        background: none;
+        width: 110px;
+
+        .brand_img {
+            display: block;
+            justify-content: center;
+            align-items: center;
+            width: 237px;
+            height: 224px;
+            background-color: var(--azul);
+            border-radius: 6px;
+
+            img {
+                width: 120px;
+                height: 120px;
+            }
+
+            p {
+                font-size: 13px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: #fff;
+                padding-top: 05px;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+        }
+    }
+}
+
+
+
