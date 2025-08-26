@@ -5,8 +5,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import Header from '../Componentes/Header.jsx';
 import Banner from '../Componentes/Banner.jsx';
 import Categorias from '../Componentes/Categorias.jsx';
-import ProdutosDestaque from '../Componentes/ProdutosDestaque.jsx';
+import ProdutoDestaque from '../Componentes/ProdutoDestaque.jsx';
 import Marcas from '../Componentes/Marcas.jsx';
+import Footer from '../Componentes/Footer.jsx';
 
 import Filtro from './Filtro.jsx';
 import Cascata from "./Cascata.jsx";
@@ -210,9 +211,8 @@ function Home() {
 
       <Banner />
       <Categorias />
-      <ProdutosDestaque handleLinhaClick={handleLinhaClick} />
 
-      <Filtro
+      {/* <Filtro
         query={query} setQuery={setQuery}
         placa={placa} setPlaca={setPlaca}
         marcas={marcas}
@@ -232,7 +232,7 @@ function Home() {
         listaFamilias={listaFamilias}
         familiaSelecionada={familiaSelecionada}
         handleFamiliaChange={handleFamiliaChange}
-      />
+      /> */}
 
       <Tabela
         resultados={resultados}
@@ -255,6 +255,7 @@ function Home() {
       />
 
       <Marcas />
+      <Footer />
     </div>
   );
 }

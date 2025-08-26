@@ -1,22 +1,38 @@
 /* src/Paginas/produtosDestaque.css */
-.produtos-destaque {
-  margin: 40px 0;
+.produto-destaque-container {
+  margin: 2rem auto;
+  max-width: 1200px;
+  padding: 1rem;
 }
 
-.destaque-grid {
+.produto-destaque-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.produto-destaque-lista {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  gap: 1rem;
 }
 
-.produto-card {
+.produto-destaque-card {
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px;
-  cursor: pointer;
-  transition: transform 0.2s;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
 }
 
-.produto-card:hover {
-  transform: scale(1.05);
+.produto-destaque-card:hover {
+  transform: scale(1.03);
+}
+
+.produto-preco {
+  display: block;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: #2e7d32;
 }
