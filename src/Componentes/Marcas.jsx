@@ -34,7 +34,7 @@ function Marcas() {
             <h2>COMPRE POR MARCAS DE CARROS</h2>
             <div className="brands_container">
                 {brand_list.map(brand => (
-                    <button key={brand.id}>
+                    <button className="brand_btn" key={brand.id}>
                         <div className="brand_img">
                             <img src={brand.src} alt={brand.name} />
                             <p>{brand.name}</p>

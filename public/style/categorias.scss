@@ -7,10 +7,12 @@
     button {
         display: block;
         justify-content: center;
+        background: none;
         border: none;
         cursor: pointer;
         background: none;
         width: 110px;
+        color: var(--azul);
 
         .categoria_img {
             display: flex;
@@ -38,7 +40,9 @@
             overflow-wrap: break-word;
         }
     }
+
+    button:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s;
+    }
 }
-
-
-

@@ -1,9 +1,4 @@
-/* =======================================
-// ESTILOS GERAIS DO COMPONENTE
-// ======================================= */
-
 .brands {
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,13 +13,11 @@
         margin-bottom: 20px;
         text-align: center;
     }
-
 }
-
 
 .brands_container {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); // 6 colunas para telas grandes
+    grid-template-columns: repeat(6, 1fr); 
     gap: 15px;
     justify-content: center;
 
@@ -43,22 +36,16 @@
         align-items: center;
         justify-content: center;
 
-        :hover {
-            transform: translateY(-5px); // Efeito de elevação ao passar o mouse
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
         .brand_img {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px; // Espaço entre a imagem e o texto
+            gap: 10px;
 
             img {
                 width: 100px;
                 height: auto;
                 border-radius: 15px;
-                filter: brightness(0) invert(1); // Transforma o logo em branco para combinar com o fundo escuro
             }
 
             p {
@@ -73,8 +60,13 @@
         }
 
     }
-}
 
+    button:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+}
 
 /* =======================================
 // RESPONSIVIDADE PARA DIFERENTES TELAS
@@ -97,4 +89,3 @@
         grid-template-columns: repeat(2, 1fr); // 2 colunas em celulares
     }
 }
-

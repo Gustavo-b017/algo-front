@@ -1,7 +1,7 @@
 // src/Paginas/Header.jsx
 
 import React from "react";
-import "/public/style/header.css";
+import "/public/style/header.scss";
 
 import logo from "/public/imagens/logo_ancora.svg";
 import menu_icon from "/public/imagens/icones/menu.png";
