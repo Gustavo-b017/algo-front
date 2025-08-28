@@ -211,7 +211,8 @@ function Home() {
 
       <Banner />
       <Categorias />
-      <ProdutoDestaque handleLinhaClick={handleLinhaClick} />
+      <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />
+      <ProdutoDestaque produtoDestaque="filtro de ar" handleLinhaClick={handleLinhaClick} />
 
       {/* <Filtro
         query={query} setQuery={setQuery}
@@ -233,8 +234,7 @@ function Home() {
         listaFamilias={listaFamilias}
         familiaSelecionada={familiaSelecionada}
         handleFamiliaChange={handleFamiliaChange}
-      /> */}
-
+      /> 
       <Resultados
         resultados={resultados}
         paginaAtual={paginaAtual}
@@ -253,10 +253,9 @@ function Home() {
           familia_id: familiaSelecionada.id,
           familia_nome: familiaSelecionada.nome
         })}
-      />
-
+      />*/}
       
-
+      
       <Marcas />
       <Footer />
     </div>
