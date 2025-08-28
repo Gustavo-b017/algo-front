@@ -211,6 +211,7 @@ function Home() {
 
       <Banner />
       <Categorias />
+      <ProdutoDestaque handleLinhaClick={handleLinhaClick} />
 
       {/* <Filtro
         query={query} setQuery={setQuery}
@@ -253,6 +254,8 @@ function Home() {
           familia_nome: familiaSelecionada.nome
         })}
       />
+
+      
 
       <Marcas />
       <Footer />

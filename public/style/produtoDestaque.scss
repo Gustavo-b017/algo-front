@@ -1,0 +1,41 @@
+/* src/Paginas/produtosDestaque.css */
+.produto-destaque {
+  padding: 20px;
+  text-align: center;
+}
+
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.card-produto {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: transform 0.2s;
+}
+
+.card-produto:hover {
+  transform: translateY(-5px);
+}
+
+.card-produto img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.card-produto h3 {
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+.card-produto .preco {
+  font-weight: bold;
+  color: #007bff;
+}
