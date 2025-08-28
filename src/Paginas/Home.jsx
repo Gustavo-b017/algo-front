@@ -11,7 +11,7 @@ import Footer from '../Componentes/Footer.jsx';
 
 import Filtro from './Filtro.jsx';
 import Cascata from "./Cascata.jsx";
-import Tabela from './Tabela.jsx';
+import Resultados from '../Componentes/CardsProdutos.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -235,7 +235,7 @@ function Home() {
         handleFamiliaChange={handleFamiliaChange}
       /> */}
 
-      <Tabela
+      <Resultados
         resultados={resultados}
         paginaAtual={paginaAtual}
         totalPaginas={totalPaginas}
