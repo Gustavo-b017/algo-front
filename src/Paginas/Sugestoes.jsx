@@ -1,10 +1,10 @@
+// Sugestoes.jsx
 import React from 'react';
 import '/public/style/sugestao.css';
 
-// O componente recebe os dados diretamente do componente pai
-function Sugestoes({ dadosSimilares }) {
+// O componente agora recebe também a função de clique
+function Sugestoes({ dadosSimilares, onSugestaoClick }) {
 
-  // Se não houver dados ou se as listas estiverem vazias, não mostramos nada.
   if (!dadosSimilares || (dadosSimilares.similares.length === 0 && dadosSimilares.produtosParcialmenteSimilares.length === 0)) {
     return null;
   }
@@ -20,7 +20,11 @@ function Sugestoes({ dadosSimilares }) {
           <div className="aplicacoes-scroll-limitada">
             <div className="aplicacoes-grid">
               {similares.map((produto, index) => (
-                <div key={produto.id || index} className="aplicacao-card">
+                <div
+                  key={produto.id || index}
+                  className="aplicacao-card"
+                  onClick={() => onSugestaoClick(produto)} // Adicione o evento de clique
+                >
                   <div className="aplicacao-header">
                     <p><strong>Ref:</strong> {produto.codigoReferencia}</p>
                     <p><strong>Marca:</strong> {produto.marca}</p>
@@ -38,7 +42,11 @@ function Sugestoes({ dadosSimilares }) {
           <div className="aplicacoes-scroll-limitada">
             <div className="aplicacoes-grid">
               {parciais.map((produto, index) => (
-                <div key={index} className="aplicacao-card">
+                <div
+                  key={index}
+                  className="aplicacao-card"
+                  onClick={() => onSugestaoClick(produto)} // Adicione o evento de clique
+                >
                   <div className="aplicacao-header">
                     <p>{produto.nomeProduto}</p>
                     <p><strong>Marca:</strong> {produto.marca}</p>

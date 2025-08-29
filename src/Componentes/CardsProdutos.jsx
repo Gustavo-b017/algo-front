@@ -1,7 +1,7 @@
 import React from 'react';
 import '/public/style/cardProduto.scss';
 
-function Tabela({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage }) {
+function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage }) {
   if (carregandoTabela) {
     return (
       <div className="loader-container">
@@ -78,4 +78,4 @@ function Tabela({ resultados, paginaAtual, totalPaginas, buscarTratados, handleL
   );
 }
 
-export default Tabela;
+export default CardsProdutos;
