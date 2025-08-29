@@ -254,9 +254,9 @@ function Home() {
           familia_nome: familiaSelecionada.nome
         })}
       />*/}
-      
-      
+
       <Marcas />
+
       <Footer />
     </div>
   );

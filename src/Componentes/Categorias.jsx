@@ -1,3 +1,4 @@
+import React, { useRef } from "react";
 import "/public/style/categorias.scss";
 import battery_icon from "/public/imagens/icones/battery.png";
 import wheel_icon from "/public/imagens/icones/wheel.png";
@@ -23,16 +24,38 @@ const category_list = [
 ]
 
 function Categorias() {
+    const carouselRef = useRef(null);
+
+    const scrollCarousel = (direction) => {
+        if (carouselRef.current) {
+            const scrollAmount = 200; // Ajuste a quantidade de rolagem
+            if (direction === "left") {
+                carouselRef.current.scrollLeft -= scrollAmount;
+            } else {
+                carouselRef.current.scrollLeft += scrollAmount;
+            }
+        }
+    };
     return (
         <div className="categorias_container">
-            {category_list.map(category => (
-                <button key={category.id}>
-                    <div className="categoria_img">
-                        <img src={category.src} alt={category.name} />
-                    </div>
-                    <p>{category.name}</p>
+            <div className="carousel-wrapper">
+                <button className="carousel-arrow left" onClick={() => scrollCarousel("left")}>
+                    &lt;
                 </button>
-            ))}
+                <div className="carousel-items" ref={carouselRef}>
+                    {category_list.map((category) => (
+                        <button key={category.id}>
+                            <div className="categoria_img">
+                                <img src={category.src} alt={category.name} />
+                            </div>
+                            <p>{category.name}</p>
+                        </button>
+                    ))}
+                </div>
+                <button className="carousel-arrow right" onClick={() => scrollCarousel("right")}>
+                    &gt;
+                </button>
+            </div>
         </div>
     );
 }

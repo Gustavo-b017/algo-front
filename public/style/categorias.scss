@@ -1,18 +1,33 @@
 .categorias_container {
     display: flex;
-    justify-content: space-between;
-    padding: 60px;
-    margin: 0 98px;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0;
+    box-sizing: border-box;
+
+    .carousel-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+
+        /* Esconde as setas por padrão em desktop */
+        .carousel-arrow {
+            display: none;
+        }
+    }
 
     button {
-        display: block;
-        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
         background: none;
         border: none;
         cursor: pointer;
-        background: none;
         width: 110px;
         color: var(--azul);
+        padding: 10px;
 
         .categoria_img {
             display: flex;
@@ -35,7 +50,7 @@
             font-weight: bold;
             text-transform: uppercase;
             color: var(--azul);
-            padding-top: 20px;
+            padding-top: 15px;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
@@ -44,5 +59,101 @@
     button:hover {
         transform: scale(1.1);
         transition: transform 0.2s;
+    }
+}
+
+
+/* =======================================
+// MEDIA QUERIES PARA RESPONSIVIDADE
+// ======================================= */
+
+
+/* Telas de tablet (tamanho entre 768px e 1470px) */
+@media (max-width: 1470px) {
+    .categorias_container {
+        padding: 40px 0;
+
+        .carousel-wrapper {
+            width: 100%;
+
+            .carousel-arrow {
+                display: block;
+                background: #1a932c;
+                border: none;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+                cursor: pointer;
+                z-index: 10;
+                transition: background-color 0.2s, color 0.2s;
+                margin: 20px;
+
+                &:hover {
+                    background-color: #f0f0f0;
+                    color: #ce0f2d;
+                    border: 1px solid #ce0f2d;
+                }
+
+                .left {
+                    margin-right: 15px;
+                }
+
+                .right {
+                    margin-left: 15px;
+                }
+
+            }
+
+        }
+
+        .carousel-items {
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+
+            border: 1px solid green;
+
+            // Ocutando a barra de rolagem nos navegadores
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+}
+
+/* Telas de celular (tamanho até 767px) */
+@media (max-width: 767px) {
+    @media (max-width: 767px) {
+        .categorias_container {
+            padding: 20px 0;
+        }
+
+        .carousel-items button {
+            width: 90px;
+
+            .categoria_img {
+                width: 70px;
+                height: 70px;
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+
+            p {
+                width: 90px;
+                font-size: 11px;
+            }
+        }
+
+        .carousel-arrow {
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+        }
     }
 }

@@ -17,12 +17,6 @@
   /* border: 1px solid red; */
 }
 
-body {
-  margin: 0;
-  background: white;
-  min-height: 100vh;
-}
-
 .home.container-fluid {
   padding: 0;
   margin: 0;
@@ -30,9 +24,6 @@ body {
   background: none;
   width: 100%;
 
-  .row {
-    margin: 0;
-  }
 }
 
 .container-fluid {
