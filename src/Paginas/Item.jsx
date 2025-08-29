@@ -1,5 +1,3 @@
-// src/Paginas/Item.jsx
-
 import React, { useState } from 'react';
 import '/public/style/item.css';
 

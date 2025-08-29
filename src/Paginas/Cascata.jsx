@@ -1,5 +1,3 @@
-// src/Paginas/Cascata.jsx
-
 import React from 'react';
 import Montadora from './Montadora.jsx';
 import Familia from './Familia.jsx';

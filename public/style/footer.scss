@@ -1,0 +1,164 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.footer-container {
+    background-color: #21354a;
+    font-family: Arial, sans-serif;
+    margin-top: 100px;
+    box-sizing: border-box;
+
+    .footer-top {
+        background-color: #4a6c8b;
+        text-align: center;
+        padding: 10px 0;
+    }
+}
+
+.back-to-top {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+
+}
+
+.back-to-top:hover {
+    color: #c0c0c0;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px 100px;
+    gap: 40px;
+    flex-wrap: wrap;
+
+    .footer-section {
+        flex: 1;
+        min-width: 250px;
+
+        h4 {
+            color: #fff;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+    }
+}
+
+
+/* Estilos para a seção "Sobre nós" */
+.about-us p {
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 50px;
+}
+
+.contact-info p {
+    font-size: 14px;
+    margin: 5px 0;
+
+    span {
+        margin-right: 10px;
+
+        img {
+            width: 17px;
+        }
+    }
+}
+
+
+/* Estilos para a seção de links */
+.links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.links ul li {
+    margin-bottom: 10px;
+}
+
+.links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.links a:hover {
+    text-decoration: underline;
+    color: #c0c0c0;
+}
+
+/* Estilos para a seção de formulário de contato */
+.contact-form {
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    input,
+    textarea {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px;
+        color: #1a293a;
+        font-size: 14px;
+    }
+    textarea {
+        height: 100px;
+        resize: none;
+    }
+}
+
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+
+    a {
+        color: #fff;
+        font-size: 20px;
+        transition: color 0.3s;
+    }
+
+    img {
+        width: 30px;
+    }
+}
+
+.footer-bottom {
+    background-color: #1a293a;
+    text-align: center;
+    font-size: 12px;
+    border-top: 1px solid #3d4d5e;
+    //border: 1px solid red;
+
+    p {
+        color: #4a6c8b;   
+        padding: 15px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-main {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+    .footer-section {
+        margin-bottom: 30px;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}

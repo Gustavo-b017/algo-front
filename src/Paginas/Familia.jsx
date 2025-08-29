@@ -1,4 +1,3 @@
-// src/Paginas/Familia.jsx
 import React from 'react';
 
 function Familia({ listaFamilias, montadoraId, valorSelecionadoId, onChange, carregando }) {

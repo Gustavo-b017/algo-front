@@ -1,16 +1,10 @@
-// src/Paginas/Home.jsx
-
 import React, { useState, useEffect, useRef } from 'react';
-
 import Header from '../Componentes/Header.jsx';
 import Banner from '../Componentes/Banner.jsx';
 import Categorias from '../Componentes/Categorias.jsx';
-import ProdutosDestaque from '../Componentes/ProdutosDestaque.jsx';
+import ProdutoDestaque from '../Componentes/ProdutoDestaque.jsx';
 import Marcas from '../Componentes/Marcas.jsx';
-
-import Filtro from './Filtro.jsx';
-import Cascata from "./Cascata.jsx";
-import Tabela from './Tabela.jsx';
+import Footer from '../Componentes/Footer.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -210,9 +204,10 @@ function Home() {
 
       <Banner />
       <Categorias />
-      <ProdutosDestaque handleLinhaClick={handleLinhaClick} />
+      <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />
+      <ProdutoDestaque produtoDestaque="filtro de ar" handleLinhaClick={handleLinhaClick} />
 
-      <Filtro
+      {/* <Filtro
         query={query} setQuery={setQuery}
         placa={placa} setPlaca={setPlaca}
         marcas={marcas}
@@ -232,9 +227,8 @@ function Home() {
         listaFamilias={listaFamilias}
         familiaSelecionada={familiaSelecionada}
         handleFamiliaChange={handleFamiliaChange}
-      />
-
-      <Tabela
+      /> 
+      <Resultados
         resultados={resultados}
         paginaAtual={paginaAtual}
         totalPaginas={totalPaginas}
@@ -252,9 +246,11 @@ function Home() {
           familia_id: familiaSelecionada.id,
           familia_nome: familiaSelecionada.nome
         })}
-      />
+      />*/}
 
       <Marcas />
+
+      <Footer />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// src/Paginas/Montadora.jsx
 import React from 'react';
 
 function Montadora({ listaMontadoras, valorSelecionado, onChange, carregando }) {

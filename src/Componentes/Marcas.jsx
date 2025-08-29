@@ -18,27 +18,32 @@ const brand_list = [
     { name: "Hyundai", id: 3, src: hyundai },
     { name: "Volkswagen", id: 4, src: volkswagen },
     { name: "Ford", id: 5, src: ford },
-    { name: "Mitsubihi", id: 6, src: mitsubishi },
-    { name: "Mercedez Benz", id: 7, src: mercedez },
-    { name: "Bmw", id: 8, src: bmw },
+    { name: "Mitsubishi", id: 6, src: mitsubishi },
+    { name: "Mercedez-Benz", id: 7, src: mercedez },
+    { name: "BMW", id: 8, src: bmw },
     { name: "Toyota", id: 9, src: toyota },
     { name: "Lexus", id: 10, src: lexus },
-    { name: "Infiniti", id: 10, src: infiniti },
-    { name: "Mazda", id: 10, src: mazda }
-]
+    { name: "Infiniti", id: 11, src: infiniti },
+    { name: "Mazda", id: 12, src: mazda }
+];
+
 
 function Marcas() {
     return (
-        <div className="brands_container">
-            {brand_list.map(brand => (
-                <button key={brand.id}>
-                    <div className="brand_img">
-                        <img src={brand.src} alt={brand.name} />
-                        <p>{brand.name}</p>
-                    </div>
-                </button>
-            ))}
+        <div className="brands">
+            <h2>COMPRE POR MARCAS DE CARROS</h2>
+            <div className="brands_container">
+                {brand_list.map(brand => (
+                    <button className="brand_btn" key={brand.id}>
+                        <div className="brand_img">
+                            <img src={brand.src} alt={brand.name} />
+                            <p>{brand.name}</p>
+                        </div>
+                    </button>
+                ))}
+            </div>
         </div>
+
     );
 }
 

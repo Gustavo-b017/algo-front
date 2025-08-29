@@ -1,5 +1,3 @@
-// src/Paginas/Sugestoes.jsx
-
 import React from 'react';
 import '/public/style/sugestao.css';
 

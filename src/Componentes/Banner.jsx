@@ -1,4 +1,4 @@
-import "/public/style/header.css";
+import "/public/style/header.scss";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 

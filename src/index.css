@@ -1,26 +1,20 @@
 :root {
-    --azul: #022e4c;
-    --vermelho: #ce0f2d;
-    --cinza_claro: #d7d8d8;
-    --cinza_escuro: #666968;
+  --azul: #022e4c;
+  --vermelho: #ce0f2d;
+  --cinza_claro: #d7d8d8;
+  --cinza_escuro: #666968;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
-  padding-left: 0;
+  padding: 0;
   list-style: none;
   text-decoration: none;
   color: #022e4c;
   scrollbar-width: thin;
   scrollbar-color: #ddd transparent;
   /* border: 1px solid red; */
-}
-
-body {
-  margin: 0;
-  background: white;
-  min-height: 100vh;
 }
 
 .home.container-fluid {
@@ -30,7 +24,96 @@ body {
   background: none;
   width: 100%;
 
-  .row {
-    margin: 0;
+}
+
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
+
+h2 {
+  font-family: Arial, sans-serif;
+  font-size: 27px;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+
+/* =======================================
+// ESTADO DE CARREGAMENTO
+// ======================================= */
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+}
+
+.loader-container p {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #555;
+  margin-top: 15px;
+}
+
+.loader-circle {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3; 
+  border-top: 5px solid #ce0f2d; 
+  border-radius: 50%; 
+  animation: spin 1s linear infinite; 
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* =======================================
+// ESTADO DE VAZIO (SEM RESULTADOS)
+// ======================================= */
+
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  border: 2px dashed #d7d8d8;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  max-width: 400px;
+  margin: 40px auto;
+}
+
+.empty-state-icon {
+  width: 60px;
+  height: 60px; 
+}
+
+.empty-state-container h1 {
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  color: var(--azul);
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.empty-state-container p {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  color: #555;
+  margin-top: 20px;
+  font-weight: 500;
 }
