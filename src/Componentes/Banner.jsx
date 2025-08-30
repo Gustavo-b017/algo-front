@@ -1,4 +1,3 @@
-import "/public/style/header.scss";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -6,10 +5,9 @@ import banner from "/public/imagens/banner1.svg";
 
 function Banner() {
     return (
-        <div className="Banner" style={{
-            margin: "0 98px",
-            flex: "1",
-            borderRadius: "16px",
+        <div className="banner" style={{
+            margin: '0 auto',
+            maxWidth: '1600px',
         }}>
             <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-indicators">
@@ -40,7 +38,7 @@ function Banner() {
                     <span className="visually-hidden">Próximo</span>
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 

@@ -42,7 +42,7 @@ function Categorias() {
                 <button className="carousel-arrow left" onClick={() => scrollCarousel("left")}>
                     &lt;
                 </button>
-                <div className="carousel-items" ref={carouselRef}>
+                <div className="categorias_grid" ref={carouselRef}>
                     {category_list.map((category) => (
                         <button key={category.id}>
                             <div className="categoria_img">
