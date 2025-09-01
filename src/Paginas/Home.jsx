@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+// src/Paginas/Home.jsx
+import React, { useState, useRef, useEffect } from 'react';
 import Header from '../Componentes/Header.jsx';
 import Banner from '../Componentes/Banner.jsx';
 import Categorias from '../Componentes/Categorias.jsx';
@@ -12,25 +13,16 @@ import { useNavigate } from 'react-router-dom';
 const API_URL = 'http://127.0.0.1:5000';
 
 function Home() {
-    // --- Estados ---
-    const [listaMontadoras, setListaMontadoras] = useState([]);
-    const [listaFamilias, setListaFamilias] = useState([]);
-    const [montadoraSelecionada, setMontadoraSelecionada] = useState({ id: '', nome: '' });
-    const [familiaSelecionada, setFamiliaSelecionada] = useState({ id: '', nome: '' });
-    const [carregandoCascata, setCarregandoCascata] = useState(true);
-
-    // Estados da Busca por Texto
+    // Estados simplificados apenas para a busca por texto do Header
     const [query, setQuery] = useState('');
     const [placa, setPlaca] = useState('DME8I14');
     const [sugestoes, setSugestoes] = useState([]);
     const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
     const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
-
     const dropdownRef = useRef(null);
-    const isClearingRef = useRef(false);
     const navigate = useNavigate();
 
-    // --- Funções ---
+    // Função de busca por texto/placa
     const handleSearchSubmit = (termo, placa) => {
         if (termo || placa) {
             const params = new URLSearchParams({ termo, placa });
@@ -38,33 +30,7 @@ function Home() {
         }
     };
 
-    // --- Efeitos ---
-    useEffect(() => {
-        async function carregarDadosCascata() {
-            try {
-                const [resMontadoras, resFamilias] = await Promise.all([
-                    axios.get(`${API_URL}/montadoras`),
-                    axios.get(`${API_URL}/familias`)
-                ]);
-                setListaMontadoras(resMontadoras.data);
-                setListaFamilias(resFamilias.data);
-            } catch (error) {
-                console.error("Erro ao carregar dados da cascata", error);
-            } finally {
-                setCarregandoCascata(false);
-            }
-        }
-        carregarDadosCascata();
-    }, []);
-
-    useEffect(() => {
-        if (montadoraSelecionada.id && familiaSelecionada.id) {
-            isClearingRef.current = true;
-            setQuery('');
-            setPlaca('');
-        }
-    }, [montadoraSelecionada, familiaSelecionada]);
-
+    // Efeito para buscar sugestões de autocomplete
     useEffect(() => {
         if (!query) {
             setSugestoes([]);
@@ -81,26 +47,7 @@ function Home() {
         return () => clearTimeout(timer);
     }, [query]);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setMostrarSugestoes(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    // --- Handlers ---
-    const handleMontadoraChange = (id, nome) => {
-        setMontadoraSelecionada({ id, nome });
-        setFamiliaSelecionada({ id: '', nome: '' });
-    };
-
-    const handleFamiliaChange = (id, nome) => {
-        setFamiliaSelecionada({ id, nome });
-    };
-
+    // Handler para o clique em um produto em destaque
     const handleLinhaClick = (produto) => {
         const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
         navigate(`/produto?${params.toString()}`);

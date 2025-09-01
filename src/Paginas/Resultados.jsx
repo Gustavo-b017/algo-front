@@ -1,29 +1,30 @@
-// src/Paginas/Resultados.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Componentes/Header.jsx';
 import CardsProdutos from '../Componentes/CardsProdutos.jsx';
 import Footer from '../Componentes/Footer.jsx';
-import FiltroLateral from '../Componentes/FiltroLateral.jsx';
-import '/public/style/Resultados.css';
+import Cascata from '../Componentes/Cascata.jsx';
 
-// const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
 
 function Resultados() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // ... (o resto dos seus 'useState' permanece o mesmo)
-  const [query, setQuery] = useState('');
-  const [placa, setPlaca] = useState('');
-  const [marcas, setMarcas] = useState([]);
-  const [marcaSelecionada, setMarcaSelecionada] = useState('');
-  const [ordem, setOrdem] = useState('asc');
-  const [sugestoes, setSugestoes] = useState([]);
-  const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
-  const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
+  const [query, setQuery] = useState(searchParams.get('termo') || '');
+  const [placa, setPlaca] = useState(searchParams.get('placa') || '');
+
+  const [listaMontadoras, setListaMontadoras] = useState([]);
+  const [listaFamilias, setListaFamilias] = useState([]);
+  const [listaSubFamilias, setListaSubFamilias] = useState([]);
+  const [montadoraSelecionada, setMontadoraSelecionada] = useState({ id: '', nome: searchParams.get('marca') || '' });
+  const [familiaSelecionada, setFamiliaSelecionada] = useState({ id: searchParams.get('familia_id') || '', nome: searchParams.get('familia_nome') || '' });
+  const [subFamiliaSelecionada, setSubFamiliaSelecionada] = useState({ id: searchParams.get('subfamilia_id') || '', nome: searchParams.get('subfamilia_nome') || '' });
+  const [carregandoCascata, setCarregandoCascata] = useState(false);
+  const [carregandoSubFamilias, setCarregandoSubFamilias] = useState(false);
+
+  // ... (outros estados como 'resultados', 'paginaAtual', etc. permanecem os mesmos)
   const [resultados, setResultados] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
@@ -31,49 +32,53 @@ function Resultados() {
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const dropdownRef = useRef(null);
 
-  // A função de busca permanece a mesma
-  const buscarResultados = (config) => {
-    setCarregandoTabela(true);
-    setFeedbackMessage('');
-    let params = new URLSearchParams({
-      pagina: config.pagina,
-      termo: config.termo,
-      placa: config.placa,
-      marca: config.marca,
-      ordem: config.ordem,
-    });
 
-    axios.get(`${API_URL}/pesquisar?${params.toString()}`)
-      .then(res => {
-        setResultados(res.data.dados || []);
-        setMarcas(res.data.marcas || []);
-        setPaginaAtual(res.data.pagina || 1);
-        setTotalPaginas(res.data.total_paginas || 1);
-        setFeedbackMessage(res.data.mensagem || '');
-      })
-      .catch(err => console.error("Erro na busca", err))
-      .finally(() => setCarregandoTabela(false));
-  };
-
-  // O useEffect para buscar os dados com base na URL permanece o mesmo
   useEffect(() => {
-    const termoDaUrl = searchParams.get('termo') || '';
-    const placaDaUrl = searchParams.get('placa') || '';
-    const marcaDaUrl = searchParams.get('marca') || '';
-    const ordemDaUrl = searchParams.get('ordem') || 'asc';
-    
-    setQuery(termoDaUrl);
-    setPlaca(placaDaUrl);
-    setMarcaSelecionada(marcaDaUrl);
-    setOrdem(ordemDaUrl);
-    
-    buscarResultados({
-      pagina: 1,
-      termo: termoDaUrl,
-      placa: placaDaUrl,
-      marca: marcaDaUrl,
-      ordem: ordemDaUrl,
-    });
+    async function carregarDadosCascata() {
+      setCarregandoCascata(true);
+      try {
+        const [resMontadoras, resFamilias] = await Promise.all([
+          axios.get(`${API_URL}/montadoras`),
+          axios.get(`${API_URL}/familias`)
+        ]);
+        setListaMontadoras(resMontadoras.data);
+        setListaFamilias(resFamilias.data);
+      } catch (error) {
+        console.error("Erro ao carregar dados da cascata", error);
+      } finally {
+        setCarregandoCascata(false);
+      }
+    }
+    carregarDadosCascata();
+  }, []);
+
+  useEffect(() => {
+    if (familiaSelecionada.id) {
+      setCarregandoSubFamilias(true);
+      setListaSubFamilias([]); // Limpa a lista antes de buscar novas
+      axios.get(`${API_URL}/familias/${familiaSelecionada.id}/subfamilias`)
+        .then(res => setListaSubFamilias(res.data))
+        .catch(err => console.error("Erro ao buscar subfamílias", err))
+        .finally(() => setCarregandoSubFamilias(false));
+    } else {
+      setListaSubFamilias([]);
+    }
+  }, [familiaSelecionada.id]);
+
+  useEffect(() => {
+    const params = Object.fromEntries(searchParams.entries());
+    if (params.termo || (params.marca && params.familia_id)) {
+      setCarregandoTabela(true);
+      axios.get(`${API_URL}/pesquisar`, { params })
+        .then(res => {
+          setResultados(res.data.dados || []);
+          setPaginaAtual(res.data.pagina || 1);
+          setTotalPaginas(res.data.total_paginas || 1);
+          setFeedbackMessage(res.data.mensagem || '');
+        })
+        .catch(err => console.error("Erro na busca", err))
+        .finally(() => setCarregandoTabela(false));
+    }
   }, [searchParams]);
 
   const handleLinhaClick = (produto) => {
@@ -82,23 +87,51 @@ function Resultados() {
   };
 
   const handlePageChange = (pagina) => {
-      setSearchParams(prev => {
-          prev.set('pagina', pagina);
-          return prev;
-      });
+    setSearchParams(prev => {
+      prev.set('pagina', pagina.toString());
+      return prev;
+    });
   };
 
-  const handleFilterChange = (filters) => {
-    setSearchParams(prev => {
-        if (filters.montadora) prev.set('marca', filters.montadora);
-        else prev.delete('marca');
-        
-        if (filters.familia) prev.set('familia_id', filters.familia);
-        else prev.delete('familia_id');
+  const handleSearchSubmit = (termo, placa) => {
+    setSearchParams({ termo, placa });
+  };
 
-        prev.set('pagina', '1');
-        return prev;
-    }, { replace: true });
+  const handleMontadoraChange = (id, nome) => {
+    setMontadoraSelecionada({ id, nome });
+    setFamiliaSelecionada({ id: '', nome: '' });
+    setSubFamiliaSelecionada({ id: '', nome: '' });
+  };
+
+  // ATUALIZADO: Dispara a busca principal
+  const handleFamiliaChange = (id, nome) => {
+    setFamiliaSelecionada({ id, nome });
+    setSubFamiliaSelecionada({ id: '', nome: '' }); // Limpa a seleção de subfamília
+
+    if (montadoraSelecionada.nome && id) {
+      // Dispara a busca apenas com montadora e família
+      setSearchParams({
+        marca: montadoraSelecionada.nome,
+        familia_id: id,
+        familia_nome: nome
+      });
+    }
+  };
+
+  // ATUALIZADO: Dispara a busca refinada (ou a principal, se o usuário desmarcar)
+  const handleSubFamiliaChange = (id, nome) => {
+    setSubFamiliaSelecionada({ id, nome });
+
+    // Garante que os outros filtros essenciais ainda estão lá
+    if (montadoraSelecionada.nome && familiaSelecionada.id) {
+      setSearchParams({
+        marca: montadoraSelecionada.nome,
+        familia_id: familiaSelecionada.id,
+        familia_nome: familiaSelecionada.nome,
+        // Adiciona ou remove os parâmetros da subfamília
+        ...(id && { subfamilia_id: id, subfamilia_nome: nome })
+      });
+    }
   };
 
   return (
@@ -106,26 +139,34 @@ function Resultados() {
       <Header
         query={query} setQuery={setQuery}
         placa={placa} setPlaca={setPlaca}
-        sugestoes={sugestoes}
-        mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
-        carregandoSugestoes={carregandoSugestoes}
         dropdownRef={dropdownRef}
-        // ADICIONADO A LINHA ABAIXO PARA CORRIGIR O ERRO
-        onSearchSubmit={(termo, placa) => setSearchParams({ termo, placa })}
+        onSearchSubmit={handleSearchSubmit}
       />
-      <div className="resultados-container">
-        <FiltroLateral onFilterChange={handleFilterChange} />
-        <div className="main-content">
-          <CardsProdutos
-            resultados={resultados}
-            paginaAtual={paginaAtual}
-            totalPaginas={totalPaginas}
-            handleLinhaClick={handleLinhaClick}
-            carregandoTabela={carregandoTabela}
-            feedbackMessage={feedbackMessage}
-            buscarTratados={handlePageChange}
-          />
-        </div>
+
+      <Cascata
+        listaMontadoras={listaMontadoras}
+        montadoraSelecionada={montadoraSelecionada}
+        handleMontadoraChange={handleMontadoraChange}
+        carregandoCascata={carregandoCascata}
+        listaFamilias={listaFamilias}
+        familiaSelecionada={familiaSelecionada}
+        handleFamiliaChange={handleFamiliaChange}
+        listaSubFamilias={listaSubFamilias}
+        subFamiliaSelecionada={subFamiliaSelecionada}
+        handleSubFamiliaChange={handleSubFamiliaChange}
+        carregandoSubFamilias={carregandoSubFamilias}
+      />
+
+      <div className="main-content">
+        <CardsProdutos
+          resultados={resultados}
+          paginaAtual={paginaAtual}
+          totalPaginas={totalPaginas}
+          handleLinhaClick={handleLinhaClick}
+          carregandoTabela={carregandoTabela}
+          feedbackMessage={feedbackMessage}
+          buscarTratados={handlePageChange}
+        />
       </div>
       <Footer />
     </div>

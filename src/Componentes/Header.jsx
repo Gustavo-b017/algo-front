@@ -21,7 +21,7 @@ function Header({
                 <button className="menu-btn"><img src={menu_icon} alt={"Menu"} /></button>
             </div>
 
-            <div className="logo">
+            <div className="logo" onClick={() => window.location.href = "/"}  >
                 <img src={logo} alt={"Rede Ancora - Logo"} />
             </div>
 
