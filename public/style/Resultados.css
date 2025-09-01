@@ -1,0 +1,8 @@
+/* public/style/Resultados.css */
+.resultados-container {
+  display: flex;
+}
+
+.main-content {
+  flex-grow: 1;
+}

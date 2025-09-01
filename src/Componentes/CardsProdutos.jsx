@@ -1,3 +1,4 @@
+// src/Componentes/CardsProdutos.jsx
 import React from 'react';
 import '/public/style/cardProduto.scss';
 
@@ -5,7 +6,7 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
   if (carregandoTabela) {
     return (
       <div className="loader-container">
-        <div class="loader-circle"></div>
+        <div className="loader-circle"></div>
         <p className="notive_load">Carregando...</p>
       </div>
     );
@@ -16,11 +17,11 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
   // Se não houver resultados e não houver uma mensagem de feedback, não exibe nada.
   if (!resultados || resultados.length === 0) {
     return (
-      <div class="empty-state-container">
+      <div className="empty-state-container">
         <h1>Nenhum resultado encontrado...</h1>
-        <div class="empty-state-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.166 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75h.008v.008h-.008v-.008zM14.25 9.75h.008v.008h-.008v-.008z" />
+        <div className="empty-state-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.166 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75h.008v.008h-.008v-.008zM14.25 9.75h.008v.008h-.008v-.008z" />
           </svg>
         </div>
         <p>{feedbackMessage}</p>

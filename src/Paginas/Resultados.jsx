@@ -1,19 +1,21 @@
 // src/Paginas/Resultados.jsx
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Componentes/Header.jsx';
 import CardsProdutos from '../Componentes/CardsProdutos.jsx';
 import Footer from '../Componentes/Footer.jsx';
+import FiltroLateral from '../Componentes/FiltroLateral.jsx';
+import '/public/style/Resultados.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = 'http://127.0.0.1:5000';
 
 function Resultados() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Estados da Busca por Texto
+  // ... (o resto dos seus 'useState' permanece o mesmo)
   const [query, setQuery] = useState('');
   const [placa, setPlaca] = useState('');
   const [marcas, setMarcas] = useState([]);
@@ -22,20 +24,17 @@ function Resultados() {
   const [sugestoes, setSugestoes] = useState([]);
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
   const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
-  
   const [resultados, setResultados] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [carregandoTabela, setCarregandoTabela] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
-
   const dropdownRef = useRef(null);
 
-  // Função de busca principal
+  // A função de busca permanece a mesma
   const buscarResultados = (config) => {
     setCarregandoTabela(true);
     setFeedbackMessage('');
-
     let params = new URLSearchParams({
       pagina: config.pagina,
       termo: config.termo,
@@ -56,13 +55,13 @@ function Resultados() {
       .finally(() => setCarregandoTabela(false));
   };
 
-  // Sincroniza a busca com os parâmetros da URL
+  // O useEffect para buscar os dados com base na URL permanece o mesmo
   useEffect(() => {
     const termoDaUrl = searchParams.get('termo') || '';
     const placaDaUrl = searchParams.get('placa') || '';
     const marcaDaUrl = searchParams.get('marca') || '';
     const ordemDaUrl = searchParams.get('ordem') || 'asc';
-
+    
     setQuery(termoDaUrl);
     setPlaca(placaDaUrl);
     setMarcaSelecionada(marcaDaUrl);
@@ -77,42 +76,29 @@ function Resultados() {
     });
   }, [searchParams]);
 
-  // Efeito para a busca de sugestões
-  useEffect(() => {
-    if (!query) {
-      setSugestoes([]);
-      setMostrarSugestoes(false);
-      return;
-    }
-    const timer = setTimeout(() => {
-      setCarregandoSugestoes(true);
-      axios.get(`${API_URL}/autocomplete?prefix=${query}`)
-        .then(res => setSugestoes(res.data?.sugestoes || []))
-        .catch(() => setSugestoes([]))
-        .finally(() => setCarregandoSugestoes(false));
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [query]);
-
-  // Handler para o clique no card de produto
   const handleLinhaClick = (produto) => {
     const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
     navigate(`/produto?${params.toString()}`);
   };
 
-  // Handler para atualizar a página de resultados
   const handlePageChange = (pagina) => {
       setSearchParams(prev => {
           prev.set('pagina', pagina);
           return prev;
       });
-      buscarResultados({
-          pagina: pagina,
-          termo: query,
-          placa: placa,
-          marca: marcaSelecionada,
-          ordem: ordem
-      });
+  };
+
+  const handleFilterChange = (filters) => {
+    setSearchParams(prev => {
+        if (filters.montadora) prev.set('marca', filters.montadora);
+        else prev.delete('marca');
+        
+        if (filters.familia) prev.set('familia_id', filters.familia);
+        else prev.delete('familia_id');
+
+        prev.set('pagina', '1');
+        return prev;
+    }, { replace: true });
   };
 
   return (
@@ -120,24 +106,26 @@ function Resultados() {
       <Header
         query={query} setQuery={setQuery}
         placa={placa} setPlaca={setPlaca}
-        marcas={marcas}
-        marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
-        ordem={ordem} setOrdem={setOrdem}
         sugestoes={sugestoes}
         mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
         carregandoSugestoes={carregandoSugestoes}
         dropdownRef={dropdownRef}
+        // ADICIONADO A LINHA ABAIXO PARA CORRIGIR O ERRO
+        onSearchSubmit={(termo, placa) => setSearchParams({ termo, placa })}
       />
-      <div className="main-content">
-        <CardsProdutos
-          resultados={resultados}
-          paginaAtual={paginaAtual}
-          totalPaginas={totalPaginas}
-          handleLinhaClick={handleLinhaClick}
-          carregandoTabela={carregandoTabela}
-          feedbackMessage={feedbackMessage}
-          buscarTratados={handlePageChange}
-        />
+      <div className="resultados-container">
+        <FiltroLateral onFilterChange={handleFilterChange} />
+        <div className="main-content">
+          <CardsProdutos
+            resultados={resultados}
+            paginaAtual={paginaAtual}
+            totalPaginas={totalPaginas}
+            handleLinhaClick={handleLinhaClick}
+            carregandoTabela={carregandoTabela}
+            feedbackMessage={feedbackMessage}
+            buscarTratados={handlePageChange}
+          />
+        </div>
       </div>
       <Footer />
     </div>
