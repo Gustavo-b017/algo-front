@@ -1,6 +1,7 @@
-html, body {
-  height: 100%;
-  margin: 0;
+html,
+body {
+    height: 100%;
+    margin: 0;
 }
 
 .footer-container {
@@ -101,6 +102,7 @@ html, body {
         flex-direction: column;
         gap: 15px;
     }
+
     input,
     textarea {
         background-color: #ffffff;
@@ -110,6 +112,7 @@ html, body {
         color: #1a293a;
         font-size: 14px;
     }
+
     textarea {
         height: 100px;
         resize: none;
@@ -141,24 +144,78 @@ html, body {
     //border: 1px solid red;
 
     p {
-        color: #4a6c8b;   
+        color: #4a6c8b;
         padding: 15px 0;
     }
 }
 
 @media (max-width: 768px) {
     .footer-main {
-        flex-direction: column;
         align-items: center;
         text-align: center;
         padding: 30px 20px;
+        gap: 15px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .footer-section {
+            min-width: 250px;
+            text-align: left;
+
+            h4 {
+                color: #fff;
+                font-size: 15px;
+                font-weight: bold;
+                margin-bottom: 20px;
+                text-transform: uppercase;
+            }
+
+            p {
+                font-size: 12px;
+                margin: 5px 0;
+            }
+        }
     }
 
     .footer-section {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
+        /* Reduz a margem para telas menores */
+    }
+
+    .footer-section.contact-form {
+        width: 100%;
+        /* Garante que o formulário ocupe 100% da largura */
+    }
+
+    .contact-info p {
+        justify-content: center;
+    }
+
+    .about-us p {
+        margin-bottom: 20px;
+        /* Ajusta a margem do parágrafo */
     }
 
     .social-links {
         justify-content: center;
+    }
+
+    h4 {
+        font-size: 1.2rem;
+        /* Reduz o tamanho do título */
+    }
+
+    p,
+    li,
+    a {
+        font-size: 0.9rem;
+        /* Reduz o tamanho do texto */
+    }
+
+    .contact-form {
+        form {
+            align-items: stretch;
+            /* Garante que os inputs se estendam por toda a largura */
+        }
     }
 }
