@@ -121,10 +121,11 @@
 
   .header-actions {
     order: 3; /* Ações ficam à direita */
-    gap: 15px; /* Reduz o espaçamento entre os botões */
+    gap: 5px; /* Reduz o espaçamento entre os botões */
     
     button {
       font-size: 0; /* Oculta o texto para economizar espaço */
+
       
       img {
         width: 24px; /* Diminui os ícones de ação */

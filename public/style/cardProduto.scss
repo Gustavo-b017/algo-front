@@ -1,18 +1,18 @@
 /* src/Estilosao/tabela.css */
 
 :root {
-  --azul: #022e4c;
-  --vermelho: #ce0f2d;
-  --branco: #ffffff;
-  --cinza_claro: #e5e5e5;
-  --cinza_escuro: #666968;
+    --azul: #022e4c;
+    --vermelho: #ce0f2d;
+    --branco: #ffffff;
+    --cinza_claro: #e5e5e5;
+    --cinza_escuro: #666968;
 }
 
 /* Container para a grade de cards */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 5px;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
@@ -20,50 +20,104 @@
 
 /* Estilo individual de cada card de produto */
 .produto-card {
-    background-color: var(--branco);
-    border: 1px solid var(--cinza_claro);
+    display: flex;
+    flex-direction: column;
     border-radius: 8px;
-    padding: 20px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    width: 255px;
+    height: auto;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+    background-color: #dcdbdb;
+    border: 2px solid #dcdbdb;
+
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    text-align: center;
+
+    .produto-imagem {
+        width: 100%;
+        height: 180px;
+        min-height: 180px;
+        object-fit: contain;
+        object-position: center;
+        background-color: #fff;
+        border-bottom-right-radius: 11px;
+        border-bottom-left-radius: 11px;
+    }
+
+    .produto-info {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        background-color: #dcdbdb;
+        width: 100%;
+        height: 100%;
+
+        .produto-nome {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.4;
+            margin: 0 0 10px;
+            padding: 0 5px;
+        }
+
+        p {
+            font-size: 12px;
+            color: #666;
+            margin: 1px 0;
+            text-align: left;
+        }
+
+        span {
+            font-weight: bold;
+            color: #333;
+        }
+    }
+
 }
 
-.produto-imagem {
-    width: 100%;
-    height: 180px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
 .produto-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(4, 2, 64, 0.272);
 }
 
-.produto-card h3 {
-    font-size: 1.2rem;
-    color: var(--azul);
-    margin-bottom: 10px;
-    word-break: break-word;
+.add-carrinho {
+    width: 80%;
+    padding: 12px 10px;
+    margin-top: 15px;
+    margin-left: 20%;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--vermelho);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.produto-card p {
-    font-size: 0.9rem;
-    color: var(--cinza_escuro);
-    margin: 4px 0;
+.add-carrinho:hover {
+    background-color: #a80c25;
 }
 
 /* Controles de paginação */
 .tabela-controle {
-  display: flex;
-  max-width: 1200px;
-  margin: 20px auto;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
-  flex-wrap: wrap;
-  gap: 10px;
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .tabela-controle button {

@@ -2,9 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Componentes/Header.jsx';
+import Categorias from "../Componentes/Categorias.jsx"
 import CardsProdutos from '../Componentes/CardsProdutos.jsx';
 import Footer from '../Componentes/Footer.jsx';
 import Cascata from '../Componentes/Cascata.jsx';
+import '../../public/style/resultados.scss';
 
 const API_URL = 'http://127.0.0.1:5000';
 
@@ -142,6 +144,8 @@ function Resultados() {
         dropdownRef={dropdownRef}
         onSearchSubmit={handleSearchSubmit}
       />
+
+      <Categorias/>
 
       <Cascata
         listaMontadoras={listaMontadoras}

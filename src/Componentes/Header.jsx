@@ -38,8 +38,8 @@ function Header({
             </div>
 
             <div className="header-actions">
-                <button><img src={user_icon} alt={"User icon"} className="cadastro-btn" />Entre/Cadastro</button>
-                <button><img src={carrinho_icon} alt={"Carrinho icon"} className="carrinho-btn" />Carrinho</button>
+                <button><img src={user_icon} alt={"User icon"} className="cadastro-btn" /><span>Entre/Cadastro</span></button>
+                <button><img src={carrinho_icon} alt={"Carrinho icon"} className="carrinho-btn" /><span>Carrinho</span></button>
             </div>
         </div>
     );

@@ -65,7 +65,9 @@ function Home() {
                 onSearchSubmit={handleSearchSubmit}
             />
             <Banner />
-            <Categorias />
+            <div style={{ padding: '60px 0px'}}>
+                <Categorias />
+            </div>
             <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />
             <ProdutoDestaque produtoDestaque="filtro de ar" handleLinhaClick={handleLinhaClick} />
             <Marcas />

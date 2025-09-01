@@ -46,11 +46,14 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
             onClick={() => handleLinhaClick(item)}
           >
             <img src={item.imagemReal} alt={item.nome} className="produto-imagem" />
-            <h3>{item.nome}</h3>
-            <p><strong>Marca:</strong> {item.marca}</p>
-            <p><strong>Potência:</strong> {item.potencia}</p>
-            <p><strong>Ano Início:</strong> {item.ano_inicio}</p>
-            <p><strong>Ano Fim:</strong> {item.ano_fim}</p>
+            <div className="produto-info">
+              <p className='produto-nome'>{item.nome}</p>
+              <p> Marca: <span>{item.marca}</span></p>
+              <p> Potência: <span>{item.potencia}</span></p>
+              <p> Ano Início: <span>{item.ano_inicio}</span></p>
+              <p> Ano Fim: <span>{item.ano_fim}</span></p>
+              <button className="add-carrinho">Adicionar ao Carrinho</button>
+            </div>
           </div>
         ))}
       </div>
