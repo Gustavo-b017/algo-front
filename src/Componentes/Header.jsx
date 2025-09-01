@@ -1,5 +1,3 @@
-// src/Paginas/Header.jsx
-
 import React from "react";
 import "/public/style/header.scss";
 
@@ -12,10 +10,9 @@ import Pesquisa from "./Pesquisa.jsx";
 
 
 function Header({
-    // Props para o Campos.jsx
-    query, setQuery, placa, setPlaca, marcas, marcaSelecionada,
-    setMarcaSelecionada, ordem, setOrdem, sugestoes, mostrarSugestoes,
-    carregandoSugestoes, setMostrarSugestoes, dropdownRef,
+    // Props para o Pesquisa.jsx
+    query, setQuery, placa, setPlaca, sugestoes, mostrarSugestoes,
+    carregandoSugestoes, setMostrarSugestoes, dropdownRef, onSearchSubmit
 }) {
     return (
         <div className="header">
@@ -24,7 +21,7 @@ function Header({
                 <button className="menu-btn"><img src={menu_icon} alt={"Menu"} /></button>
             </div>
 
-            <div className="logo">
+            <div className="logo" onClick={() => window.location.href = "/"}  >
                 <img src={logo} alt={"Rede Ancora - Logo"} />
             </div>
 
@@ -32,13 +29,11 @@ function Header({
                 <Pesquisa
                     query={query} setQuery={setQuery}
                     placa={placa} setPlaca={setPlaca}
-                    marcas={marcas}
-                    marcaSelecionada={marcaSelecionada} setMarcaSelecionada={setMarcaSelecionada}
-                    ordem={ordem} setOrdem={setOrdem}
                     sugestoes={sugestoes}
                     mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
                     carregandoSugestoes={carregandoSugestoes}
                     dropdownRef={dropdownRef}
+                    onSearchSubmit={onSearchSubmit} // Passe a nova prop
                 />
             </div>
 

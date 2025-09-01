@@ -42,31 +42,29 @@ function CustomSelect({ options, value, onChange, placeholder }) {
     );
 }
 
-function Campos({
+function Pesquisa({
     query, setQuery,
     placa, setPlaca,
-    marcas = [],
-    marcaSelecionada, setMarcaSelecionada,
-    ordem, setOrdem,
     sugestoes = [],
     mostrarSugestoes = false,
     carregandoSugestoes = false,
     setMostrarSugestoes,
-    dropdownRef
+    dropdownRef,
+    onSearchSubmit // Adicione a nova prop
 }) {
     const handleSelect = (sugestao) => {
         setQuery(sugestao);
         setMostrarSugestoes(false);
+        onSearchSubmit(sugestao, placa); // Chama a função de busca com a sugestão
     };
 
-    const marcaOptions = marcas.map(m => ({ value: m, label: m }));
-    const ordemOptions = [
-        { value: 'asc', label: 'Crescente' },
-        { value: 'desc', label: 'Decrescente' }
-    ];
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSearchSubmit(query, placa);
+    };
 
     return (
-        <div className="busca">
+        <form className="busca" onSubmit={handleSubmit}>
             <div className="campo-busca" ref={dropdownRef}>
                 <input
                     type="text"
@@ -91,7 +89,7 @@ function Campos({
                                 sugestoes.map((s, i) => (
                                     <li key={i} className="sugestao">
                                         <button type="button" onClick={() => handleSelect(s)}>
-                                            {s}
+                                            {s} 
                                         </button>
                                     </li>
                                 ))
@@ -109,8 +107,10 @@ function Campos({
                     onChange={(e) => setPlaca(e.target.value.toUpperCase())}
                 />
             </div>
-        </div>
+            {/* Botão de submissão oculto, para permitir o envio do formulário com a tecla 'Enter' */}
+            <button type="submit" style={{ display: 'none' }}></button>
+        </form>
     );
 }
 
-export default Campos;
+export default Pesquisa;

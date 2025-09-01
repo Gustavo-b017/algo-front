@@ -1,6 +1,7 @@
 import React from 'react';
-import Montadora from './Montadora.jsx';
-import Familia from './Familia.jsx';
+import Montadora from './Montadora'; // Ajuste o caminho se necessário
+import Familia from './Familia'; // Ajuste o caminho se necessário
+import SubFamilia from './SubFamilia'; // Importa o novo componente
 
 function Cascata({
     listaMontadoras,
@@ -9,7 +10,11 @@ function Cascata({
     carregandoCascata,
     listaFamilias,
     familiaSelecionada,
-    handleFamiliaChange
+    handleFamiliaChange,
+    listaSubFamilias,        // Novas props
+    subFamiliaSelecionada,   // Novas props
+    handleSubFamiliaChange,  // Novas props
+    carregandoSubFamilias    // Novas props
 }) {
     return (
         <div className="cascata-container">
@@ -26,6 +31,13 @@ function Cascata({
                 valorSelecionadoId={familiaSelecionada.id}
                 onChange={handleFamiliaChange}
                 carregando={carregandoCascata}
+            />
+            <SubFamilia
+                listaSubFamilias={listaSubFamilias}
+                familiaId={familiaSelecionada.id}
+                valorSelecionadoId={subFamiliaSelecionada.id}
+                onChange={handleSubFamiliaChange}
+                carregando={carregandoSubFamilias}
             />
         </div>
     );
