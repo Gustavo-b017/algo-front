@@ -33,7 +33,7 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
   return (
     <>
       {feedbackMessage && (
-        <div className="alert alert-info text-center" role="alert" style={{ marginBottom: '20px' }}>
+        <div className="feedback-message-seach" role="alert" >
           {feedbackMessage}
         </div>
       )}

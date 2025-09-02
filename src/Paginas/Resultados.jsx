@@ -148,7 +148,7 @@ function Resultados() {
 
       <Categorias />
 
-      <Cascata
+      {/* <Cascata
         listaMontadoras={listaMontadoras}
         montadoraSelecionada={montadoraSelecionada}
         handleMontadoraChange={handleMontadoraChange}
@@ -160,7 +160,7 @@ function Resultados() {
         subFamiliaSelecionada={subFamiliaSelecionada}
         handleSubFamiliaChange={handleSubFamiliaChange}
         carregandoSubFamilias={carregandoSubFamilias}
-      />
+      /> */}
 
       <main className='search-page-container'>
 
