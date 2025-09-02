@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Componentes/Header.jsx';
 import Categorias from "../Componentes/Categorias.jsx"
+import Filtro from '../Componentes/Filtro.jsx';
 import CardsProdutos from '../Componentes/CardsProdutos.jsx';
 import Footer from '../Componentes/Footer.jsx';
 import Cascata from '../Componentes/Cascata.jsx';
@@ -145,7 +146,7 @@ function Resultados() {
         onSearchSubmit={handleSearchSubmit}
       />
 
-      <Categorias/>
+      <Categorias />
 
       <Cascata
         listaMontadoras={listaMontadoras}
@@ -161,17 +162,25 @@ function Resultados() {
         carregandoSubFamilias={carregandoSubFamilias}
       />
 
-      <div className="main-content">
-        <CardsProdutos
-          resultados={resultados}
-          paginaAtual={paginaAtual}
-          totalPaginas={totalPaginas}
-          handleLinhaClick={handleLinhaClick}
-          carregandoTabela={carregandoTabela}
-          feedbackMessage={feedbackMessage}
-          buscarTratados={handlePageChange}
-        />
-      </div>
+      <main className='search-page-container'>
+
+        <aside className="filters-sidebar">
+          <Filtro />
+        </aside>
+
+        <section className="search-results">
+          <CardsProdutos
+            resultados={resultados}
+            paginaAtual={paginaAtual}
+            totalPaginas={totalPaginas}
+            handleLinhaClick={handleLinhaClick}
+            carregandoTabela={carregandoTabela}
+            feedbackMessage={feedbackMessage}
+            buscarTratados={handlePageChange}
+          />
+        </section>
+
+      </main>
       <Footer />
     </div>
   );

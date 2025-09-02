@@ -1,14 +1,20 @@
 /* public/style/Resultados.css */
-.resultados-container {
-  display: flex;
+/* =======================================
+// ESTILOS DO LAYOUT PRINCIPAL
+// ======================================= */
+
+.search-page-container {
+    display: flex;
+    gap: 30px; /* Espaço entre a barra lateral e o conteúdo */
+    padding: 20px 98px; /* Padding para o layout geral da página */
+    align-items: flex-start; /* Alinha o topo dos elementos */
 }
 
-.main-content {
-  flex-grow: 1;
+.filters-sidebar {
+    width: 280px; /* Largura fixa para a barra lateral de filtros */
+    flex-shrink: 0; /* Impede que a barra lateral encolha em telas maiores */
 }
 
-.cat {
-  margin: 0 auto;
-  padding: 20px 0 !important;
-  background-color: black !important;
+.search-results {
+    flex: 1; /* Permite que a seção de resultados ocupe o espaço restante */
 }

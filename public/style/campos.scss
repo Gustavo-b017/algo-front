@@ -1,0 +1,140 @@
+/* Campos base */
+.busca {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 10px;
+
+  /* Input e select */
+  input,
+  .custom-select-selected {
+    width: 100%;
+    padding: 0.5rem .75rem;
+    font-size: 1rem;
+    background: transparent;
+    border: 2px solid var(--azul);
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+
+  .campo-busca {
+    flex: 1 1 10%;
+    position: relative;
+
+    /* Botão toggle */
+    .toggle-btn {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .toggle-btn.aberto {
+      transform: translateY(-50%) rotate(90deg);
+    }
+
+    .toggle-btn:hover {
+      background-color: rgba(194, 196, 195, 0.185);
+      border-radius: 4px;
+    }
+  }
+}
+
+/* Lista de sugestões */
+.sugestoes-list,
+.custom-select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+  margin-top: 0.25rem;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 2px solid var(--cinza_escuro);
+  border-radius: 6px;
+  list-style: none;
+  padding: 0;
+  box-sizing: border-box;
+
+  li {
+    border-bottom: 1px solid var(--cinza_escuro);
+    cursor: pointer;
+    color: var(--azul);
+    transition: background 0.2s, color 0.2s;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.loading {
+      text-align: center;
+      padding: 0.5rem 1rem;
+      font-style: italic;
+    }
+
+    &:hover {
+      background: var(--azul);
+      color: #fff;
+    }
+
+    button {
+      color: var(--azul);
+      width: 100%;
+      padding: .6rem 1.2rem;
+      border: none;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--cinza_claro);
+      }
+    }
+  }
+}
+
+.custom-select.open .custom-select-options {
+  display: block;
+}
+
+.custom-select-options {
+  display: none;
+}
+
+/* Mobile: quebra para coluna */
+@media (max-width: 1000px) {
+  .filtros {
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    justify-content: space-between;
+    gap: 2%;
+
+    .campo-marcas,
+    .campo-ordem {
+      width: 49%;
+      min-width: 0;
+    }
+  }
+
+  .busca {
+    flex-direction: column;
+    align-items: stretch;
+
+  }
+}
