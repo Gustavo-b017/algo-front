@@ -4,6 +4,9 @@ import { useSearchParams, useNavigate } from 'react-router-dom'; // Importe useN
 import Item from './Item';
 import Sugestoes from './Sugestoes';
 import axios from 'axios';
+import Header from '../Componentes/Header';
+import Categorias from '../Componentes/Categorias'
+import ProdutoDestaque from '../Componentes/ProdutoDestaque'
 import '/public/style/produto.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -49,19 +52,33 @@ function Produto() {
   }, [searchParams]);
 
   if (carregando) {
-    return <div className="text-center mt-5"><h1>Carregando produto...</h1></div>;
+    return (
+      <div className="loader-container" style={{
+        height: '100vh'
+      }}>
+        <div className="loader-circle"></div>
+        <p className="notive_load">Carregando...</p>
+      </div>
+    );
   }
 
   if (erro) {
-    return <div className="container mt-5 text-center"><h2>{erro}</h2></div>;
+    return (
+      <div className="empty-state-container">
+        <h1>{erro}</h1>
+      </div>
+    );
   }
 
   return (
     <div className="container">
+      <Header />
+      <Categorias />
       {dadosCompletos && (
         <>
           <Item dadosItem={dadosCompletos.item} />
           <hr />
+
           <Sugestoes
             dadosSimilares={dadosCompletos.similares}
             onSugestaoClick={handleSugestaoClick} // Passe a nova prop

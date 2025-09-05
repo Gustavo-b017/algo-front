@@ -2,9 +2,9 @@
   padding: 0;
   border: none;
   margin: 0 auto;
-  background: none;
+  background: #fff;
   width: 100%;
-  
+    
   hr {
     max-width: 1200px;
     margin: 40px auto;

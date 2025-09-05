@@ -17,6 +17,10 @@
   /* border: 1px solid red; */
 }
 
+body {
+  background-color: rgba(217, 217, 217, 1);
+}
+
 .home.container-fluid {
   padding: 0;
   margin: 0;
@@ -95,11 +99,6 @@ h2 {
   background-color: #f9f9f9;
   max-width: 400px;
   margin: 40px auto;
-}
-
-.empty-state-icon {
-  width: 60px;
-  height: 60px; 
 }
 
 .empty-state-container h1 {
