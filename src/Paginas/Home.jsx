@@ -54,7 +54,7 @@ function Home() {
     };
 
     return (
-        <div className="container-fluid">
+        <div className="container">
             <Header
                 query={query} setQuery={setQuery}
                 placa={placa} setPlaca={setPlaca}
@@ -65,7 +65,7 @@ function Home() {
                 onSearchSubmit={handleSearchSubmit}
             />
             <Banner />
-            <div style={{ padding: '60px 0px'}}>
+            <div style={{ padding: '4rem 0px'}}>
                 <Categorias />
             </div>
             <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />

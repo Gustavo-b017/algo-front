@@ -17,27 +17,31 @@
   /* border: 1px solid red; */
 }
 
+html {
+  font-size: 62.5%; /* 1rem = 10px */
+}
+
 body {
+  font-size: 1.6rem; /* 16px */
   background-color: rgba(217, 217, 217, 1);
 }
 
-.home.container-fluid {
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: none;
-  width: 100%;
-
+.container {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0%;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.container-fluid {
-  padding: 0;
-  margin: 0;
+hr {
+  margin: 40px auto;
 }
 
 h2 {
   font-family: Arial, sans-serif;
-  font-size: 27px;
+  font-size:  1.7rem;
   font-weight: 800;
   color: #333;
   margin-bottom: 30px;
@@ -115,4 +119,23 @@ h2 {
   color: #555;
   margin-top: 20px;
   font-weight: 500;
+}
+
+
+/* =======================================
+// MEDIA QUERIES PARA TELAS MAIORES
+// ======================================= */
+
+/* Telas maiores que 768px (tablet e desktop) */
+@media (min-width: 768px) {
+  html {
+    font-size: 70%; 
+  }
+}
+
+/* Telas maiores que 1024px (desktop) */
+@media (min-width: 1024px) {
+  html {
+    font-size: 100%; 
+  }
 }

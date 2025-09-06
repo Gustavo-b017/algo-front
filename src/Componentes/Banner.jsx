@@ -7,7 +7,7 @@ function Banner() {
     return (
         <div className="banner" style={{
             margin: '0 auto',
-            maxWidth: '1600px',
+            padding: '20px',
         }}>
             <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-indicators">

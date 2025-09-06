@@ -7,7 +7,6 @@ import axios from 'axios';
 import Header from '../Componentes/Header';
 import Categorias from '../Componentes/Categorias'
 import ProdutoDestaque from '../Componentes/ProdutoDestaque'
-import '/public/style/produto.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 // const API_URL = 'http://127.0.0.1:5000';

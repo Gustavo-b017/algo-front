@@ -5,14 +5,17 @@
 
 .search-page-container {
     display: flex;
-    gap: 30px; /* Espaço entre a barra lateral e o conteúdo */
+    width: 100%;
+    max-width: 1250px; 
+    margin: 0 auto; 
+    gap: 0%; 
     margin-top: 20px;
-    padding: 20px 98px; /* Padding para o layout geral da página */
+    padding: 20px 0px; /* Padding para o layout geral da página */
     align-items: flex-start; /* Alinha o topo dos elementos */
 }
 
 .filters-sidebar {
-    width: 280px; /* Largura fixa para a barra lateral de filtros */
+    width: 20%; /* Largura fixa para a barra lateral de filtros */
     flex-shrink: 0; /* Impede que a barra lateral encolha em telas maiores */
 }
 

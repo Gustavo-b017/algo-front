@@ -5,7 +5,7 @@
 .item-page-container {
   max-width: 1200px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0%;
 }
 
 .produto-main-section {
@@ -41,7 +41,6 @@
   width: 100%;
   height: auto;
   display: block;
-  color: #fff;
 }
 
 .video-overlay {
@@ -307,57 +306,58 @@
 // ======================================= */
 
 .secao-titulo-tabela {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    background-color: rgba(217, 217, 217, 1);
-    padding: 15px;
-    border-radius: 8px 8px 0 0;
-    margin: 0;
-    text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  background-color: rgba(217, 217, 217, 1);
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+  margin: 0;
+  text-align: center;
 }
 
 .produto-tabela-info {
-    border: 1px solid rgba(217, 217, 217, 1);
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
+  border: 1px solid rgba(217, 217, 217, 1);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
 }
 
 .tabela-descricao-geral {
-    padding: 20px;
-    line-height: 1.6;
-    color: #555;
-    background-color: #fff;
-    
-    p span {
-        font-weight: bold;
-        color: #333;
-    }
+  padding: 20px;
+  line-height: 1.6;
+  color: #555;
+  background-color: #fff;
+
+  p span {
+    font-weight: bold;
+    color: #333;
+  }
 }
 
 .tabela-linha {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
 }
 
 .tabela-linha:nth-child(even) {
-    background-color: rgba(217, 217, 217, 1); 
+  background-color: rgba(217, 217, 217, 1);
 }
 
 .tabela-linha:nth-child(odd) {
-    background-color: #fff; 
+  background-color: #fff;
 }
 
 .tabela-label {
-    font-weight: bold;
-    color: #555;
+  font-weight: bold;
+  color: #555;
 }
 
 .tabela-valor {
-    color: #333;
+  color: #333;
 }
 
 .tabela-linha:hover {
@@ -426,6 +426,7 @@
         object-fit: contain;
         margin-bottom: 10px;
       }
+
       .aplicacao-detalhes {
         margin-top: 12px;
         font-size: 0.9rem;
@@ -454,4 +455,5 @@
     flex-direction: column;
     align-items: center;
   }
+
 }
