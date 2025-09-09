@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import '/public/style/item.scss';
 import playIcon from '/public/imagens/icones/play_icon.png';
 
+const formatBRL = (v) =>
+  typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
+
 // O componente agora recebe os dados diretamente via props
 function Item({ dadosItem }) {
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -78,13 +81,27 @@ function Item({ dadosItem }) {
           <p className="produto-marca">Marca: <strong>{dados.marca}</strong></p>
 
           <div className="produto-precos">
-            <p className="preco-antigo">de: <span className="valor-antigo">R$ 3.699,00</span></p>
+            {typeof dados.precoOriginal === 'number' && dados.precoOriginal > (dados.preco ?? 0) && (
+              <p className="preco-antigo">
+                de: <span className="valor-antigo">{formatBRL(dados.precoOriginal)}</span>
+              </p>
+            )}
+
             <p className="preco-principal-container">
-              por: <span className="preco-principal">R$ 3.393,04</span>
-              <span className="desconto-tag">9% OFF</span>
+              por: <span className="preco-principal">{formatBRL(dados.preco)}</span>
+              {dados.descontoPercentual > 0 && (
+                <span className="desconto-tag">{dados.descontoPercentual}% OFF</span>
+              )}
             </p>
-            <p className="parcelas">ou em até <strong>12x de R$ 282,75</strong> sem juros</p>
+
+            {dados.parcelas?.qtd && dados.parcelas?.valor && (
+              <p className="parcelas">
+                ou em até <strong>{dados.parcelas.qtd}x de {formatBRL(dados.parcelas.valor)}</strong> sem juros
+              </p>
+            )}
           </div>
+
+
 
           <div className="compra-opcoes">
             <div className="quantidade-selector ">
@@ -127,8 +144,8 @@ function Item({ dadosItem }) {
           <div className="tabela-descricao-geral">
             <p><span>O PRODUTO</span></p>
             <p>
-              Desenvolvida para discos ventilados, esta pastilha de freio em cerâmica oferece frenagens mais suaves e silenciosas, 
-              com menos acúmulo de poeira nas rodas. Sua formulação garante alta durabilidade e resistência ao calor, 
+              Desenvolvida para discos ventilados, esta pastilha de freio em cerâmica oferece frenagens mais suaves e silenciosas,
+              com menos acúmulo de poeira nas rodas. Sua formulação garante alta durabilidade e resistência ao calor,
               mantendo a performance e segurança do seu veículo.
             </p>
           </div>

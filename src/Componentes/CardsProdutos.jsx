@@ -1,6 +1,8 @@
 // src/Componentes/CardsProdutos.jsx
 import React from 'react';
 import '/public/style/cardProduto.scss';
+const formatBRL = (v) =>
+  typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
 function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage }) {
   if (carregandoTabela) {
@@ -52,6 +54,26 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
               <p> Potência: <span>{item.potencia}</span></p>
               <p> Ano Início: <span>{item.ano_inicio}</span></p>
               <p> Ano Fim: <span>{item.ano_fim}</span></p>
+              <div className="produto-precos">
+                {typeof item.precoOriginal === 'number' && item.precoOriginal > (item.preco ?? 0) && (
+                  <p className="preco-antigo">
+                    <span className="valor-antigo">{formatBRL(item.precoOriginal)}</span>
+                  </p>
+                )}
+
+                <p className="preco-principal-container">
+                  <span className="preco-principal">{formatBRL(item.preco)}</span>
+                  {item.descontoPercentual > 0 && (
+                    <span className="desconto-tag">{item.descontoPercentual}% OFF</span>
+                  )}
+                </p>
+
+                {item.parcelas?.qtd && item.parcelas?.valor && (
+                  <p className="parcelas">
+                    {item.parcelas.qtd}x de {formatBRL(item.parcelas.valor)} sem juros
+                  </p>
+                )}
+              </div>
               <button className="add-carrinho">Adicionar ao Carrinho</button>
             </div>
           </div>
