@@ -8,33 +8,19 @@ import carrinho_icon from "/public/imagens/icones/carrinho.svg";
 
 import Pesquisa from "./Pesquisa.jsx";
 
-
-function Header({
-    // Props para o Pesquisa.jsx
-    query, setQuery, placa, setPlaca, sugestoes, mostrarSugestoes,
-    carregandoSugestoes, setMostrarSugestoes, dropdownRef, onSearchSubmit
-}) {
+function Header() {
     return (
         <div className="header">
-
             <div className="header-menu">
                 <button className="menu-btn"><img src={menu_icon} alt={"Menu"} /></button>
             </div>
 
-            <div className="logo" onClick={() => window.location.href = "/"}  >
+            <div className="logo" onClick={() => window.location.href = "/"}>
                 <img src={logo} alt={"Rede Ancora - Logo"} />
             </div>
 
             <div className="header-busca">
-                <Pesquisa
-                    query={query} setQuery={setQuery}
-                    placa={placa} setPlaca={setPlaca}
-                    sugestoes={sugestoes}
-                    mostrarSugestoes={mostrarSugestoes} setMostrarSugestoes={setMostrarSugestoes}
-                    carregandoSugestoes={carregandoSugestoes}
-                    dropdownRef={dropdownRef}
-                    onSearchSubmit={onSearchSubmit} // Passe a nova prop
-                />
+                <Pesquisa />
             </div>
 
             <div className="header-actions">

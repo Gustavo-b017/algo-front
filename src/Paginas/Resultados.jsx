@@ -139,12 +139,7 @@ function Resultados() {
 
   return (
     <div className="container">
-      <Header
-        query={query} setQuery={setQuery}
-        placa={placa} setPlaca={setPlaca}
-        dropdownRef={dropdownRef}
-        onSearchSubmit={handleSearchSubmit}
-      />
+      <Header />
 
       <Categorias />
 
