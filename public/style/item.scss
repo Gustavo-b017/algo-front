@@ -447,6 +447,22 @@
 }
 
 /* =======================================
+// SEÇÃO DE INFORMAÇÕES DO PRODUTO (TABELA)
+// ======================================= */
+
+.aplicacao-header img {
+  background-color: rgba(175, 177, 179, 0.53);
+  background-image: url('/public/imagens/backcar.jpg');
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.176);
+  border: 1px solid #ddd;
+
+}
+
+/* =======================================
 // RESPONSIVIDADE
 // ======================================= */
 

@@ -87,7 +87,7 @@ function Item({ dadosItem }) {
             )}
 
             <p className="preco-principal-container">
-              por: <span className="preco-principal">{formatBRL(dados.preco)}</span>
+              por: <span className="preco-principal">0000{formatBRL(dados.preco)}</span>
               {dados.descontoPercentual > 0 && (
                 <span className="desconto-tag">{dados.descontoPercentual}% OFF</span>
               )}
@@ -99,8 +99,6 @@ function Item({ dadosItem }) {
               </p>
             )}
           </div>
-
-
 
           <div className="compra-opcoes">
             <div className="quantidade-selector ">
@@ -196,7 +194,7 @@ function Item({ dadosItem }) {
 
           <div className="tabela-linha">
             <div className="tabela-label">Largura</div>
-            <div className="tabela-valor">-{dados.largura}</div>
+            <div className="tabela-valor">-{dados.dimensoes}</div>
           </div>
 
           <div className="tabela-linha">

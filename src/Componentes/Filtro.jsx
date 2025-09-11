@@ -1,73 +1,53 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import '/public/style/filtros.scss';
+import Montadora from './Montadora';
+import Familia from './Familia';
+import SubFamilia from './SubFamilia';
 
-// Componente para os seletores customizados
-function CustomSelect({ options, value, onChange, placeholder }) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef();
-
-    useEffect(() => {
-        function handleClickOutside(e) {
-            if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const selectedLabel = options.find(opt => opt.value === value)?.label || placeholder;
-
-    return (
-        <div className={`custom-select${open ? ' open' : ''}`} ref={ref}>
-            <div
-                className="custom-select-selected"
-                onClick={() => setOpen(!open)}
-            >
-                {selectedLabel}
-            </div>
-            <ul className="custom-select-options">
-                {options.map((opt, i) => (
-                    <li
-                        key={i}
-                        className={opt.value === value ? 'selected' : ''}
-                        onClick={() => {
-                            onChange(opt.value);
-                            setOpen(false);
-                        }}
-                    >
-                        {opt.label}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
 
 function Filtro({
-    query, setQuery,
-    placa, setPlaca,
-    marcas = [],
-    marcaSelecionada, setMarcaSelecionada,
-    ordem, setOrdem,
-    sugestoes = [],
-    mostrarSugestoes = false,
-    carregandoSugestoes = false,
+    setQuery,
     setMostrarSugestoes,
-    dropdownRef
+    listaMontadoras,
+    montadoraSelecionada,
+    handleMontadoraChange,
+    carregandoCascata,
+    listaFamilias,
+    familiaSelecionada,
+    handleFamiliaChange,
+    listaSubFamilias,        // Novas props
+    subFamiliaSelecionada,   // Novas props
+    handleSubFamiliaChange,  // Novas props
+    carregandoSubFamilias    // Novas props
 }) {
-    const handleSelect = (sugestao) => {
-        setQuery(sugestao);
-        setMostrarSugestoes(false);
-    };
-
-    const marcaOptions = marcas.map(m => ({ value: m, label: m }));
-    const ordemOptions = [
-        { value: 'asc', label: 'Crescente' },
-        { value: 'desc', label: 'Decrescente' }
-    ];
 
     return (
         <div className="filtros-container">
             <h3>Filtros</h3>
+
+            <h4>Pesquisa por marca:</h4>
+            <Montadora
+                listaMontadoras={listaMontadoras}
+                valorSelecionado={montadoraSelecionada.id}
+                onChange={handleMontadoraChange}
+                carregando={carregandoCascata}
+            />
+
+            <Familia
+                listaFamilias={listaFamilias}
+                montadoraId={montadoraSelecionada.id}
+                valorSelecionadoId={familiaSelecionada.id}
+                onChange={handleFamiliaChange}
+                carregando={carregandoCascata}
+            />
+
+            <SubFamilia
+                listaSubFamilias={listaSubFamilias}
+                familiaId={familiaSelecionada.id}
+                valorSelecionadoId={subFamiliaSelecionada.id}
+                onChange={handleSubFamiliaChange}
+                carregando={carregandoSubFamilias}
+            />
 
             {/* Filtro: Categoria da Peça */}
             <div className="filtro-grupo">
@@ -123,6 +103,7 @@ function Filtro({
                     <li><input id="21" type="checkbox" /><label htmlFor='21'>MAZDA</label></li>
                 </ul>
             </div>
+
 
             {/* Filtro: Fabricante */}
             <div className="filtro-grupo">

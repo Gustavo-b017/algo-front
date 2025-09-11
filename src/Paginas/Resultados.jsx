@@ -139,28 +139,31 @@ function Resultados() {
 
   return (
     <div className="container">
-      <Header />
+      <Header
+        query={query} setQuery={setQuery}
+        placa={placa} setPlaca={setPlaca}
+        dropdownRef={dropdownRef}
+        onSearchSubmit={handleSearchSubmit}
+      />
 
       <Categorias />
-
-      {/* <Cascata
-        listaMontadoras={listaMontadoras}
-        montadoraSelecionada={montadoraSelecionada}
-        handleMontadoraChange={handleMontadoraChange}
-        carregandoCascata={carregandoCascata}
-        listaFamilias={listaFamilias}
-        familiaSelecionada={familiaSelecionada}
-        handleFamiliaChange={handleFamiliaChange}
-        listaSubFamilias={listaSubFamilias}
-        subFamiliaSelecionada={subFamiliaSelecionada}
-        handleSubFamiliaChange={handleSubFamiliaChange}
-        carregandoSubFamilias={carregandoSubFamilias}
-      />  */}
 
       <main className='search-page-container'>
 
         <aside className="filters-sidebar">
-          <Filtro />
+          <Filtro
+            listaMontadoras={listaMontadoras}
+            montadoraSelecionada={montadoraSelecionada}
+            handleMontadoraChange={handleMontadoraChange}
+            carregandoCascata={carregandoCascata}
+            listaFamilias={listaFamilias}
+            familiaSelecionada={familiaSelecionada}
+            handleFamiliaChange={handleFamiliaChange}
+            listaSubFamilias={listaSubFamilias}
+            subFamiliaSelecionada={subFamiliaSelecionada}
+            handleSubFamiliaChange={handleSubFamiliaChange}
+            carregandoSubFamilias={carregandoSubFamilias}
+          />
         </aside>
 
         <section className="search-results">
