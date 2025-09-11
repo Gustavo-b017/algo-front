@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '/public/style/item.scss';
-import playIcon from '/public/imagens/icones/play_icon.png';
 
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
