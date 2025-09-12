@@ -1,113 +1,174 @@
-/* Campos base */
+/* Busca - mobile-first (adaptado) */
+
+:root {
+  /* segurança para variáveis inexistentes */
+  --azul: var(--azul, #022e4c);
+  --radius: 10px;
+  --gap: 0.5rem;
+}
+
 .busca {
   display: flex;
+  flex-direction: row;
+  /* mobile: coluna (campo full-width) */
   width: 100%;
   box-sizing: border-box;
-  gap: 10px;
+  gap: 0.5rem;
 
-  /* Input e select */
+  /* Input e select dentro da busca: full width por padrão */
   input,
   .custom-select-selected {
     width: 100%;
-    padding: 0.5rem .75rem;
+    padding: 0.5rem 0.75rem;
     font-size: 1rem;
-    background: transparent;
-    border: 2px solid var(--azul);
-    border-radius: 6px;
+    background: #fff;
+    border: 1.5px solid var(--azul);
     box-sizing: border-box;
+    outline: none;
   }
 
+  /* Container do campo de busca (input e ícone) */
   .campo-busca {
-    flex: 1 1 10%;
+    flex: 1 1 90%;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
-    /* Botão toggle */
+    /* para que o input ocupe corretamente o espaço */
+    input,
+    .custom-select-selected {
+      flex: 1 1 auto;
+      min-width: 0;
+      border-bottom-left-radius: var(--radius);
+      border-top-left-radius: var(--radius);
+    }
+
+    /* Botão de busca/toggle (touch target maior no mobile) */
     .toggle-btn {
       position: absolute;
       top: 50%;
-      right: 10px;
+      right: 3px;
       transform: translateY(-50%);
       background: transparent;
       border: none;
       font-size: 18px;
-      padding: 0;
+      padding: 0px;
+      /* alvo touch maior */
       width: 24px;
       height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.3s ease, color 0.3s ease;
+      transition: transform 0.2s ease, color 0.2s ease;
       cursor: pointer;
-    }
 
-    .toggle-btn.aberto {
-      transform: translateY(-50%) rotate(90deg);
+      &.aberto {
+        transform: translateY(-50%) rotate(90deg);
+      }
     }
+  }
 
-    .toggle-btn:hover {
-      background-color: rgba(194, 196, 195, 0.185);
-      border-radius: 4px;
+  .campo-placa {
+    input,
+    .custom-select-selected {
+      border-bottom-right-radius: var(--radius);
+      border-top-right-radius: var(--radius);
     }
   }
 }
 
-/* Lista de sugestões */
+/* Estilos para listas de sugestões e opções de select */
 .sugestoes-list,
 .custom-select-options {
+  /* Propriedades de posicionamento e layout já estão boas */
   position: absolute;
-  top: 100%;
+  top: calc(100% + 0.5rem);
+  /* Aumenta o espaçamento entre a barra e a lista */
   left: 0;
   width: 100%;
-  z-index: 3;
-  margin-top: 0.25rem;
+  z-index: 1000;
+  margin: 0;
   max-height: 300px;
   overflow-y: auto;
+
+  /* Melhora o visual do contêiner */
   background-color: #fff;
-  border: 2px solid var(--cinza_escuro);
-  border-radius: 6px;
+  border: 1px solid var(--cinza_claro, #e6e6e6);
+  /* Borda mais suave */
+  border-radius: var(--radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  /* Sombra elegante */
+
   list-style: none;
   padding: 0;
+  /* Remove o padding do contêiner, o padding vai para o 'li' */
   box-sizing: border-box;
 
+  /* Estilização dos itens da lista */
   li {
-    border-bottom: 1px solid var(--cinza_escuro);
     cursor: pointer;
+    border-bottom: 1px solid var(--cinza_claro, #e6e6e6);
     color: var(--azul);
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s ease, color 0.2s ease;
+    /* Transições mais suaves */
+    font-size: 0.9rem;
+    /* Tamanho da fonte levemente menor para clareza */
+
+    /* Arredonda o topo e base da lista */
+    &:first-child {
+      border-top-left-radius: calc(var(--radius) - 1px);
+      border-top-right-radius: calc(var(--radius) - 1px);
+    }
 
     &:last-child {
       border-bottom: none;
+      border-bottom-left-radius: calc(var(--radius) - 1px);
+      border-bottom-right-radius: calc(var(--radius) - 1px);
     }
 
     &.loading {
       text-align: center;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1rem;
+      /* Espaçamento para o item de carregamento */
       font-style: italic;
+      color: var(--cinza_escuro, #666);
     }
 
-    &:hover {
-      background: var(--azul);
+    &:hover,
+    &.highlighted {
+      /* Adiciona classe para navegação por teclado */
+      background: var(--cinza_escuro);
       color: #fff;
     }
 
     button {
       color: var(--azul);
       width: 100%;
-      padding: .6rem 1.2rem;
+      padding: 0.75rem 1rem;
+      /* Aumenta o padding do botão para melhor clique */
       border: none;
       background: transparent;
       text-align: left;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: color 0.2s;
+      cursor: inherit;
+      /* Hereda o cursor do 'li' */
+      font-size: inherit;
+      /* Hereda o tamanho da fonte */
 
       &:hover {
-        color: var(--cinza_claro);
+        /* Remove o hover do botão para evitar conflito com o 'li' pai */
+        color: inherit;
       }
+    }
+
+    &:hover button {
+      color: #fff;
+      /* Altera a cor do texto do botão no hover */
     }
   }
 }
 
+/* Opcional: Mostra/esconde a lista de opções */
 .custom-select.open .custom-select-options {
   display: block;
 }
@@ -116,26 +177,65 @@
   display: none;
 }
 
-
-/* Mobile: quebra para coluna */
-@media (max-width: 1000px) {
-  .filtros {
+/* ====== Breakpoint: tablet+ / desktop - restaura layout em linha ====== */
+@media (min-width: 768px) {
+  .busca {
     flex-direction: row;
-    align-items: stretch;
-    width: 100%;
-    justify-content: space-between;
-    gap: 2%;
+    align-items: center;
+    gap: 0.625rem;
+  }
 
-    .campo-marcas,
-    .campo-ordem {
-      width: 49%;
-      min-width: 0;
+  /* Quando em linha, cada campo pode ter sua largura relativa:
+     .campo-busca ocupa a maior parte; outros campos (ex: categoria) podem ter flex-basis fixo */
+  .busca .campo-busca {
+    flex: 1 1 60%;
+    min-width: 0;
+
+    .toggle-btn {
+      right: 10px;
     }
   }
 
-  .busca {
-    flex-direction: column;
-    align-items: stretch;
+  /* se tiver select ao lado, por exemplo:
+     .busca .campo-select { flex: 0 0 140px; } */
+  .busca input,
+  .busca .custom-select-selected {
+    font-size: 1rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: var(--radius);
+  }
 
+  /* reduzir o tamanho do botão toggle no desktop */
+  .campo-busca .toggle-btn {
+    width: 46px;
+    height: 46px;
+    right: 8px;
+  }
+
+  /* sugestões ajustadas para desktop */
+  .sugestoes-list,
+  .custom-select-options {
+    top: calc(100% + 0.35rem);
+    max-height: 320px;
+  }
+}
+
+/* ====== Pequenas proteções contra overflow em telas muito pequenas ====== */
+@media (max-width: 360px) {
+  .busca {
+    gap: 0.35rem;
+  }
+
+  .campo-busca .toggle-btn {
+    width: 40px;
+    height: 40px;
+    right: 6px;
+    padding: 6px;
+  }
+
+  .busca input,
+  .busca .custom-select-selected {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.95rem;
   }
 }

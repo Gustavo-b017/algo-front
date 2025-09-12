@@ -13,10 +13,10 @@ function Header() {
         <div className="header">
             <div className="header-menu">
                 <button className="menu-btn"><img src={menu_icon} alt={"Menu"} /></button>
-            </div>
 
-            <div className="logo" onClick={() => window.location.href = "/"}>
-                <img src={logo} alt={"Rede Ancora - Logo"} />
+                <div className="logo" onClick={() => window.location.href = "/"}>
+                    <img src={logo} alt={"Rede Ancora - Logo"} />
+                </div>
             </div>
 
             <div className="header-busca">
