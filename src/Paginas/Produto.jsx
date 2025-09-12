@@ -1,6 +1,6 @@
-// Produto.jsx
+// src/Paginas/Produto.jsx
 import { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom'; // Importe useNavigate
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Item from './Item';
 import Sugestoes from './Sugestoes';
 import axios from 'axios';
@@ -17,6 +17,16 @@ function Produto() {
   const [erro, setErro] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const navigate = useNavigate(); // Inicialize o hook de navegação
+
+  const salvarProduto = async (dadosDoItem) => {
+    try {
+      const res = await axios.post(`${API_URL}/salvar_produto`, dadosDoItem);
+      alert(res.data.message);
+    } catch (error) {
+      console.error("Erro ao salvar produto:", error);
+      alert("Erro ao salvar o produto. Verifique o console.");
+    }
+  };
 
   const handleSugestaoClick = (produto) => {
     // Redireciona para a mesma página, mas com novos parâmetros
@@ -75,7 +85,7 @@ function Produto() {
       <Categorias />
       {dadosCompletos && (
         <>
-          <Item dadosItem={dadosCompletos.item} />
+          <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
           <hr />
 
           <Sugestoes

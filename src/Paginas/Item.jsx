@@ -1,3 +1,4 @@
+// src/Paginas/Item.jsx
 import React, { useState } from 'react';
 import '/public/style/item.scss';
 import playIcon from '/public/imagens/icones/play_icon.png';
@@ -6,7 +7,7 @@ const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
 // O componente agora recebe os dados diretamente via props
-function Item({ dadosItem }) {
+function Item({ dadosItem, onSave }) {
   const [hoverIndex, setHoverIndex] = useState(null);
 
   // Se, por alguma razão, os dados não chegarem, mostramos uma mensagem.
@@ -16,6 +17,17 @@ function Item({ dadosItem }) {
 
   // Renomeamos a variável para 'dados' para não ter de mudar o JSX
   const dados = dadosItem;
+
+  const handleSaveClick = () => {
+    onSave({
+      nome: dados.nomeProduto,
+      codigo_referencia: dados.id, // <-- CORREÇÃO AQUI
+      url_imagem: dados.imagemReal,
+      preco_original: dados.precoOriginal,
+      preco_final: dados.preco,
+      desconto: dados.descontoPercentual
+    });
+  };
 
   return (
     <div className="item-page-container">
@@ -101,8 +113,6 @@ function Item({ dadosItem }) {
             )}
           </div>
 
-
-
           <div className="compra-opcoes">
             <div className="quantidade-selector ">
               <span>Quantidade:</span>
@@ -115,7 +125,7 @@ function Item({ dadosItem }) {
               </select>
             </div>
             <button className="comprar-agora-btn">Comprar Agora</button>
-            <button className="adicionar-sacola-btn">Adicionar à sacola</button>
+            <button className="adicionar-sacola-btn" onClick={handleSaveClick}>Adicionar à sacola</button>
 
             <div className="frete-calc-container">
               <p>Calcular frete:</p>
