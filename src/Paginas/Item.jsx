@@ -20,14 +20,16 @@ function Item({ dadosItem, onSave }) {
 
   const handleSaveClick = () => {
     onSave({
-      nome: dados.nomeProduto,
-      codigo_referencia: dados.id, // <-- CORREÇÃO AQUI
-      url_imagem: dados.imagemReal,
-      preco_original: dados.precoOriginal,
-      preco_final: dados.preco,
-      desconto: dados.descontoPercentual
+        id_api_externa: dados.id,
+        nome: dados.nomeProduto,
+        codigo_referencia: dados.codigoReferencia, // Corrigido
+        url_imagem: dados.imagemReal,
+        preco_original: dados.precoOriginal,
+        preco_final: dados.preco,
+        desconto: dados.descontoPercentual,
+        marca: dados.marca,
     });
-  };
+};
 
   return (
     <div className="item-page-container">

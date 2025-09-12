@@ -4,9 +4,9 @@ import axios from 'axios';
 import Footer from '../Componentes/Footer';
 import Header from '../Componentes/Header';
 import { useNavigate } from 'react-router-dom';
-import CardCarrinho from '../Componentes/CardCarrinho'; // Importe o novo componente
+import CardCarrinho from '../Componentes/CardCarrinho';
 import '/public/style/cardProduto.scss';
-import '/public/style/cardCarrinho.scss'; // Adicione a importação de estilos
+import '/public/style/cardCarrinho.scss';
 import '/public/style/footer.scss';
 import '/public/style/cardProduto.scss';
 import '/public/style/produtoDestaque.scss';
@@ -41,7 +41,10 @@ function Carrinho() {
     }, []);
 
     const handleCardClick = (produto) => {
-        const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
+        // A lógica para criar os parâmetros está correta
+        const params = new URLSearchParams({ id: produto.id_api_externa, nomeProduto: produto.nome });
+
+        // CORREÇÃO: Navegue para a rota de página "/produto"
         navigate(`/produto?${params.toString()}`);
     };
 
@@ -53,14 +56,13 @@ function Carrinho() {
             </div>
         );
     }
-    
+
     return (
         <div className="container-fluid">
             <Header />
             <div className="main-content">
                 <h2 className="carrinho-titulo">Seu Carrinho</h2>
                 <div className="carrinho-container">
-                    {/* Substitua o CardsProdutos pelo novo CardCarrinho */}
                     <CardCarrinho
                         produtos={produtos}
                         handleCardClick={handleCardClick}
