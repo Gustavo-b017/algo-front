@@ -25,8 +25,8 @@ function Home() {
             </div>
             <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />
             <ProdutoDestaque produtoDestaque="filtro de ar" handleLinhaClick={handleLinhaClick} />
-            <Marcas />
-            <Footer /> */}
+            <Marcas /> */}
+            <Footer /> 
         </div>
     );
 }

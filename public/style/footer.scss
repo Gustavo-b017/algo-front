@@ -1,5 +1,12 @@
+/* footer.scss */
+
+/* -------------------------------------------------------------------------- */
+/* Variáveis e Estilos Globais */
+/* -------------------------------------------------------------------------- */
+
 html,
-body {
+body, .container {
+    
     height: 100%;
     margin: 0;
 }
@@ -7,96 +14,124 @@ body {
 .footer-container {
     background-color: #21354a;
     font-family: Arial, sans-serif;
-    margin-top: 100px;
+    margin-top: 50px;
+    /* Margem padrão para mobile */
     box-sizing: border-box;
+    color: #fff;
+    /* Define a cor do texto para o container principal */
+}
 
-    .footer-top {
-        background-color: #4a6c8b;
-        text-align: center;
-        padding: 10px 0;
-    }
+/* Estilo do botão de "Voltar ao Início" */
+.footer-top {
+    background-color: #4a6c8b;
+    text-align: center;
+    padding: 2px 0;
 }
 
 .back-to-top {
     color: #fff;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 11px;
     transition: color 0.3s;
 
+    &:hover {
+        color: #c0c0c0;
+    }
 }
 
-.back-to-top:hover {
-    color: #c0c0c0;
-}
+/* -------------------------------------------------------------------------- */
+/* Estilos Principais (MOBILE-FIRST) */
+/* -------------------------------------------------------------------------- */
 
 .footer-main {
     display: flex;
-    justify-content: space-between;
-    padding: 50px 100px;
-    gap: 40px;
-    flex-wrap: wrap;
+    flex-direction: row;
+    /* Alinha as seções em linha no mobile */
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    /* Distribui o espaço entre as colunas */
+    padding: 30px 20px;
+    gap: 15px;
+    /* Reduz o espaçamento entre as seções */
 
     .footer-section {
-        flex: 1;
-        min-width: 250px;
+        flex: 1 1 45%;
+        /* Cada seção ocupa quase metade do espaço */
+        min-width: 150px;
+        /* Garante que não fiquem pequenas demais */
+        text-align: left;
+    }
 
-        h4 {
-            color: #fff;
-            font-size: 17px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+    .footer-section h4 {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+
+    .footer-section p,
+    .footer-section a,
+    .footer-section li {
+        font-size: 0.8rem;
+        /* Diminui o tamanho do texto */
     }
 }
-
 
 /* Estilos para a seção "Sobre nós" */
-.about-us p {
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 50px;
+.about-us {
+    p {
+        font-size: 0.6rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
 }
 
-.contact-info p {
-    font-size: 14px;
-    margin: 5px 0;
+.contact-info {
+    p {
+        font-size: 0.6rem;
+        margin: 5px 0;
+        display: flex;
+        align-items: center;
 
-    span {
-        margin-right: 10px;
+        span {
+            margin-right: 5px;
 
-        img {
-            width: 17px;
+            img {
+                width: 12px;
+            }
         }
     }
 }
 
-
 /* Estilos para a seção de links */
-.links ul {
-    list-style: none;
-    padding: 0;
-}
+.links {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
 
-.links ul li {
-    margin-bottom: 10px;
-}
+    li {
+        margin-bottom: 10px;
+    }
 
-.links a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s;
-}
+    a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s;
 
-.links a:hover {
-    text-decoration: underline;
-    color: #c0c0c0;
+        &:hover {
+            text-decoration: underline;
+            color: #c0c0c0;
+        }
+    }
 }
 
 /* Estilos para a seção de formulário de contato */
 .contact-form {
+
+    display: none;
+
     form {
         display: flex;
         flex-direction: column;
@@ -105,12 +140,16 @@ body {
 
     input,
     textarea {
-        background-color: #ffffff;
-        border: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 5px;
         padding: 12px;
-        color: #1a293a;
-        font-size: 14px;
+        color: #fff;
+        font-size: 0.9rem;
+
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
     }
 
     textarea {
@@ -119,29 +158,22 @@ body {
     }
 }
 
-
 .social-links {
     display: flex;
     gap: 15px;
-    margin-top: 10px;
-
-    a {
-        color: #fff;
-        font-size: 20px;
-        transition: color 0.3s;
-    }
+    margin-top: 20px;
 
     img {
         width: 30px;
     }
 }
 
+/* Rodapé inferior */
 .footer-bottom {
     background-color: #1a293a;
     text-align: center;
-    font-size: 12px;
+    font-size: 0.8rem;
     border-top: 1px solid #3d4d5e;
-    //border: 1px solid red;
 
     p {
         color: #4a6c8b;
@@ -149,73 +181,82 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+/* -------------------------------------------------------------------------- */
+/* Estilos para Desktop (SOBRESCRITA) */
+/* -------------------------------------------------------------------------- */
+@media (min-width: 769px) {
+
+    .footer-container {
+        margin-top: 100px;
+    }
+
+    .back-to-top {
+        font-size: 14px;
+    }
+
     .footer-main {
-        align-items: center;
-        text-align: center;
-        padding: 30px 20px;
-        gap: 15px;
-        display: flex;
-        flex-wrap: wrap;
+        flex-direction: row;
+        /* Volta a ser uma linha no desktop */
+        justify-content: space-between;
+        padding: 50px 100px;
+        /* Padding para desktop */
+        gap: 100px;
+        flex-wrap: nowrap;
+        /* Impede a quebra de linha */
 
         .footer-section {
+            flex: 1 1 40%;
             min-width: 250px;
             text-align: left;
 
-            h4 {
-                color: #fff;
-                font-size: 15px;
-                font-weight: bold;
-                margin-bottom: 20px;
-                text-transform: uppercase;
+            /* A seção "Sobre nós" ocupa mais espaço */
+            &:nth-child(1) {
+                flex: 2 1 60%;
             }
 
-            p {
-                font-size: 12px;
-                margin: 5px 0;
+            h4 {
+                margin-bottom: 20px;
             }
         }
     }
 
-    .footer-section {
-        margin-bottom: 20px;
-        /* Reduz a margem para telas menores */
-    }
-
-    .footer-section.contact-form {
-        width: 100%;
-        /* Garante que o formulário ocupe 100% da largura */
+    .about-us {
+        p {
+            font-size: 0.9rem;
+            margin-bottom: 50px;
+        }
     }
 
     .contact-info p {
-        justify-content: center;
-    }
+        justify-content: flex-start;
+        /* Alinha à esquerda no desktop */
+        margin: 5px 0;
 
-    .about-us p {
-        margin-bottom: 20px;
-        /* Ajusta a margem do parágrafo */
+        span {
+            margin-right: 10px;
+
+            img {
+                width: 17px;
+            }
+        }
     }
 
     .social-links {
-        justify-content: center;
-    }
-
-    h4 {
-        font-size: 1.2rem;
-        /* Reduz o tamanho do título */
-    }
-
-    p,
-    li,
-    a {
-        font-size: 0.9rem;
-        /* Reduz o tamanho do texto */
+        justify-content: flex-start;
     }
 
     .contact-form {
+        display: block;
+
         form {
             align-items: stretch;
-            /* Garante que os inputs se estendam por toda a largura */
         }
+    }
+
+    /* Rodapé inferior */
+    .footer-bottom {
+        font-size: 0.8rem;
+        border-top: 1px solid #3d4d5e;
+
     }
 }
