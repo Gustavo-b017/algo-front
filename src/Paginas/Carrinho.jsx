@@ -3,9 +3,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Footer from '../Componentes/Footer';
 import Header from '../Componentes/Header';
-import CardsProdutos from '../Componentes/CardsProdutos';
-import '/public/style/cardProduto.scss';
 import { useNavigate } from 'react-router-dom';
+import CardCarrinho from '../Componentes/CardCarrinho'; // Importe o novo componente
+import '/public/style/cardProduto.scss';
+import '/public/style/cardCarrinho.scss'; // Adicione a importação de estilos
+import '/public/style/footer.scss';
+import '/public/style/cardProduto.scss';
+import '/public/style/produtoDestaque.scss';
+
 
 const API_URL = 'http://127.0.0.1:5000';
 
@@ -32,11 +37,9 @@ function Carrinho() {
                 setCarregando(false);
             }
         };
-
         buscarProdutosCarrinho();
     }, []);
 
-    // Nova função para lidar com o clique no card
     const handleCardClick = (produto) => {
         const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
         navigate(`/produto?${params.toString()}`);
@@ -50,30 +53,17 @@ function Carrinho() {
             </div>
         );
     }
-
-    const resultadosAdaptados = produtos.map(p => ({
-        id: p.id,
-        nome: p.nome,
-        marca: 'N/A', // A API interna não retorna a marca para o card
-        codigoReferencia: p.codigo_referencia,
-        imagemReal: p.url_imagem,
-        precoOriginal: p.preco_original,
-        preco: p.preco_final,
-        desconto: p.desconto
-    }));
-
+    
     return (
         <div className="container-fluid">
             <Header />
             <div className="main-content">
-                <h2 style={{ textAlign: 'center', margin: '40px 0' }}>Seu Carrinho</h2>
-                <div className="cards-grid">
-                    <CardsProdutos
-                        resultados={resultadosAdaptados}
-                        paginaAtual={1}
-                        totalPaginas={1}
-                        feedbackMessage={mensagem}
-                        handleLinhaClick={handleCardClick} // Adicione esta linha
+                <h2 className="carrinho-titulo">Seu Carrinho</h2>
+                <div className="carrinho-container">
+                    {/* Substitua o CardsProdutos pelo novo CardCarrinho */}
+                    <CardCarrinho
+                        produtos={produtos}
+                        handleCardClick={handleCardClick}
                     />
                 </div>
             </div>
