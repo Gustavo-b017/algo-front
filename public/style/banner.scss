@@ -1,0 +1,65 @@
+/* Arquivo: banner.scss */
+
+/* Variáveis (se houver, use as do seu arquivo principal) */
+:root {
+  --radius: 8px;
+}
+
+/* Contêiner principal do banner */
+.banner {
+  max-width: 1200px; /* Limita a largura do banner, centralizando-o */
+  margin: 0 auto;
+  padding: 0; 
+  box-sizing: border-box;
+}
+
+/* Estilização do carrossel do Bootstrap */
+#carouselExampleIndicators {
+  border-radius: var(--radius);
+  overflow: hidden; /* Garante que a imagem siga o border-radius */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+}
+
+/* Customização dos indicadores (bolinhas) */
+.carousel-indicators {
+  button {
+    background-color: rgba(255, 255, 255, 0.6); /* Cor base mais suave */
+    height: 10px;
+    width: 10px;
+    border-radius: 50%; /* Transforma em círculo */
+    border: 1px solid var(--azul);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    
+    &.active {
+      transform: scale(1.2); /* Aumenta o tamanho da bolinha ativa */
+    }
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+  }
+}
+
+/* Customização dos botões de navegação (setas) */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%; /* Aumenta a área de clique */
+  
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    width: 3rem; /* Tamanho do ícone */
+    height: 3rem;
+  }
+}
+
+/* Efeito de hover nas setas */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: background-color 0.3s ease;
+  }
+}
