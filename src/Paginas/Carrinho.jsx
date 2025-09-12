@@ -20,31 +20,39 @@ function Carrinho() {
     const [mensagem, setMensagem] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const buscarProdutosCarrinho = async () => {
-            try {
-                const res = await axios.get(`${API_URL}/carrinho`);
-                if (res.data.success) {
-                    setProdutos(res.data.produtos);
-                    setMensagem(res.data.produtos.length === 0 ? 'Seu carrinho está vazio.' : '');
-                } else {
-                    setMensagem('Não foi possível carregar os produtos do carrinho.');
-                }
-            } catch (error) {
-                console.error("Erro ao buscar produtos do carrinho:", error);
-                setMensagem('Erro de conexão com o servidor.');
-            } finally {
-                setCarregando(false);
+
+    const buscarProdutosCarrinho = async () => {
+        setCarregando(true);
+        try {
+            const res = await axios.get(`${API_URL}/carrinho`);
+            if (res.data.success) {
+                setProdutos(res.data.produtos);
             }
-        };
+        } catch (error) {
+            console.error("Erro ao buscar produtos do carrinho:", error);
+        } finally {
+            setCarregando(false);
+        }
+    };
+
+    useEffect(() => {
         buscarProdutosCarrinho();
     }, []);
 
-    const handleCardClick = (produto) => {
-        // A lógica para criar os parâmetros está correta
-        const params = new URLSearchParams({ id: produto.id_api_externa, nomeProduto: produto.nome });
+    const handleRemoverItem = async (id_api_externa) => {
+        try {
+            // Usando a nova rota POST com o corpo da requisição
+            await axios.post(`${API_URL}/carrinho/produto/remover`, { id_api_externa });
+            // Recarrega a lista de produtos após a remoção
+            buscarProdutosCarrinho();
+        } catch (error) {
+            console.error("Erro ao remover o item:", error);
+            alert("Não foi possível remover o item do carrinho.");
+        }
+    };
 
-        // CORREÇÃO: Navegue para a rota de página "/produto"
+    const handleCardClick = (produto) => {
+        const params = new URLSearchParams({ id: produto.id_api_externa, nomeProduto: produto.nome });
         navigate(`/produto?${params.toString()}`);
     };
 
@@ -66,6 +74,7 @@ function Carrinho() {
                     <CardCarrinho
                         produtos={produtos}
                         handleCardClick={handleCardClick}
+                        handleRemoverItem={handleRemoverItem}
                     />
                 </div>
             </div>
