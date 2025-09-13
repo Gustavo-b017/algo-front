@@ -1,81 +1,42 @@
+/* =======================================
+// ESTILOS PADRÃO (MOBILE-FIRST)
+// ======================================= */
+
 .produtos-destaque {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 0px;
-  background-color: #f0f0f0;
+  padding: 10px 10px;
+  /* Padding menor para mobile */
+  background-color: #dcdbdb;
   margin: 0 auto;
-  max-width: 1250px;
   width: 100%;
-
-  .carousel-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    position: relative;
-  }
-
+  border-radius: 8px;
 }
 
-// SETAS DO CARROSEL
-.carousel-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  border: none;
-  width: 55px;
-  height: 60px;
-  color: #c0c0c0;
-  cursor: pointer;
-  z-index: 10;
-  transition: transform 0.2s, color 0.2s, background-color 0.2s;
-  flex-shrink: 0;
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
-
+.destaque-titulo {
+  font-size: 1.15rem;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.carousel-arrow:hover {
-  transform: scale(1.3);
-}
+/* Oculta as setas por padrão no mobile */
+.carousel-container .carousel-arrow { display: none; }
 
-.carousel-arrow.left {
-  margin-right: 10px;
-}
-
-.carousel-arrow.right {
-  margin-left: 10px;
-}
-
-// CARROSEL
+/* Container dos itens - PADRÃO GRID PARA MOBILE */
 .carousel-items {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  /* Permite a rolagem horizontal */
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-  /* Oculta a barra de rolagem no IE e Edge */
-  scrollbar-width: none;
-  /* Oculta a barra de rolagem no Firefox */
-  padding: 1rem 0;
-  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* Oculta a barra de rolagem para navegadores Webkit (Chrome, Safari) */
-.carousel-items::-webkit-scrollbar {
-  display: none;
-}
-
-// CARDS DE PRODUTO
-
+/* Cards de produto */
 .produto-card-detaque {
   display: flex;
   flex-direction: column;
+  align-items: center;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -83,39 +44,40 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
-  width: 255px;
-  height: 363px;
-  flex-shrink: 0;
-  background-color: #dcdbdb;
+  background-color: #fff;
+  
+  max-width: 150px;
+  height: 210px;
 
   .produto-img-destaque {
     width: 100%;
-    height: 150px;
-    min-height: 150px;
+    height: 90px;
+    min-height: 90px;
     object-fit: contain;
     object-position: center;
-    margin-top: 25px;
+    margin-top: 10px;
     background-color: #fff;
-    border-bottom-right-radius: 11px;
-    border-bottom-left-radius: 11px;
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   .produto-info {
-    padding: 15px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #dcdbdb;
+    background-color: #fff;
+    border-top: 1px solid #eee;
     width: 100%;
     height: 100%;
 
     .produto-nome {
-      font-size: 1rem;
+      font-size: 0.8rem;
       font-weight: bold;
       color: #333;
-      line-height: 1.4;
-      margin-top: 10px;
+      line-height: 1.2;
+      margin-top: 1px;
+      height: auto;
+      overflow: hidden;
     }
 
     .precos {
@@ -123,39 +85,31 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-    }
-
-    .preco-antigo {
-      font-size: 12px;
-      color: #888;
-      text-decoration: line-through;
-
-    }
-
-    .preco-novo {
-      font-size: 14px;
-      color: #333;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    .preco-principal {
-      font-size: 18px;
-      color: #238B23;
-      font-weight: 900;
-    }
-
-    .preco-parcelado {
-      padding: 0%;
       margin: 0%;
-      font-size: 0.9rem;
+      padding: 0%;
+
+      .preco-antigo {
+        font-size: 10px;
+        color: #888;
+        text-decoration: line-through;
+      }
+
+      .preco-novo {
+        font-size: 10px;
+        font-weight: bold;
+        color: #333;
+        margin: 0%;
+
+        .preco-principal {
+          font-size: 1.1rem;
+          color: #238B23;
+          font-weight: 900;
+        }
+      }
+
+      .preco-parcelado { font-size: 0.8rem; }
     }
   }
-}
-
-.produto-card-detaque:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(55, 50, 50, 0.683);
 }
 
 .tag-message {
@@ -164,10 +118,128 @@
   left: 0;
   background-color: #D20404;
   color: #fff;
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 3px 6px;
+  font-size: 10px;
   font-weight: bold;
   border-bottom-right-radius: 8px;
   z-index: 5;
-  width: 100%;
+}
+
+/* Efeito de hover (pode ser desativado para mobile se preferir) */
+.produto-card-detaque:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* =======================================
+// ESTILOS PARA DESKTOP (SOBRESCRITA)
+// ======================================= */
+@media (min-width: 768px) {
+
+  .produtos-destaque {
+    padding: 10px 0px 30px 0px;
+    background-color: #fff;
+    max-width: 1200px;
+
+    .carousel-container .carousel-arrow { display: block; }
+
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+
+    .destaque-titulo { font-size: 1.5rem; }
+
+  }
+
+  // SETAS DO CARROSEL
+  .carousel-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    width: 40px;
+    height: 55px;
+    color: #c0c0c0;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s, color 0.2s, background-color 0.2s;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+  }
+
+  .carousel-arrow:hover { transform: scale(1.3); }
+  .carousel-arrow.left { margin-right: 5px; }
+  .carousel-arrow.right { margin-left: 5px; }
+
+  // CARROSEL
+  .carousel-items {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    /* Permite a rolagem horizontal */
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    /* Oculta a barra de rolagem no IE e Edge */
+    scrollbar-width: none;
+    /* Oculta a barra de rolagem no Firefox */
+    padding: 1rem 0;
+    border-radius: 20px;
+  }
+
+  /* Oculta a barra de rolagem para navegadores Webkit (Chrome, Safari) */
+  .carousel-items::-webkit-scrollbar { display: none; }
+
+  // CARDS DE PRODUTO
+  .produto-card-detaque {
+    max-width: 255px;
+    height: 363px;
+    flex-shrink: 0;
+    background-color: #dcdbdb;
+
+    .produto-img-destaque {
+      height: 150px;
+      min-height: 150px;
+      margin-top: 25px;
+      border-bottom-right-radius: 11px;
+      border-bottom-left-radius: 11px;
+      font-size: 1rem;
+    }
+
+    .produto-info {
+      padding: 15px;
+      background-color: #dcdbdb;
+
+      .produto-nome {
+        font-size: 1rem;
+        font-weight: bold;
+        line-height: 1.4;
+        margin-top: 5px;
+      }
+
+      .preco-antigo { font-size: 3rem; }
+      .preco-novo { font-size: 14px; }
+      .preco-principal { font-size: 18px; }
+      .preco-parcelado { font-size: 0.9rem; }
+    }
+  }
+
+  .produto-card-detaque:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(55, 50, 50, 0.683);
+  }
+
+  .tag-message {
+    padding: 5px 10px;
+    font-size: 12px;
+    width: 100%;
+  }
 }
