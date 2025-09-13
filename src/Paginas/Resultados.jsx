@@ -9,7 +9,8 @@ import Footer from '../Componentes/Footer.jsx';
 import Cascata from '../Componentes/Cascata.jsx';
 import '../../public/style/resultados.scss';
 
-const API_URL = 'http://127.0.0.1:5000';
+const API_URL = import.meta.env.VITE_API_URL;
+//const API_URL = 'http://127.0.0.1:5000';
 
 function Resultados() {
   const [searchParams, setSearchParams] = useSearchParams();
