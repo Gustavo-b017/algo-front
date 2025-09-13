@@ -84,7 +84,7 @@
 }
 
 @media (max-width: 500px) {
-    .brands_container {
-        grid-template-columns: repeat(2, 1fr); // 2 colunas em celulares
+    .brands {
+        display: none;
     }
 }

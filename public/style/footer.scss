@@ -4,13 +4,6 @@
 /* Variáveis e Estilos Globais */
 /* -------------------------------------------------------------------------- */
 
-html,
-body, .container {
-    
-    height: 100%;
-    margin: 0;
-}
-
 .footer-container {
     background-color: #21354a;
     font-family: Arial, sans-serif;
@@ -34,9 +27,7 @@ body, .container {
     font-size: 11px;
     transition: color 0.3s;
 
-    &:hover {
-        color: #c0c0c0;
-    }
+    &:hover { color: #c0c0c0; }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -46,73 +37,64 @@ body, .container {
 .footer-main {
     display: flex;
     flex-direction: row;
-    /* Alinha as seções em linha no mobile */
     flex-wrap: nowrap;
-    justify-content: space-around;
-    /* Distribui o espaço entre as colunas */
-    padding: 30px 20px;
-    gap: 15px;
-    /* Reduz o espaçamento entre as seções */
+    justify-content: space-between;
+    padding: 15px 15px;
+    box-sizing: border-box;
 
     .footer-section {
-        flex: 1 1 45%;
-        /* Cada seção ocupa quase metade do espaço */
-        min-width: 150px;
-        /* Garante que não fiquem pequenas demais */
         text-align: left;
-    }
+        padding: 0 10px;
 
-    .footer-section h4 {
-        font-size: 1rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-    }
+        h4 {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
 
-    .footer-section p,
-    .footer-section a,
-    .footer-section li {
-        font-size: 0.8rem;
-        /* Diminui o tamanho do texto */
+        p, a, li { font-size: 0.8rem; }
     }
 }
 
 /* Estilos para a seção "Sobre nós" */
 .about-us {
+    flex: 0 0 60%;
+    display: block;
+
     p {
         font-size: 0.6rem;
         line-height: 1.6;
         margin-bottom: 20px;
     }
-}
 
-.contact-info {
-    p {
-        font-size: 0.6rem;
-        margin: 5px 0;
-        display: flex;
-        align-items: center;
+    .contact-info {
+        p {
+            font-size: 0.6rem;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
 
-        span {
-            margin-right: 5px;
-
-            img {
-                width: 12px;
+            span {
+                margin-right: 5px;
+                img { width: 12px; }
             }
         }
     }
 }
 
+
 /* Estilos para a seção de links */
 .links {
+
+    flex: 0 0 40%;
+
     ul {
         list-style: none;
         padding: 0;
     }
 
-    li {
-        margin-bottom: 10px;
-    }
+    li { margin-bottom: 10px; }
 
     a {
         color: #fff;
@@ -147,9 +129,7 @@ body, .container {
         color: #fff;
         font-size: 0.9rem;
 
-        &::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
+        &::placeholder { color: rgba(255, 255, 255, 0.7); }
     }
 
     textarea {
@@ -163,9 +143,7 @@ body, .container {
     gap: 15px;
     margin-top: 20px;
 
-    img {
-        width: 30px;
-    }
+    img { width: 30px; }
 }
 
 /* Rodapé inferior */
@@ -186,13 +164,9 @@ body, .container {
 /* -------------------------------------------------------------------------- */
 @media (min-width: 769px) {
 
-    .footer-container {
-        margin-top: 100px;
-    }
+    .footer-container { margin-top: 100px; }
 
-    .back-to-top {
-        font-size: 14px;
-    }
+    .back-to-top { font-size: 14px; }
 
     .footer-main {
         flex-direction: row;
@@ -210,13 +184,9 @@ body, .container {
             text-align: left;
 
             /* A seção "Sobre nós" ocupa mais espaço */
-            &:nth-child(1) {
-                flex: 2 1 60%;
-            }
+            &:nth-child(1) { flex: 2 1 60%; }
 
-            h4 {
-                margin-bottom: 20px;
-            }
+            h4 { margin-bottom: 20px; }
         }
     }
 
@@ -235,22 +205,15 @@ body, .container {
         span {
             margin-right: 10px;
 
-            img {
-                width: 17px;
-            }
+            img { width: 17px; }
         }
     }
 
-    .social-links {
-        justify-content: flex-start;
-    }
+    .social-links { justify-content: flex-start; }
 
     .contact-form {
         display: block;
-
-        form {
-            align-items: stretch;
-        }
+        form { align-items: stretch; }
     }
 
     /* Rodapé inferior */

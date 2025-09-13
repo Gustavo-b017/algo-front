@@ -20,12 +20,10 @@ function Home() {
         <div className="container">
             <Header />
             <Banner />
-            {/* <div style={{ padding: '4rem 0px' }}>
-                <Categorias />
-            </div>
+            <Categorias/>
             <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />
             <ProdutoDestaque produtoDestaque="filtro de ar" handleLinhaClick={handleLinhaClick} />
-            <Marcas /> */}
+            <Marcas />  
             <Footer /> 
         </div>
     );

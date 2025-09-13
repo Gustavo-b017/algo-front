@@ -38,9 +38,6 @@ function Categorias() {
     return (
         <div className="categorias_container">
             <div className="carousel-wrapper">
-                <button className="carousel-arrow left" onClick={() => scrollCarousel("left")}>
-                    &lt;
-                </button>
                 <div className="categorias_grid" ref={carouselRef}>
                     {category_list.map((category) => (
                         <button key={category.id}>
@@ -51,9 +48,6 @@ function Categorias() {
                         </button>
                     ))}
                 </div>
-                <button className="carousel-arrow right" onClick={() => scrollCarousel("right")}>
-                    &gt;
-                </button>
             </div>
         </div>
     );
