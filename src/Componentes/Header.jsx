@@ -23,7 +23,7 @@ function Header() {
                 <Pesquisa />
             </div>
 
-            <div className="header-actions">
+            <div className="header-actions" onClick={() => window.location.href = "/carrinho"}>
                 <button><img src={user_icon} alt={"User icon"} className="cadastro-btn" /><span>Entre/Cadastro</span></button>
                 <button><img src={carrinho_icon} alt={"Carrinho icon"} className="carrinho-btn" /><span>Carrinho</span></button>
             </div>

@@ -1,3 +1,4 @@
+// src/Paginas/Item.jsx
 import React, { useState } from 'react';
 import '/public/style/item.scss';
 
@@ -5,16 +6,32 @@ const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
 // O componente agora recebe os dados diretamente via props
-function Item({ dadosItem }) {
+function Item({ dadosItem, onSave }) {
   const [hoverIndex, setHoverIndex] = useState(null);
+  const [quantidade, setQuantidade] = useState(1); // 1. CRIAR ESTADO PARA A QUANTIDADE
+
 
   // Se, por alguma razão, os dados não chegarem, mostramos uma mensagem.
   if (!dadosItem) {
     return <div className="empty-state-container"><h1>Informações do item não disponíveis.</h1></div>;
   }
 
-  // Renomeamos a variável para 'dados' para não ter de mudar o JSX
   const dados = dadosItem;
+
+  const handleSaveClick = () => {
+    // 3. ENVIAR A QUANTIDADE JUNTO COM OS OUTROS DADOS
+    onSave({
+      id_api_externa: dados.id,
+      nome: dados.nomeProduto,
+      codigo_referencia: dados.codigoReferencia,
+      url_imagem: dados.imagemReal,
+      preco_original: dados.precoOriginal,
+      preco_final: dados.preco,
+      desconto: dados.descontoPercentual,
+      marca: dados.marca,
+      quantidade: quantidade // Adiciona a quantidade selecionada
+    });
+  };
 
   return (
     <div className="item-page-container">
@@ -101,18 +118,19 @@ function Item({ dadosItem }) {
           </div>
 
           <div className="compra-opcoes">
-            <div className="quantidade-selector ">
-              <span>Quantidade:</span>
-              <select>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={5}>5</option>
-              </select>
-            </div>
-            <button className="comprar-agora-btn">Comprar Agora</button>
-            <button className="adicionar-sacola-btn">Adicionar à sacola</button>
+        <div className="quantidade-selector ">
+          <span>Quantidade:</span>
+          {/* 2. CONTROLAR O VALOR DO SELECT COM O ESTADO */}
+          <select value={quantidade} onChange={(e) => setQuantidade(Number(e.target.value))}>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+          </select>
+        </div>
+        <button className="comprar-agora-btn">Comprar Agora</button>
+        <button className="adicionar-sacola-btn" onClick={handleSaveClick}>Adicionar à sacola</button>
 
             <div className="frete-calc-container">
               <p>Calcular frete:</p>

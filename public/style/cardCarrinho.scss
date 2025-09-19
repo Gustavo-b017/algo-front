@@ -1,0 +1,26 @@
+
+.carrinho-titulo {
+  text-align: center;
+  margin: 40px 0;
+  flex-direction: column;
+}
+
+.carrinho-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+// CARROSEL
+.carousel-items {
+  display: flex;
+  gap: 20px; /* <--- Adicionar ou ajustar esta linha */
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 10px 0;
+  border-radius: 8px;
+  padding: 0%;
+}
