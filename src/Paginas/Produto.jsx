@@ -93,8 +93,6 @@ function Produto() {
         <>
           <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
 
-          <hr />
-
           <Sugestoes
             dadosSimilares={dadosCompletos.similares}
             onSugestaoClick={handleSugestaoClick} // Passe a nova prop
@@ -103,7 +101,9 @@ function Produto() {
         </>
       )}
 
-      <ProdutoDestaque produtoDestaque={dadosCompletos.item.nomeProduto}  handleLinhaClick={handleLinhaClick}/>
+      <hr />
+
+      <ProdutoDestaque produtoDestaque={dadosCompletos.item.nomeProduto} handleLinhaClick={handleLinhaClick} />
       <Avaliacoes />
       <Footer />
     </div>
