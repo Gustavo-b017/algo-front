@@ -22,7 +22,7 @@ function Home() {
             <Banner />
             <Categorias/>
             <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />
-            <ProdutoDestaque produtoDestaque="filtro de ar" handleLinhaClick={handleLinhaClick} />
+            <ProdutoDestaque produtoDestaque="pastilha" handleLinhaClick={handleLinhaClick} />
             <Marcas />  
             <Footer /> 
         </div>

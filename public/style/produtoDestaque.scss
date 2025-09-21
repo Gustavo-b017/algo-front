@@ -6,13 +6,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 10px;
-  /* Padding menor para mobile */
-  background-color: #dcdbdb;
+  padding: 10px 5px;
+  //background-color: #dcdbdb;
   margin: 0 auto;
   width: 100%;
   border-radius: 8px;
 }
+
 
 .destaque-titulo {
   font-size: 1.15rem;
@@ -26,8 +26,8 @@
 /* Container dos itens - PADRÃO GRID PARA MOBILE */
 .carousel-items {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(150px, 1fr)); 
+  gap: 5px;
   width: 100%;
   overflow-x: hidden;
 }
@@ -38,15 +38,16 @@
   flex-direction: column;
   align-items: center;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
   background-color: #fff;
+  border: 1px solid #dcdbdb93;
   
-  max-width: 150px;
+  //max-width: 150px;
   height: 210px;
 
   .produto-img-destaque {

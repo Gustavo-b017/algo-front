@@ -15,7 +15,7 @@ function CardCarrinho({ produtos, handleCardClick, handleRemoverItem }) {
     }
 
     return (
-        <div className="carousel-items">
+        <div className="carousel-items-carrinho">
             {produtos.map((item) => (
                 <div key={item.id_api_externa} className="produto-card-detaque">
                     <div onClick={() => handleCardClick(item)} style={{ cursor: 'pointer' }}>

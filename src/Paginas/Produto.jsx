@@ -1,8 +1,8 @@
 // src/Paginas/Produto.jsx
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import Item from './Item';
-import Sugestoes from './Sugestoes';
+import Item from '../Componentes/Item';
+import Sugestoes from '../Componentes/Sugestoes';
 import axios from 'axios';
 import Header from '../Componentes/Header';
 import Categorias from '../Componentes/Categorias'
@@ -84,20 +84,20 @@ function Produto() {
   return (
     <div className="container">
       <Header />
-      <Categorias />
       {dadosCompletos && (
         <>
           <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
           <hr />
-
+{/* 
           <Sugestoes
             dadosSimilares={dadosCompletos.similares}
             onSugestaoClick={handleSugestaoClick} // Passe a nova prop
-          />
+          /> */}
         </>
       )}
+{/*       
       <ProdutoDestaque />
-      <Avaliacoes/>
+      <Avaliacoes/> */}
       <Footer/>
     </div>
   );

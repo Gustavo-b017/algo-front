@@ -1,5 +1,5 @@
 // src/Componentes/ProdutoDestaque.jsx
-import "/public/style/produtoDestaque.scss"
+import "/public/style/produtoDestaque.scss";
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
@@ -70,6 +70,9 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque }) {
     );
   }
 
+  // Limita a exibição de itens para 4 no mobile
+  const itensParaExibir = window.innerWidth < 768 ? itens.slice(0, 4) : itens;
+
   return (
     <section className="produtos-destaque">
       <h2 className="destaque-titulo">{produtoDestaque}</h2>
@@ -79,7 +82,7 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque }) {
           <img src={arrow_left} alt="Arrow left icon" />
         </button>
         <div className="carousel-items" ref={carouselRef}>
-          {itens.map((item) => (
+          {itensParaExibir.map((item) => (
             <div key={item.id} className="produto-card-detaque" onClick={() => handleLinhaClick?.(item)}>
               <div className="tag-message">{TagMenssage}</div>
               <img src={item.imagemReal} alt={item.nome} className="produto-img-destaque" />
