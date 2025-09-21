@@ -26,10 +26,13 @@ function Sugestoes({ dadosSimilares, onSugestaoClick }) {
                   onClick={() => onSugestaoClick(produto)} // Adicione o evento de clique
                 >
                   <div className="aplicacao-header">
+
+                    <p>{produto.nomeProduto}</p>
                     <p><strong>Ref:</strong> {produto.codigoReferencia}</p>
                     <p><strong>Marca:</strong> {produto.marca}</p>
                   </div>
                 </div>
+                
               ))}
             </div>
           </div>

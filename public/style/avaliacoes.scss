@@ -1,195 +1,263 @@
-/* =======================================
-// SEÇÃO DE AVALIAÇÕES GERAL
-// ======================================= */
+/* ==========================
+   AVALIAÇÕES - MOBILE FIRST 
+   ========================== */
 
+/* Container geral */
 .avaliacoes-secao {
     font-family: Arial, sans-serif;
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 16px 0;
+    padding: 10px;
+
+    /* título */
+    h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: rgb(97, 97, 97);
+        margin-bottom: 16px;
+        text-transform: capitalize;
+    }
 }
 
-.avaliacoes-secao h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: rgba(120, 122, 124, 1);
-    margin-bottom: 30px;
-    text-transform: capitalize;
-}
-
+/* conteúdo */
 .avaliacoes-conteudo {
     display: flex;
-    gap: 40px;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+    box-sizing: border-box;
 }
 
-/* =======================================
-// COLUNA DA ESQUERDA: RESUMO DAS ESTRELAS
-// ======================================= */
-
+/* resumo */
 .avaliacoes-resumo {
-    width: 250px;
+    width: 100%;
     flex-shrink: 0;
+    box-sizing: border-box;
+    padding: 8px 0;
+
+    /* linha do resumo */
+    .resumo-linha {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+
+    .estrelas-numero {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #333;
+        min-width: 34px;
+        text-align: left;
+    }
+
+    /* barra de progresso - ocupa o restante */
+    .barra-progresso-fundo {
+        flex-grow: 1;
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .barra-progresso-preenchimento {
+        height: 100%;
+        background-color: #ff9900;
+        width: 0%;
+        transition: width 0.5s ease-in-out;
+    }
+
+    .porcentagem {
+        font-size: 0.95rem;
+        color: #666;
+        width: 48px;
+        text-align: right;
+        margin-left: 8px;
+    }
 }
 
-.resumo-linha {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
 
-.estrelas-numero {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-}
-
-.barra-progresso-fundo {
-    flex-grow: 1;
-    height: 8px;
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.barra-progresso-preenchimento {
-    height: 100%;
-    background-color: #ff9900;
-    transition: width 0.5s ease-in-out;
-}
-
-.porcentagem {
-    font-size: 14px;
-    color: #666;
-    width: 40px;
-    text-align: right;
-}
-
-/* =======================================
-// COLUNA DA DIREITA: CARDS DE COMENTÁRIOS
-// ======================================= */
-
+/* comentários */
 .avaliacoes-comentarios {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    flex-grow: 1;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .comentario-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.comentario-estrelas {
-    font-size: 20px;
-    color: #ff9900;
-    margin-bottom: 10px;
-}
-
-.comentario-texto {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #555;
-}
-
-/* =======================================
-// ESTILOS DE INFORMAÇÕES DO USUÁRIO
-// ======================================= */
-
-.info-usuario {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    /* Espaço entre o avatar e o texto */
-    margin-top: 15px;
-    /* Espaço para separar do texto do comentário */
-}
-
-.avatar-placeholder {
-    width: 45px;
-    height: 45px;
-    background-color: #969696;
-    border-radius: 50%;
-    border: 1px solid #969696;
-
-    overflow: hidden;
-    margin-right: 10px;
-    font-size: 0.1rem;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-    }
-}
-
-.info-texto {
     display: flex;
     flex-direction: column;
+
+    .comentario-estrelas {
+        order: 1;
+        font-size: 1.1rem;
+        color: #ff9900;
+        margin-top: 8px;
+    }
+
+    .comentario-texto {
+        order: 2;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #555;
+        margin-top: 8px;
+    }
+
+    /* info usuário */
+    .info-usuario {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+
+        .avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            background-color: #969696;
+            border-radius: 50%;
+            border: 1px solid #969696;
+            overflow: hidden;
+            flex: 0 0 40px;    
+            font-size: 0.1rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+
+        .info-texto {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nome-usuario {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .tempo-atras {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 0;
+        }
+    }
 }
 
-.nome-usuario {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-}
 
-.tempo-atras {
-    font-size: 0.8rem;
-    color: #666;
-    margin: 0;
-}
-
-/* =======================================
-// LINK "VEJA MAIS"
-// ======================================= */
-
+/* botão 'ver mais' - alinhado à direita por padrão; mobile: alinhado center / end */
 .botoes-avaliacoes {
     text-align: end;
-    margin-top: 20px;
-
-    button {
-        font-size: 14px;
-        font-weight: bold;
-        color: #007bff;
-        text-decoration: none;
-        transition: text-decoration 0.2s;
-        border: none;
-        background: none;
-    }
-
-    button:hover {
-        text-decoration: underline;
-    }
+    margin-top: 16px;
 }
 
+.botoes-avaliacoes button {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #007bff;
+    text-decoration: none;
+    transition: text-decoration 0.2s;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
 
+.botoes-avaliacoes button:hover {
+    text-decoration: underline;
+}
 
-/* =======================================
-// RESPONSIVIDADE
-// ======================================= */
+/* ===========================
+   DESKTOP: restaura layout (>= 900px)
+   =========================== */
+@media (min-width: 900px) {
+    .avaliacoes-secao {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
 
-@media (max-width: 900px) {
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+    }
+
+    /* Conteúdo em duas colunas: resumo (fixo) + comentários (expande) */
     .avaliacoes-conteudo {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
+        flex-direction: row;
+        gap: 40px;
+        align-items: flex-start;
     }
 
     .avaliacoes-resumo {
-        width: 100%;
-        max-width: 400px;
+        width: 250px;
+        flex-shrink: 0;
+        padding-top: 4px;
     }
 
+    .resumo-linha {
+        margin-bottom: 10px;
+    }
+
+    .estrelas-numero {
+        font-size: 14px;
+        min-width: 36px;
+    }
+
+    .barra-progresso-fundo {
+        height: 8px;
+    }
+
+    .porcentagem {
+        font-size: 14px;
+        width: 40px;
+        margin-left: 8px;
+        text-align: right;
+    }
+
+    /* Comentários: grid 2 colunas */
     .avaliacoes-comentarios {
-        grid-template-columns: 1fr;
-        width: 100%;
-        max-width: 400px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        flex-grow: 1;
+    }
+
+    .comentario-card {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+        .comentario-estrelas {
+            order: 0;
+            margin-top: 0;
+        }
+
+        .comentario-texto {
+            order: 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .info-usuario {
+            margin-top: 2px;
+        }
+    }
+
+
+
+    /* Botão 'ver mais' alinhado a direita */
+    .botoes-avaliacoes {
+        text-align: end;
+        margin-top: 20px;
     }
 }

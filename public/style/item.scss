@@ -565,6 +565,9 @@
   }
 
   .aplicacoes-grid {
+    display: flex;
+    flex-wrap: wrap;
+
     .aplicacao-card {
       margin-top: 5px;
       display: flex;

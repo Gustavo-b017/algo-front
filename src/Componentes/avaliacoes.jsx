@@ -47,10 +47,13 @@ function Avaliacoes() {
                 <div className="avaliacoes-comentarios">
                     {avaliacoes.comentarios.slice(0, comentariosVisiveis).map((comentario, index) => (
                         <div className="comentario-card" key={index}>
+
                             <div className="comentario-estrelas">
                                 {'⭐'.repeat(comentario.estrelas)}
                             </div>
+
                             <p className="comentario-texto">{comentario.texto}</p>
+
                             <div className="info-usuario">
                                 <div className="avatar-placeholder"><img src={comentario.perfil} alt="perfil user" /></div>
                                 <div className="info-texto">
@@ -58,6 +61,7 @@ function Avaliacoes() {
                                     <p className="tempo-atras">{comentario.tempo}</p>
                                 </div>
                             </div>
+                            
                         </div>
                     ))}
                 </div>

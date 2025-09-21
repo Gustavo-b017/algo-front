@@ -36,6 +36,11 @@ function Produto() {
     navigate(`/produto?${params.toString()}`);
   };
 
+  const handleLinhaClick = (produto) => {
+    const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
+    navigate(`/produto?${params.toString()}`);
+  };
+
   useEffect(() => {
     const id = searchParams.get('id');
     const nomeProduto = searchParams.get('nomeProduto');
@@ -87,18 +92,20 @@ function Produto() {
       {dadosCompletos && (
         <>
           <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
+
           <hr />
-{/* 
+
           <Sugestoes
             dadosSimilares={dadosCompletos.similares}
             onSugestaoClick={handleSugestaoClick} // Passe a nova prop
-          /> */}
+          />
+
         </>
       )}
-{/*       
-      <ProdutoDestaque />
-      <Avaliacoes/> */}
-      <Footer/>
+
+      <ProdutoDestaque produtoDestaque={dadosCompletos.item.nomeProduto}  handleLinhaClick={handleLinhaClick}/>
+      <Avaliacoes />
+      <Footer />
     </div>
   );
 }
