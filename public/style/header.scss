@@ -9,7 +9,7 @@
   --gap-md: 1.5rem;
   --radius: 10px;
   --header-vertical-padding-mobile: 0.6rem;
-  --header-vertical-padding-desktop: 2rem;
+  --header-vertical-padding-desktop: 20px;
 }
 
 /* Container principal - mobile first */
@@ -56,7 +56,7 @@
       cursor: pointer;
 
       img {
-        width: clamp(8px, 9vw, 43px);
+        width: clamp(8px, 8vw, 35px);
         display: block;
       }
     }
@@ -66,7 +66,7 @@
       cursor: pointer;
 
       img {
-        width: clamp(28px, 9vw, 50px);
+        width: clamp(28px, 9vw, 45px);
         height: auto;
       }
     }

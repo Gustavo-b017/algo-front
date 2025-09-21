@@ -2,23 +2,45 @@
 /* =======================================
 // ESTILOS DO LAYOUT PRINCIPAL
 // ======================================= */
-
 .search-page-container {
     display: flex;
     width: 100%;
-    max-width: 1250px; 
-    margin: 0 auto; 
-    gap: 0%; 
-    margin-top: 20px;
-    padding: 20px 0px; /* Padding para o layout geral da página */
-    align-items: flex-start; /* Alinha o topo dos elementos */
+    max-width: 1250px;
+    margin: 0 auto;
+    gap: 0%;
+    align-items: flex-start;
 }
 
 .filters-sidebar {
-    width: 20%; /* Largura fixa para a barra lateral de filtros */
-    flex-shrink: 0; /* Impede que a barra lateral encolha em telas maiores */
+    display: none;
 }
 
 .search-results {
-    flex: 1; /* Permite que a seção de resultados ocupe o espaço restante */
+    width: 100%;
+}
+
+/* =======================================
+// ESTILOS PARA DESKTOP (SOBRESCRITA)
+// ======================================= */
+@media (min-width: 768px) {
+
+    .search-page-container {
+        gap: 15px;
+        align-items: flex-start;
+        padding: 0 20px;
+    }
+
+    .filters-sidebar {
+        display: block;
+        width: 20%;
+        /* Largura fixa para a barra lateral de filtros */
+        flex-shrink: 0;
+        /* Impede que a barra lateral encolha em telas maiores */
+    }
+
+    .search-results {
+        flex: 1;
+        /* Permite que a seção de resultados ocupe o espaço restante */
+    }
+
 }

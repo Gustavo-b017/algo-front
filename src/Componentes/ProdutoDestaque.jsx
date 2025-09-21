@@ -9,9 +9,8 @@ import arrow_right from "/public/imagens/icones/arrow-right.png";
 const API_URL = import.meta.env.VITE_API_URL;
 //const API_URL = 'http://127.0.0.1:5000';
 
-
-// INFORMAÇÃO EDITAVEIS
-const TagMenssage = "-15% OFF";
+const formatBRL = (v) =>
+  typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
 function ProdutoDestaque({ handleLinhaClick, produtoDestaque }) {
   const [itens, setItens] = useState([]);
@@ -84,14 +83,22 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque }) {
         <div className="carousel-items" ref={carouselRef}>
           {itensParaExibir.map((item) => (
             <div key={item.id} className="produto-card-detaque" onClick={() => handleLinhaClick?.(item)}>
-              <div className="tag-message">{TagMenssage}</div>
+
+              {/* TAG MESSAGE */}
+              <div className="tag-message">{item.descontoPercentual}% OFF</div>
+              {/* iMAGEM */}
               <img src={item.imagemReal} alt={item.nome} className="produto-img-destaque" />
+
               <div className="produto-info">
                 <p className="produto-nome">{item.nome}</p>
                 <div className="precos">
-                  <p className="preco-antigo">De: R$ 500,00{item.precoAntigo}</p>
+                  {typeof item.precoOriginal === 'number' && item.precoOriginal > (item.preco ?? 0) && (
+                    <p className="preco-antigo">
+                      <span>{formatBRL(item.precoOriginal)}</span>
+                    </p>
+                  )}
                   <p className="preco-novo">
-                    Por: <span className="preco-principal">R$ 499,99{item.precoNovo}</span> no Pix
+                    Por: <span className="preco-principal">{formatBRL(item.preco)}</span> no Pix
                   </p>
                   <p className="preco-parcelado">ou em até 10x de R$50,00</p>
                 </div>

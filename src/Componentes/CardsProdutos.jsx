@@ -1,6 +1,9 @@
 // src/Componentes/CardsProdutos.jsx
 import React from 'react';
 import '/public/style/cardProduto.scss';
+import "/public/style/produtoDestaque.scss";
+import carrinho_icon from '../../public/imagens/icones/add-carrinho.png'; // Ou o caminho para o seu ícone
+
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
@@ -21,11 +24,6 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
     return (
       <div className="empty-state-container">
         <h1>Nenhum resultado encontrado...</h1>
-        <div className="empty-state-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.166 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75h.008v.008h-.008v-.008zM14.25 9.75h.008v.008h-.008v-.008z" />
-          </svg>
-        </div>
         <p>{feedbackMessage}</p>
       </div>
 
@@ -47,34 +45,41 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
             className="produto-card"
             onClick={() => handleLinhaClick(item)}
           >
+            {/* TAG MESSAGE */}
+            {item.descontoPercentual > 0 && (
+              <span className="tag-message">{item.descontoPercentual}% OFF</span>
+            )}
+
+            {/* IMAGEM */}
             <img src={item.imagemReal} alt={item.nome} className="produto-imagem" />
+
+            {/* BOTÃO DO CARRINHO */}
+            <button className="add-carrinho-btn">
+              <img src={carrinho_icon} alt="Ícone de carrinho" />
+            </button>
+
             <div className="produto-info">
+
               <p className='produto-nome'>{item.nome}</p>
-              <p> Marca: <span>{item.marca}</span></p>
-              <p> Potência: <span>{item.potencia}</span></p>
-              <p> Ano Início: <span>{item.ano_inicio}</span></p>
-              <p> Ano Fim: <span>{item.ano_fim}</span></p>
+
               <div className="produto-precos">
                 {typeof item.precoOriginal === 'number' && item.precoOriginal > (item.preco ?? 0) && (
                   <p className="preco-antigo">
-                    <span className="valor-antigo">{formatBRL(item.precoOriginal)}</span>
+                    De: <span>{formatBRL(item.precoOriginal)}</span>
                   </p>
                 )}
 
-                <p className="preco-principal-container">
-                  <span className="preco-principal">{formatBRL(item.preco)}</span>
-                  {item.descontoPercentual > 0 && (
-                    <span className="desconto-tag">{item.descontoPercentual}% OFF</span>
-                  )}
+                <p className="preco-novo">
+                  Por: <span className="preco-principal">{formatBRL(item.preco)}</span> no Pix
+
                 </p>
 
                 {item.parcelas?.qtd && item.parcelas?.valor && (
-                  <p className="parcelas">
+                  <p className="preco-parcelado">
                     {item.parcelas.qtd}x de {formatBRL(item.parcelas.valor)} sem juros
                   </p>
                 )}
               </div>
-              <button className="add-carrinho">Adicionar ao Carrinho</button>
             </div>
           </div>
         ))}
