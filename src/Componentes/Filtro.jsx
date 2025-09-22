@@ -18,13 +18,18 @@ function Filtro({
     listaSubFamilias,        // Novas props
     subFamiliaSelecionada,   // Novas props
     handleSubFamiliaChange,  // Novas props
-    carregandoSubFamilias    // Novas props
+    carregandoSubFamilias,   // Novas props
+    className,
+    onClose
 }) {
 
     return (
-        <div className="filtros-container">
-            <h3>Filtros</h3>
-{/* 
+        <div className={`filtros-container ${className}`}>
+            <div className="filtros-header">
+                <h3>Filtros</h3>
+                <button className="fechar-modal-btn" onClick={onClose}>&times;</button>
+            </div>
+            {/* 
             <h4>Pesquisa por marca:</h4>
             <Montadora
                 listaMontadoras={listaMontadoras}

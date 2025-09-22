@@ -5,21 +5,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
   padding: 0;
   position: relative;
 }
 
 /* Container dos botões em mobile */
 .opcoes-mobile {
-  display: flex; /* Exibe os botões em mobile */
+  display: flex;
   width: 100%;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .opcoes-mobile button {
-  flex: 1; /* Faz com que os botões dividam o espaço igualmente */
+  flex: 1;
   padding: 0.75rem;
   border: 1px solid #ddd;
   background-color: rgba(217, 217, 217, 1);
@@ -42,43 +41,19 @@
   border-color: #022e4c;
 }
 
-/* Sidebar de filtros */
-.filters-sidebar {
-  display: none; /* OCULTO POR PADRÃO EM MOBILE */
-  width: 100%;
-  transition: all 0.3s ease-in-out;
-
-}
-
-.filters-sidebar.visivel {
-  display: block; /* Visível quando a classe `.visivel` é adicionada */
-}
-
 /* Seção de resultados da busca */
 .search-results {
   width: 100%;
 }
 
-/* Opcional: Estilo para a barra de ordenação, se ela for uma div separada */
-.ordenar-modal {
-  display: none; /* OCULTO POR PADRÃO */
-  padding: 1.5rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-bottom: 1rem;
-  
-  h3 {
-    margin-top: 0;
-  }
-}
 
 /* =======================================
 // ESTILOS DESKTOP
 // ======================================= */
 @media (min-width: 768px) {
   .search-page-container {
-    flex-direction: row; /* Layout em linha no desktop */
+    flex-direction: row;
+    /* Layout em linha no desktop */
     align-items: flex-start;
     gap: 2rem;
     padding: 0;
@@ -97,10 +72,15 @@
     flex-shrink: 0;
     width: 20%;
   }
-  
+
   /* Exibe a sidebar de filtros no desktop */
-  .filters-sidebar.visivel {
-      display: block; 
+  .filters-sidebar {
+    display: block;
+  }
+
+  /* Oculta a barra de ordenação */
+  .ordenar-wrapper {
+    display: none;
   }
 
   /* A seção de resultados da busca ocupa o espaço restante */
@@ -108,8 +88,4 @@
     flex-grow: 1;
   }
 
-  /* Oculta a barra de ordenação, pois ela seria um modal para mobile */
-  .ordenar-modal {
-    display: none; 
-  }
 }

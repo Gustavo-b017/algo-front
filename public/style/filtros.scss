@@ -1,20 +1,58 @@
+/* =======================================
+// ESTILOS PADRÃO (MOBILE-FIRST)
+// ======================================= */
+
 .filtros-container {
-  background: none;
-  border: none;
-  border-radius: 8px;
-  //padding: 0px 20px 0px 25px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70%;
+  height: 100%;
+  background-color: #f0f0f0;
+  z-index: 1000;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+
+  transform: translateX(-100%);
+  /* Escondido fora da tela (para a esquerda) */
+  transition: transform 0.3s ease-in-out;
+  border-right: 1px solid #ccc;
+}
+
+.filtros-container.visivel {
+  transform: translateX(0);
+  /* Desliza para a tela */
+}
+
+/* Cabeçalho do modal de filtro (apenas mobile) */
+.filtros-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
 
   h3 {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #727678;
-    margin-bottom: 20px;
+    color: rgba(114, 118, 120, 1);
+    margin: 0;
   }
+}
 
+/* Botão de fechar do modal de filtro (apenas mobile) */
+.fechar-modal-btn {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(114, 118, 120, 1);
 }
 
 .filtro-grupo {
-  margin-bottom: 25px;
+  margin: 10px;
   padding-bottom: 15px;
   border-bottom: 1px solid #ddd;
 
@@ -24,10 +62,10 @@
   }
 
   h4 {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    color: #727678;
-    margin-bottom: 10px;
+    color: rgba(114, 118, 120, 1);
+    margin-bottom: 15px;
   }
 
   ul {
@@ -35,24 +73,78 @@
     padding: 0;
 
     li {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     :hover {
       background-color: #72767815;
     }
-
   }
 
   label {
     display: flex;
     align-items: center;
-    font-size: 13px;
-    color: #727678;
+    font-size: 1.1rem;
+    color: #555;
     cursor: pointer;
+    position: relative;
+    padding-left: 20px;
   }
-
 }
+
+/* =======================================
+// ESTILOS DO CHECKBOX PERSONALIZADO (mobile)
+// ======================================= */
+
+.filtro-grupo input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.filtro-grupo label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border: 2px solid #999;
+  background-color: #f7f7f7;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.filtro-grupo input[type="checkbox"]:checked+label::before {
+  background-color: #004e8a;
+  border-color: #004e8a;
+}
+
+.filtro-grupo label::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 40%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.filtro-grupo input[type="checkbox"]:checked+label::after {
+  opacity: 1;
+}
+
+
+/* =========================
+// ESTILOS DO INPUT (mobile)
+// ========================= */
 
 .filtro-input-group {
   display: flex;
@@ -62,21 +154,21 @@
 
 .filtro-input-group input {
   width: 100%;
-  padding: 8px;
+  padding: 5px;
   border: none;
   border-radius: 4px;
   background-color: #D9D9D9;
-  font-size: 12px;
+  font-size: 1.1rem;
 }
 
 .aplicar-btn {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   background-color: var(--azul);
   color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -87,108 +179,76 @@
 
 
 /* =======================================
-// ESTILOS DO CHECKBOX PERSONALIZADO
+// ESTILOS PARA DESKTOP
 // ======================================= */
+@media (min-width: 768px) {
 
-/* Oculta o checkbox nativo */
-.filtro-grupo input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
+  /* Oculta a sobreposição no desktop */
+  .modal-backdrop {
+    display: none;
+  }
 
-/* Estiliza o label, que agora é a parte visível */
-.filtro-grupo label {
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-    color: #666;
-    cursor: pointer;
-    position: relative;
-    padding-left: 20px; /* Espaço para o checkbox customizado */
-}
+  .filtros-container {
+    position: static;
+    width: 100%;
+    height: auto;
+    transform: none;
+    background: none;
+    z-index: auto;
+    border: none;
+  }
 
-/* Cria o quadrado do checkbox (o elemento ::before do label) */
-.filtro-grupo label::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+  /* Oculta o cabeçalho do modal em desktop */
+  .filtros-header {
+
+    border: none;
+    margin: 0;
+
+    .fechar-modal-btn {
+      display: none;
+    }
+  }
+
+  .filtro-grupo {
+    margin: 0;
+
+    label {
+      font-size: 13px;
+    }
+  }
+
+  .filtro-grupo label::before {
     width: 14px;
     height: 14px;
     border: 1px solid #ccc;
-    background-color: #f7f7f7; /* Fundo do quadrado */
     border-radius: 3px;
-    transition: all 0.2s ease;
-}
+  }
 
-/* Mudar a cor do background do quadrado quando o input estiver marcado */
-.filtro-grupo input[type="checkbox"]:checked + label::before {
-    background-color: #022e4c; /* Fundo do quadrado quando marcado */
-    border-color: #022e4c;
-}
-
-/* Cria o "check" (o V) (o elemento ::after do label) */
-.filtro-grupo label::after {
-    content: '';
-    position: absolute;
+  .filtro-grupo label::after {
     left: 5px;
-    top: 50%;
-    transform: translateY(-50%) rotate(45deg);
     width: 5px;
     height: 10px;
-    border: solid white;
     border-width: 0 2px 2px 0;
-    opacity: 0; /* Começa invisível */
-    transition: all 0.2s ease;
-}
+  }
 
-/* Torna o "check" visível quando o input estiver marcado */
-.filtro-grupo input[type="checkbox"]:checked + label::after {
-    opacity: 1;
-}
+  .filtro-grupo h4 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
 
-/* Cria o quadrado do checkbox */
-.filtro-grupo label::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 14px;
-    height: 14px;
-    border: 1px solid #ccc;
-    background-color: #f7f7f7; /* Cor de fundo do quadrado (cinza claro) */
-    border-radius: 3px;
-    transition: all 0.2s ease;
-}
+  .filtro-grupo {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    .aplicar-btn {
+      padding: 8px;
+      font-size: 14px;
+    }
+  }
 
-/* Mudar a cor de fundo quando o checkbox estiver marcado */
-.filtro-grupo input[type="checkbox"]:checked + span::before {
-    background-color: #022e4c; /* Cor de fundo quando marcado (azul escuro) */
-    border-color: #022e4c;
+  .filtro-input-group {
+    input {
+      padding: 8px;
+      font-size: 12px;
+    }
+  }
 }
-
-/* Cria o "check" (o V) */
-.filtro-grupo label::after {
-    content: '';
-    position: absolute;
-    left: 5px;
-    top: 50%;
-    transform: translateY(-50%) rotate(45deg);
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    opacity: 0;
-    transition: all 0.2s ease;
-}
-
-/* Mostra o "check" quando o checkbox estiver marcado */
-.filtro-grupo input[type="checkbox"]:checked + span::after {
-    opacity: 1; /* Torna o "check" visível */
-}
-
