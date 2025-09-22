@@ -1,46 +1,115 @@
-/* public/style/Resultados.css */
 /* =======================================
-// ESTILOS DO LAYOUT PRINCIPAL
+// ESTILOS PADRÃO (MOBILE-FIRST)
 // ======================================= */
 .search-page-container {
-    display: flex;
-    width: 100%;
-    max-width: 1250px;
-    margin: 0 auto;
-    gap: 0%;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0;
+  position: relative;
 }
 
+/* Container dos botões em mobile */
+.opcoes-mobile {
+  display: flex; /* Exibe os botões em mobile */
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.opcoes-mobile button {
+  flex: 1; /* Faz com que os botões dividam o espaço igualmente */
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  background-color: rgba(217, 217, 217, 1);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: rgba(120, 122, 124, 1);
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.opcoes-mobile button:hover {
+  background-color: #f0f0f0;
+  color: #022e4c;
+}
+
+.opcoes-mobile .ativo {
+  background-color: #022e4c;
+  color: #fff;
+  border-color: #022e4c;
+}
+
+/* Sidebar de filtros */
 .filters-sidebar {
-    display: none;
+  display: none; /* OCULTO POR PADRÃO EM MOBILE */
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+
 }
 
+.filters-sidebar.visivel {
+  display: block; /* Visível quando a classe `.visivel` é adicionada */
+}
+
+/* Seção de resultados da busca */
 .search-results {
-    width: 100%;
+  width: 100%;
+}
+
+/* Opcional: Estilo para a barra de ordenação, se ela for uma div separada */
+.ordenar-modal {
+  display: none; /* OCULTO POR PADRÃO */
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  
+  h3 {
+    margin-top: 0;
+  }
 }
 
 /* =======================================
-// ESTILOS PARA DESKTOP (SOBRESCRITA)
+// ESTILOS DESKTOP
 // ======================================= */
 @media (min-width: 768px) {
+  .search-page-container {
+    flex-direction: row; /* Layout em linha no desktop */
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
-    .search-page-container {
-        gap: 15px;
-        align-items: flex-start;
-        padding: 0 20px;
-    }
+  /* Oculta os botões de filtro e ordenação em desktop */
+  .opcoes-mobile {
+    display: none;
+  }
 
-    .filters-sidebar {
-        display: block;
-        width: 20%;
-        /* Largura fixa para a barra lateral de filtros */
-        flex-shrink: 0;
-        /* Impede que a barra lateral encolha em telas maiores */
-    }
+  /* Exibe a sidebar de filtros em desktop */
+  .filters-sidebar {
+    display: block;
+    flex-shrink: 0;
+    width: 20%;
+  }
+  
+  /* Exibe a sidebar de filtros no desktop */
+  .filters-sidebar.visivel {
+      display: block; 
+  }
 
-    .search-results {
-        flex: 1;
-        /* Permite que a seção de resultados ocupe o espaço restante */
-    }
+  /* A seção de resultados da busca ocupa o espaço restante */
+  .search-results {
+    flex-grow: 1;
+  }
 
+  /* Oculta a barra de ordenação, pois ela seria um modal para mobile */
+  .ordenar-modal {
+    display: none; 
+  }
 }

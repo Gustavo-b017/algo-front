@@ -1,7 +1,6 @@
 // src/Componentes/CardsProdutos.jsx
 import React from 'react';
 import '/public/style/cardProduto.scss';
-import "/public/style/produtoDestaque.scss";
 import carrinho_icon from '../../public/imagens/icones/add-carrinho.png'; // Ou o caminho para o seu ícone
 
 const formatBRL = (v) =>
@@ -71,7 +70,6 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
 
                 <p className="preco-novo">
                   Por: <span className="preco-principal">{formatBRL(item.preco)}</span> no Pix
-
                 </p>
 
                 {item.parcelas?.qtd && item.parcelas?.valor && (

@@ -36,6 +36,8 @@ function Resultados() {
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const dropdownRef = useRef(null);
 
+  const [showFilters, setShowFilters] = useState(false);
+  const [showSort, setShowSort] = useState(false);
 
   useEffect(() => {
     async function carregarDadosCascata() {
@@ -151,7 +153,25 @@ function Resultados() {
 
       <main className='search-page-container'>
 
-        <aside className="filters-sidebar">
+        <div className="opcoes-mobile">
+
+          <button className={`btn-filtro ${showFilters ? 'ativo' : ''}`} onClick={() => {
+            setShowFilters(!showFilters);
+            if (showSort) setShowSort(false); // Fecha o ordenar se o filtro for aberto
+          }}>
+            Filtros
+          </button>
+          
+          <button className={`btn-ordenar ${showSort ? 'ativo' : ''}`} onClick={() => {
+            setShowSort(!showSort);
+            if (showFilters) setShowFilters(false); // Fecha o filtro se o ordenar for aberto
+          }}>
+            Ordenar
+          </button>
+          
+        </div>
+
+        <aside className={`filters-sidebar ${showFilters ? 'visivel' : ''}`}>
           <Filtro
             listaMontadoras={listaMontadoras}
             montadoraSelecionada={montadoraSelecionada}
@@ -168,6 +188,18 @@ function Resultados() {
         </aside>
 
         <section className="search-results">
+          {showSort && (
+            <div className="ordenar-modal">
+              {/* Componente ou lógica de ordenação aqui */}
+              <h3>Opções de Ordenação</h3>
+              {/* Exemplo de opções */}
+              <ul>
+                <li>Mais relevantes</li>
+                <li>Menor preço</li>
+                <li>Maior preço</li>
+              </ul>
+            </div>
+          )}
           <CardsProdutos
             resultados={resultados}
             paginaAtual={paginaAtual}

@@ -24,7 +24,7 @@ function Filtro({
     return (
         <div className="filtros-container">
             <h3>Filtros</h3>
-
+{/* 
             <h4>Pesquisa por marca:</h4>
             <Montadora
                 listaMontadoras={listaMontadoras}
@@ -47,7 +47,7 @@ function Filtro({
                 valorSelecionadoId={subFamiliaSelecionada.id}
                 onChange={handleSubFamiliaChange}
                 carregando={carregandoSubFamilias}
-            />
+            /> */}
 
             {/* Filtro: Categoria da Peça */}
             <div className="filtro-grupo">

@@ -1,31 +1,44 @@
 /* =======================================
-// ESTADO DE CARREGAMENTO
+// ESTILOS GERAIS (MOBILE-FIRST)
 // ======================================= */
 
+// Use `rem` para tamanhos de fonte base e `clamp()` para flexibilidade.
+:root {
+  --loader-primary-color: #ce0f2d;
+  --loader-secondary-color: #f3f3f3;
+  --empty-state-border-color: #d7d8d8;
+  --empty-state-bg-color: #f9f9f9;
+}
+
+/* ---------------------------------------
+// ESTADO DE CARREGAMENTO
+// --------------------------------------- */
 .loader-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 50px 20px; /* Padding ajustável para telas menores */
   text-align: center;
-  width: 100%; /* Ocupa a largura total */
-  max-width: 600px; /* Limita a largura máxima em desktops */
+  
+  // Padding adaptado para mobile. O `margin: 0 auto` centraliza em qualquer tela.
+  padding: 50px 1rem;
   margin: 0 auto;
-}
 
-.loader-container p {
-  font-family: Arial, sans-serif;
-  font-size: clamp(1rem, 4vw, 1.2rem); /* Tamanho de fonte responsivo */
-  color: #555;
-  margin-top: 15px;
+  p {
+    font-family: Arial, sans-serif;
+    // Tamanho de fonte que se adapta bem.
+    font-size: 1rem;
+    color: #555;
+    margin-top: 15px;
+  }
 }
 
 .loader-circle {
-  width: clamp(40px, 10vw, 50px); /* Tamanho do círculo responsivo */
-  height: clamp(40px, 10vw, 50px);
-  border: clamp(3px, 1vw, 5px) solid #f3f3f3;
-  border-top: clamp(3px, 1vw, 5px) solid #ce0f2d;
+  // Use `rem` para tamanhos mais previsíveis e `clamp()` para fluidez em outros contextos.
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid var(--loader-secondary-color);
+  border-top: 4px solid var(--loader-primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -35,37 +48,78 @@
   100% { transform: rotate(360deg); }
 }
 
-/* =======================================
+/* ---------------------------------------
 // ESTADO DE VAZIO (SEM RESULTADOS)
-// ======================================= */
-
+// --------------------------------------- */
 .empty-state-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px; /* Padding ajustável para telas menores */
   text-align: center;
-  border: 2px dashed #d7d8d8;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  width: 90%; /* Ocupa 90% da largura do pai */
-  max-width: 400px;
+  
+  // Padding ajustado para ser consistente.
+  padding: 40px 1rem;
   margin: 40px auto;
+
+  border: 2px dashed var(--empty-state-border-color);
+  border-radius: 8px;
+  background-color: var(--empty-state-bg-color);
+  
+  // Ocupa a largura total com um padding lateral. O `max-width` será usado no desktop.
+  width: calc(100% - 2rem);
+  
+  h1 {
+    font-family: Arial, sans-serif;
+    // Tamanho da fonte adaptado para mobile.
+    font-size: 1.2rem;
+    color: var(--azul);
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  p {
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    color: #555;
+    margin-top: 15px;
+    font-weight: 500;
+  }
 }
 
-.empty-state-container h1 {
-  font-family: Arial, sans-serif;
-  font-size: clamp(1.2rem, 5vw, 1.5rem); /* Tamanho de fonte responsivo */
-  color: var(--azul);
-  margin-top: 20px;
-  font-weight: bold;
-}
+/* =======================================
+// ESTILOS PARA DESKTOP (SOBRESCRITA)
+// ======================================= */
+@media (min-width: 768px) {
+  .loader-container {
+    // Limita a largura do container em telas maiores.
+    max-width: 600px;
+  }
+  
+  .loader-container p {
+    // Aumenta o tamanho da fonte em desktop.
+    font-size: 1.2rem;
+  }
 
-.empty-state-container p {
-  font-family: Arial, sans-serif;
-  font-size: clamp(1rem, 4.5vw, 1.1rem); /* Tamanho de fonte responsivo */
-  color: #555;
-  margin-top: 15px;
-  font-weight: 500;
+  .loader-circle {
+    // Aumenta o tamanho do círculo em desktop.
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .empty-state-container {
+    // Limita a largura em telas maiores, para não ficar muito largo.
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .empty-state-container h1 {
+    // Aumenta o tamanho da fonte em desktop.
+    font-size: 1.5rem;
+  }
+  
+  .empty-state-container p {
+    // Aumenta o tamanho da fonte em desktop.
+    font-size: 1.1rem;
+  }
 }
