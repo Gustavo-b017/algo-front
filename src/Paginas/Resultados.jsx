@@ -152,6 +152,13 @@ function Resultados() {
     });
   };
 
+  // Lidar com o clique em categoria
+  const handleCategoryClick = (categoryName) => {
+    const params = new URLSearchParams({ termo: categoryName });
+    navigate(`/resultados?${params.toString()}`);
+  };
+
+
   return (
     <div className="container">
       <Header
@@ -161,7 +168,7 @@ function Resultados() {
         onSearchSubmit={handleSearchSubmit}
       />
 
-      <Categorias />
+      <Categorias onCategoryClick={handleCategoryClick} />
 
       <main className='search-page-container'>
 

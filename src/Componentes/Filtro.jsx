@@ -8,8 +8,11 @@ import SubFamilia from './SubFamilia';
 function Filtro({
     setQuery,
     setMostrarSugestoes,
+
     listaMontadoras,
     montadoraSelecionada,
+    onMontadoraChange,
+
     handleMontadoraChange,
     carregandoCascata,
     listaFamilias,
@@ -20,7 +23,11 @@ function Filtro({
     handleSubFamiliaChange,  // Novas props
     carregandoSubFamilias,   // Novas props
     className,
-    onClose
+    onClose,
+
+    onFiltroChange, // NOVO: Callback para notificar o componente pai sobre as mudanças
+    filtrosIniciais // NOVO: Recebe os filtros iniciais do componente pai
+
 }) {
 
     return (
@@ -29,8 +36,8 @@ function Filtro({
                 <h3>Filtros</h3>
                 <button className="fechar-modal-btn" onClick={onClose}>&times;</button>
             </div>
-            {/* 
-            <h4>Pesquisa por marca:</h4>
+            
+            <h4>Pesquisa por marca de carro:</h4>
             <Montadora
                 listaMontadoras={listaMontadoras}
                 valorSelecionado={montadoraSelecionada.id}
@@ -52,7 +59,25 @@ function Filtro({
                 valorSelecionadoId={subFamiliaSelecionada.id}
                 onChange={handleSubFamiliaChange}
                 carregando={carregandoSubFamilias}
-            /> */}
+            />
+
+            {/* NOVO FILTRO: MARCAS DINÂMICAS */}
+            <div className="filtro-grupo">
+                <h4>Marcas</h4>
+                <ul>
+                    {listaMontadoras.map((montadora) => (
+                        <li key={montadora.id}>
+                            <input
+                                id={`montadora-${montadora.id}`}
+                                type="checkbox"
+                                // Você pode adicionar um `checked` aqui se tiver o estado de seleção
+                                onChange={() => onMontadoraChange(montadora)}
+                            />
+                            <label htmlFor={`montadora-${montadora.id}`}>{montadora.nome}</label>
+                        </li>
+                    ))}
+                </ul>
+            </div>
 
             {/* Filtro: Categoria da Peça */}
             <div className="filtro-grupo">

@@ -16,15 +16,21 @@ function Home() {
         navigate(`/produto?${params.toString()}`);
     };
 
+    // Lidar com o clique em categoria
+    const handleCategoryClick = (categoryName) => {
+        const params = new URLSearchParams({ termo: categoryName });
+        navigate(`/resultados?${params.toString()}`);
+    };
+
     return (
         <div className="container">
             <Header />
             <Banner />
-            <Categorias/>
+            <Categorias  onCategoryClick={handleCategoryClick} />
             <ProdutoDestaque produtoDestaque="disco de freio" handleLinhaClick={handleLinhaClick} />
             <ProdutoDestaque produtoDestaque="pastilha" handleLinhaClick={handleLinhaClick} />
-            <Marcas />  
-            <Footer /> 
+            <Marcas />
+            <Footer />
         </div>
     );
 }

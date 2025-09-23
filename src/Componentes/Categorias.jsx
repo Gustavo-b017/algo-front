@@ -11,36 +11,30 @@ import oil_icon from "/public/imagens/icones/engine-oil.png"
 import estrutura_icon from "/public/imagens/icones/carroceria.png"
 
 const category_list = [
-    { name: "DIREÇÃO E SUSPENSÃO", id: 1, src: wheel_icon },
-    { name: "MOTOR E TRANSMISSÃO", id: 2, src: motor_icon },
-    { name: "FREIOS E PASTILHAS", id: 3, src: disc_icon },
-    { name: "ELÉTRICO E IGNIÇÃO", id: 4, src: ignicao_icon },
-    { name: "ESCAPE E RADIADOR", id: 5, src: escape_icon },
-    { name: "FIXAÇÃO E FERRAGENS", id: 6, src: support_icon },
-    { name: "ADITIVOS E LUBRIFICANTES ", id: 7, src: oil_icon },
-    { name: "ESTRUTURA E CARROCERIA", id: 8, src: estrutura_icon },
-    { name: "SEGMENTOS ESPECIAIS", id: 9, src: car_icon }
+    { name: "Cambio", id: 1, src: wheel_icon },
+    { name: "Motor", id: 2, src: motor_icon },
+    { name: "Disco", id: 3, src: disc_icon },
+    { name: "Pastilha", id: 4, src: ignicao_icon },
+    { name: "Filtro", id: 5, src: escape_icon },
+    { name: "Parafuso", id: 6, src: support_icon },
+    { name: "Oleo", id: 7, src: oil_icon },
+    { name: "Valvula", id: 8, src: estrutura_icon },
+    { name: "Radiador", id: 9, src: car_icon },
+    { name: "Embreagem", id: 10, src: car_icon }
 ]
 
-function Categorias() {
+function Categorias({ onCategoryClick }) {
     const carouselRef = useRef(null);
 
-    const scrollCarousel = (direction) => {
-        if (carouselRef.current) {
-            const scrollAmount = 200; // Ajuste a quantidade de rolagem
-            if (direction === "left") {
-                carouselRef.current.scrollLeft -= scrollAmount;
-            } else {
-                carouselRef.current.scrollLeft += scrollAmount;
-            }
-        }
-    };
     return (
         <div className="categorias_container">
             <div className="carousel-wrapper">
                 <div className="categorias_grid" ref={carouselRef}>
                     {category_list.map((category) => (
-                        <button key={category.id}>
+                        <button 
+                            key={category.id}
+                            onClick={() => onCategoryClick(category.name)}
+                        >
                             <div className="categoria_img">
                                 <img src={category.src} alt={category.name} />
                             </div>

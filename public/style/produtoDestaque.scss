@@ -219,6 +219,13 @@
     flex-shrink: 0;
     background-color: #dcdbdb;
 
+
+    .tag-message {
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      width: 100%;
+    }
+
     .produto-img-destaque {
       height: 150px;
       min-height: 150px;
@@ -240,10 +247,21 @@
       }
 
       .precos {
-        .preco-antigo { font-size: 1rem; }
-        .preco-novo { font-size: 1rem; }
-        .preco-principal { font-size: 1.2rem; }
-        .preco-parcelado { font-size: 0.9rem; }
+        .preco-antigo {
+          font-size: 1rem;
+        }
+
+        .preco-novo {
+          font-size: 1rem;
+        }
+
+        .preco-principal {
+          font-size: 1.2rem;
+        }
+
+        .preco-parcelado {
+          font-size: 0.9rem;
+        }
       }
     }
   }
@@ -253,9 +271,4 @@
     box-shadow: 0 8px 16px rgba(55, 50, 50, 0.683);
   }
 
-  .tag-message {
-    padding: 5px 10px;
-    font-size: 12px;
-    width: 100%;
-  }
 }
