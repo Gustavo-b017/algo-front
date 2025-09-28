@@ -142,8 +142,8 @@
     position: absolute; 
     bottom: 115px; // 10px da borda inferior do `produto-card`
     right: 10px; // 10px da borda direita do `produto-card`
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     background-color: #fff;
     border: 1px solid #88888866;
     border-radius: 50%; // Deixa o botão redondo
@@ -238,7 +238,10 @@
         }
 
         .add-carrinho-btn {
-            display: none;
+            width: 40px;
+            height: 40px;
+            bottom: 190px;
+            //display: none;
         }
 
         .produto-info {

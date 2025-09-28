@@ -7,6 +7,7 @@ const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
 function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage }) {
+  
   if (carregandoTabela) {
     return (
       <div className="loader-container">
@@ -28,6 +29,7 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
 
     );
   }
+
 
   return (
     <>

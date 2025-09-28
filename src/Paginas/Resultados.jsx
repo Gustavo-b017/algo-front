@@ -158,7 +158,6 @@ function Resultados() {
     navigate(`/resultados?${params.toString()}`);
   };
 
-
   return (
     <div className="container">
       <Header

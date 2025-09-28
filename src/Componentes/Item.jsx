@@ -28,6 +28,7 @@ function Item({ dadosItem, onSave }) {
       url_imagem: dados.imagemReal,
       preco_original: dados.precoOriginal,
       preco_final: dados.preco,
+      //parcelas: dados.parcelas.qtd,
       desconto: dados.descontoPercentual,
       marca: dados.marca,
       quantidade: quantidade // Adiciona a quantidade selecionada
