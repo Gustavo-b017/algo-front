@@ -1,90 +1,92 @@
-.brands {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 70px 0%;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
+/* Arquivo: brands.scss */
 
-    h2 {
-        letter-spacing: 1.5px;
-        margin-bottom: 2rem;
-        text-align: center;
-    }
+/* -------------------------------------------------------------------------- */
+/* ESTILOS PADRÃO (MOBILE-FIRST) */
+/* -------------------------------------------------------------------------- */
+
+.brands {
+    display: none; /* Esconde o componente por padrão no mobile */
 }
 
-.brands_container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 15px;
-    justify-content: center;
+/* -------------------------------------------------------------------------- */
+/* ESTILOS PARA DESKTOP E TELAS MAIORES */
+/* -------------------------------------------------------------------------- */
 
-    button {
-        background-color: #0d1e37;
-        border: none;
-        border-radius: 8px;
-        padding: 20px;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        width: 237px;
-        height: 224px;
-
-        display: flex;
+@media (min-width: 768px) {
+    .brands {
+        display: flex; /* Exibe o componente a partir de 768px */
         flex-direction: column;
         align-items: center;
+        gap: 10px;
+        padding: 30px 0;
+        max-width: 1250px;
+        margin: 0 auto;
+        width: 100%;
+
+        h2 {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+    }
+
+    .brands_container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 colunas em telas maiores */
+        gap: 15px;
         justify-content: center;
 
-        .brand_img {
+        button {
+            background-color: #0d1e37;
+            border: none;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 237px;
+            height: 224px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
 
-            img {
-                width: 100px;
-                height: auto;
+            .brand_img {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+
+                img {
+                    width: 100px;
+                    height: auto;
+                }
+
+                p {
+                    color: white;
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin: 0;
+                    text-transform: uppercase;
+                }
             }
-
-            p {
-                color: white;
-                font-family: Arial, sans-serif;
-                font-size: 14px;
-                font-weight: bold;
-                margin: 0;
-                text-transform: uppercase;
-            }
-
         }
 
-    }
-
-    button:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-    }
-
-}
-
-/* =======================================
-// RESPONSIVIDADE PARA DIFERENTES TELAS
-// ======================================= */
-
-@media (max-width: 1200px) {
-    .brands_container {
-        grid-template-columns: repeat(4, 1fr); // 4 colunas em telas menores
+        button:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 992px) and (max-width: 1200px) {
     .brands_container {
-        grid-template-columns: repeat(3, 1fr); // 3 colunas em tablets
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
-@media (max-width: 500px) {
+@media (min-width: 768px) and (max-width: 991px) {
     .brands_container {
-        grid-template-columns: repeat(2, 1fr); // 2 colunas em celulares
+        grid-template-columns: repeat(3, 1fr);
     }
 }

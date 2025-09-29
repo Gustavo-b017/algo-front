@@ -1,15 +1,17 @@
 // src/Paginas/Produto.jsx
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import Item from './Item';
-import Sugestoes from './Sugestoes';
+import Item from '../Componentes/Item';
+import Sugestoes from '../Componentes/Sugestoes';
 import axios from 'axios';
 import Header from '../Componentes/Header';
 import Categorias from '../Componentes/Categorias'
 import ProdutoDestaque from '../Componentes/ProdutoDestaque'
+import Footer from '../Componentes/Footer';
+import Avaliacoes from '../Componentes/avaliacoes';
 
-// const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'http://127.0.0.1:5000';
+const API_URL = import.meta.env.VITE_API_URL;
+//const API_URL = 'http://127.0.0.1:5000';
 
 function Produto() {
   const [searchParams] = useSearchParams();
@@ -30,6 +32,11 @@ function Produto() {
 
   const handleSugestaoClick = (produto) => {
     // Redireciona para a mesma página, mas com novos parâmetros
+    const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
+    navigate(`/produto?${params.toString()}`);
+  };
+
+  const handleLinhaClick = (produto) => {
     const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
     navigate(`/produto?${params.toString()}`);
   };
@@ -82,18 +89,23 @@ function Produto() {
   return (
     <div className="container">
       <Header />
-      <Categorias />
       {dadosCompletos && (
         <>
           <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
-          <hr />
 
           <Sugestoes
             dadosSimilares={dadosCompletos.similares}
             onSugestaoClick={handleSugestaoClick} // Passe a nova prop
           />
+
         </>
       )}
+
+      <hr />
+
+      <ProdutoDestaque produtoDestaque={dadosCompletos.item.nomeProduto} handleLinhaClick={handleLinhaClick} />
+      <Avaliacoes />
+      <Footer />
     </div>
   );
 }

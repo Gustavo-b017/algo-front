@@ -1,24 +1,91 @@
-/* public/style/Resultados.css */
-/* =======================================
-// ESTILOS DO LAYOUT PRINCIPAL
-// ======================================= */
-
+/* ==============================
+// ESTILOS PADRÃO (MOBILE-FIRST)
+// =============================*/
 .search-page-container {
-    display: flex;
-    width: 100%;
-    max-width: 1250px; 
-    margin: 0 auto; 
-    gap: 0%; 
-    margin-top: 20px;
-    padding: 20px 0px; /* Padding para o layout geral da página */
-    align-items: flex-start; /* Alinha o topo dos elementos */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  position: relative;
 }
 
-.filters-sidebar {
-    width: 20%; /* Largura fixa para a barra lateral de filtros */
-    flex-shrink: 0; /* Impede que a barra lateral encolha em telas maiores */
+/* Container dos botões em mobile */
+.opcoes-mobile {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
 }
 
+.opcoes-mobile button {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  background-color: rgba(217, 217, 217, 1);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: rgba(120, 122, 124, 1);
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.opcoes-mobile button:hover {
+  background-color: #f0f0f0;
+  color: #022e4c;
+}
+
+.opcoes-mobile .ativo {
+  background-color: #022e4c;
+  color: #fff;
+  border-color: #022e4c;
+}
+
+/* Seção de resultados da busca */
 .search-results {
-    flex: 1; /* Permite que a seção de resultados ocupe o espaço restante */
+  width: 100%;
+}
+
+
+/* =======================================
+// ESTILOS DESKTOP
+// ======================================= */
+@media (min-width: 768px) {
+  .search-page-container {
+    flex-direction: row;
+    /* Layout em linha no desktop */
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Oculta os botões de filtro e ordenação em desktop */
+  .opcoes-mobile {
+    display: none;
+  }
+
+  /* Exibe a sidebar de filtros em desktop */
+  .filters-sidebar {
+    display: block;
+    flex-shrink: 0;
+    width: 20%;
+  }
+
+  /* Exibe a sidebar de filtros no desktop */
+  .filters-sidebar {
+    display: block;
+  }
+
+  /* Oculta a barra de ordenação */
+  .ordenar-wrapper {
+    display: none;
+  }
+
+  /* A seção de resultados da busca ocupa o espaço restante */
+  .search-results {
+    flex-grow: 1;
+  }
+
 }

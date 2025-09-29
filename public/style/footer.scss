@@ -1,102 +1,132 @@
-html,
-body {
-    height: 100%;
+/* footer.scss */
+
+/* -------------------------------------------------------------------------- */
+/* Variáveis e Estilos Globais */
+/* -------------------------------------------------------------------------- */
+
+.body, html {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
 }
 
 .footer-container {
     background-color: #21354a;
     font-family: Arial, sans-serif;
-    margin-top: 100px;
+    margin-top: 10px;
+    /* Margem padrão para mobile */
     box-sizing: border-box;
+    color: #fff;
+    
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    /* Define a cor do texto para o container principal */
+}
 
-    .footer-top {
-        background-color: #4a6c8b;
-        text-align: center;
-        padding: 10px 0;
-    }
+/* Estilo do botão de "Voltar ao Início" */
+.footer-top {
+    background-color: #4a6c8b;
+    text-align: center;
+    padding: 2px 0;
+    
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .back-to-top {
     color: #fff;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 11px;
     transition: color 0.3s;
 
+    &:hover { color: #c0c0c0; }
 }
 
-.back-to-top:hover {
-    color: #c0c0c0;
-}
+/* -------------------------------------------------------------------------- */
+/* Estilos Principais (MOBILE-FIRST) */
+/* -------------------------------------------------------------------------- */
 
 .footer-main {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: space-between;
-    padding: 50px 100px;
-    gap: 40px;
-    flex-wrap: wrap;
+    padding: 15px 15px;
+    box-sizing: border-box;
 
     .footer-section {
-        flex: 1;
-        min-width: 250px;
+        text-align: left;
+        padding: 0 10px;
 
         h4 {
-            color: #fff;
-            font-size: 17px;
+            font-size: 1rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             text-transform: uppercase;
         }
+
+        p, a, li { font-size: 0.8rem; }
     }
 }
 
-
 /* Estilos para a seção "Sobre nós" */
-.about-us p {
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 50px;
-}
+.about-us {
+    flex: 0 0 60%;
+    display: block;
 
-.contact-info p {
-    font-size: 14px;
-    margin: 5px 0;
+    p {
+        font-size: 0.6rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
 
-    span {
-        margin-right: 10px;
+    .contact-info {
+        p {
+            font-size: 0.7rem;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
 
-        img {
-            width: 17px;
+            span {
+                margin-right: 5px;
+                img { width: 12px; }
+            }
         }
     }
 }
 
 
 /* Estilos para a seção de links */
-.links ul {
-    list-style: none;
-    padding: 0;
-}
+.links {
 
-.links ul li {
-    margin-bottom: 10px;
-}
+    flex: 0 0 40%;
 
-.links a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s;
-}
+    ul {
+        list-style: none;
+        padding: 0;
+    }
 
-.links a:hover {
-    text-decoration: underline;
-    color: #c0c0c0;
+    li { margin-bottom: 10px; }
+
+    a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+
+        &:hover {
+            text-decoration: underline;
+            color: #c0c0c0;
+        }
+    }
 }
 
 /* Estilos para a seção de formulário de contato */
 .contact-form {
+
+    display: none;
+
     form {
         display: flex;
         flex-direction: column;
@@ -105,12 +135,14 @@ body {
 
     input,
     textarea {
-        background-color: #ffffff;
-        border: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 5px;
         padding: 12px;
-        color: #1a293a;
-        font-size: 14px;
+        color: #fff;
+        font-size: 0.9rem;
+
+        &::placeholder { color: rgba(255, 255, 255, 0.7); }
     }
 
     textarea {
@@ -119,29 +151,20 @@ body {
     }
 }
 
-
 .social-links {
     display: flex;
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 20px;
 
-    a {
-        color: #fff;
-        font-size: 20px;
-        transition: color 0.3s;
-    }
-
-    img {
-        width: 30px;
-    }
+    img { width: 30px; }
 }
 
+/* Rodapé inferior */
 .footer-bottom {
     background-color: #1a293a;
     text-align: center;
-    font-size: 12px;
+    font-size: 0.8rem;
     border-top: 1px solid #3d4d5e;
-    //border: 1px solid red;
 
     p {
         color: #4a6c8b;
@@ -149,73 +172,68 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+/* -------------------------------------------------------------------------- */
+/* Estilos para Desktop (SOBRESCRITA) */
+/* -------------------------------------------------------------------------- */
+@media (min-width: 769px) {
+
+    .footer-container { margin-top: 60px; }
+
+    .back-to-top { font-size: 14px; }
+
     .footer-main {
-        align-items: center;
-        text-align: center;
-        padding: 30px 20px;
-        gap: 15px;
-        display: flex;
-        flex-wrap: wrap;
+        flex-direction: row;
+        /* Volta a ser uma linha no desktop */
+        justify-content: space-between;
+        padding: 50px 100px;
+        /* Padding para desktop */
+        gap: 100px;
+        flex-wrap: nowrap;
+        /* Impede a quebra de linha */
 
         .footer-section {
+            flex: 1 1 40%;
             min-width: 250px;
             text-align: left;
 
-            h4 {
-                color: #fff;
-                font-size: 15px;
-                font-weight: bold;
-                margin-bottom: 20px;
-                text-transform: uppercase;
+            /* A seção "Sobre nós" ocupa mais espaço */
+            &:nth-child(1) { flex: 2 1 60%; }
+
+            h4 { margin-bottom: 20px; }
+
+            .about-us {
+                    p {
+                        font-size: 0.9rem;
+                        margin-bottom: 50px;
+                    }
             }
 
-            p {
-                font-size: 12px;
+            .contact-info {
+                justify-content: flex-start;
+                /* Alinha à esquerda no desktop */
                 margin: 5px 0;
+                font-size: 0.8rem;
+
+                span {
+                    margin-right: 10px;
+
+                    img { width: 17px; }
+                }
             }
+            
+            .social-links { justify-content: flex-start; }
         }
-    }
-
-    .footer-section {
-        margin-bottom: 20px;
-        /* Reduz a margem para telas menores */
-    }
-
-    .footer-section.contact-form {
-        width: 100%;
-        /* Garante que o formulário ocupe 100% da largura */
-    }
-
-    .contact-info p {
-        justify-content: center;
-    }
-
-    .about-us p {
-        margin-bottom: 20px;
-        /* Ajusta a margem do parágrafo */
-    }
-
-    .social-links {
-        justify-content: center;
-    }
-
-    h4 {
-        font-size: 1.2rem;
-        /* Reduz o tamanho do título */
-    }
-
-    p,
-    li,
-    a {
-        font-size: 0.9rem;
-        /* Reduz o tamanho do texto */
     }
 
     .contact-form {
-        form {
-            align-items: stretch;
-            /* Garante que os inputs se estendam por toda a largura */
-        }
+        display: block;
+        form { align-items: stretch; }
+    }
+
+    /* Rodapé inferior */
+    .footer-bottom {
+        font-size: 0.8rem;
+        border-top: 1px solid #3d4d5e;
+
     }
 }

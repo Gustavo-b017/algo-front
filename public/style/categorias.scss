@@ -1,21 +1,36 @@
 /* =======================================
-// ESTILOS PADRÃO (DESKTOP E TABLET)
+// ESTILOS PADRÃO (MOBILE-FIRST)
 // ======================================= */
 
 .categorias_container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1200px;
+  max-width: 1250px;
   margin: 0 auto;
 }
 
+/* Container do carrossel (padrão mobile) */
+.carousel-wrapper {
+  display: flex;
+  width: 100%;
+  overflow-x: auto; /* Permite a rolagem horizontal */
+  justify-content: flex-start;
+  padding: 10px 0;
+  
+  /* Oculta a barra de rolagem para um visual mais limpo */
+  -ms-overflow-style: none; /* IE e Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome e Safari */
+  }
+}
+
+/* Estilo do item de categoria no carrossel */
 .categorias_grid {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 3.9rem;
-  width: 100%;
+  flex-wrap: nowrap; /* Impede que os itens quebrem a linha */
+  gap: 10px; /* Espaçamento entre os itens */
 }
 
 .categorias_grid button {
@@ -23,156 +38,105 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 5%;
+  width: 40px;
   cursor: pointer;
   background: none;
   border: none;
   transition: transform 0.2s;
-  flex-shrink: 0;
-}
-
-.categorias_grid button:hover {
-  transform: scale(1.1);
-  transition: transform 0.2s;
+  flex-shrink: 0; /* Impede que os itens encolham */
+  
+  &:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s;
+  }
 }
 
 .categoria_img {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90px;
-  height: 90px;
-  background-color: var(--azul) ;
+  width: 40px;
+  height: 40px;
+  background-color: var(--azul);
   border-radius: 50%;
-}
-
-.categoria_img img {
-  width: 50%;
-  height: 50%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
+  img {
+    width: 25px;
+    height: 25px;
+  }
 }
 
 .categorias_grid p {
-  width: 90px;
-  font-size: 0.65rem;
+  width: 50px;
+  font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
-  color: var(--azul); 
-  padding-top: 15px;
+  color: var(--azul);
+  padding-top: 10px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   text-align: center;
 }
 
-/* Por padrão, as setas estão ocultas */
-.carousel-wrapper .carousel-arrow {
-  display: none;
-}
-
 /* =======================================
-// MEDIA QUERIES PARA TABLETS E TELAS INTERMEDIÁRIAS
+// MEDIA QUERIES PARA TABLETS E DESKTOP
 // ======================================= */
 
-@media (max-width: 1240px) {
-  .categorias_container {
-    padding: 30px 0;
-  }
-  
-  .categorias_grid {
-    gap: 20px;
-    max-width: 700px;
-    flex-wrap: wrap; 
-    justify-content: center;
-  }
-
-  .categorias_grid button {
-    width: 100px;
-    
-    .categoria_img {
-      width: 100px;
-      height: 100px;
-
-      img {
-        width: 50%;
-        height: 50%;
-      }
-    }
-    
-    p {
-      width: 100px;
-      font-size: 10px;
-      padding-top: 10px;
-    }
-  }
-}
-
-/* =======================================
-// MEDIA QUERIES PARA CELULARES (ATIVAÇÃO DO CARROSSEL)
-// ======================================= */
-
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .categorias_container {
     padding: 20px 0;
   }
 
-  .categorias_grid {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding: 10px 0;
-    
-    /* Oculta a barra de rolagem */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
-  /* Exibe as setas */
+  /* Desativa o carrossel e ativa o grid */
   .carousel-wrapper {
-    display: flex;
-    align-items: center;
-    width: 100%;
+    overflow-x: hidden; /* Remove a rolagem horizontal */
   }
 
-  .carousel-wrapper .carousel-arrow {
-    display: block;
-    background-color: transparent;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-    color: #ce0f2d;
-    cursor: pointer;
-    z-index: 10;
-    flex-shrink: 0;
-    transition: transform 0.2s, color 0.2s, background-color 0.2s;
-  }
-  
-  .carousel-wrapper .carousel-arrow.left {
-    margin: 10px;
-  }
-  .carousel-wrapper .carousel-arrow.right {
-    margin: 10px;
+  .categorias_grid {
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+    justify-content: center; /* Centraliza o grid */
+    gap: 2rem; /* Espaçamento maior entre os itens */
   }
 
   .categorias_grid button {
-    width: 90px;
-    flex-shrink: 0;
-  }
-  
-  .categorias_grid button .categoria_img {
-    width: 70px;
-    height: 70px;
-    img {
-      width: 40px;
-      height: 40px;
+    width: 100px; /* Aumenta a largura dos botões */
+    flex-shrink: 1; /* Permite que os itens encolham, se necessário */
+    
+    &:hover {
+      transform: scale(1.1); /* Efeito de hover mais pronunciado */
     }
   }
-  
+
+  .categoria_img {
+    width: 90px;
+    height: 90px;
+    
+    img {
+      width: 50%;
+      height: 50%;
+    }
+  }
+
+  .categorias_grid p {
+    width: 100px;
+    font-size: 10px;
+    padding-top: 15px;
+  }
+}
+
+/* Media query para telas grandes (desktops) */
+@media (min-width: 1240px) {
+  .categorias_grid {
+    gap: 3.5rem; /* Volta o espaçamento original para telas grandes */
+  }
+
+  .categorias_grid button {
+    width: 5%; /* Usa a porcentagem original para alinhar */
+  }
+
   .categorias_grid button p {
     width: 90px;
-    font-size: 11px;
+    font-size: 0.75rem;
   }
 }

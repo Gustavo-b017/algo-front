@@ -4,12 +4,14 @@ import axios from 'axios';
 import Header from '../Componentes/Header.jsx';
 import Categorias from "../Componentes/Categorias.jsx"
 import Filtro from '../Componentes/Filtro.jsx';
+import Ordenar from '../Componentes/Ordenar.jsx';
 import CardsProdutos from '../Componentes/CardsProdutos.jsx';
 import Footer from '../Componentes/Footer.jsx';
 import Cascata from '../Componentes/Cascata.jsx';
-import '../../public/style/resultados.scss';
+import '/public/style/resultados.scss';
 
-const API_URL = 'http://127.0.0.1:5000';
+const API_URL = import.meta.env.VITE_API_URL;
+//const API_URL = 'http://127.0.0.1:5000';
 
 function Resultados() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,6 +37,10 @@ function Resultados() {
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const dropdownRef = useRef(null);
 
+  const [showFilters, setShowFilters] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+
+  const [ordenacao, setOrdenacao] = useState('relevancia');
 
   useEffect(() => {
     async function carregarDadosCascata() {
@@ -137,31 +143,82 @@ function Resultados() {
     }
   };
 
+  const handleMudarOrdenacao = (novaOrdenacao) => {
+    setOrdenacao(novaOrdenacao);
+    // Atualiza a URL para que a ordenação seja mantida
+    setSearchParams(prev => {
+      prev.set('ordenacao', novaOrdenacao);
+      return prev;
+    });
+  };
+
+  // Lidar com o clique em categoria
+  const handleCategoryClick = (categoryName) => {
+    const params = new URLSearchParams({ termo: categoryName });
+    navigate(`/resultados?${params.toString()}`);
+  };
+
   return (
     <div className="container">
-      <Header />
+      <Header
+        query={query} setQuery={setQuery}
+        placa={placa} setPlaca={setPlaca}
+        dropdownRef={dropdownRef}
+        onSearchSubmit={handleSearchSubmit}
+      />
 
-      <Categorias />
-
-      {/* <Cascata
-        listaMontadoras={listaMontadoras}
-        montadoraSelecionada={montadoraSelecionada}
-        handleMontadoraChange={handleMontadoraChange}
-        carregandoCascata={carregandoCascata}
-        listaFamilias={listaFamilias}
-        familiaSelecionada={familiaSelecionada}
-        handleFamiliaChange={handleFamiliaChange}
-        listaSubFamilias={listaSubFamilias}
-        subFamiliaSelecionada={subFamiliaSelecionada}
-        handleSubFamiliaChange={handleSubFamiliaChange}
-        carregandoSubFamilias={carregandoSubFamilias}
-      />  */}
+      <Categorias onCategoryClick={handleCategoryClick} />
 
       <main className='search-page-container'>
 
+        <div className="opcoes-mobile">
+
+          <button className={`btn-filtro ${showFilters ? 'ativo' : ''}`} onClick={() => {
+            setShowFilters(!showFilters);
+            if (showSort) setShowSort(false); // Fecha o ordenar se o filtro for aberto
+          }}>
+            Filtros
+          </button>
+
+          <button className={`btn-ordenar ${showSort ? 'ativo' : ''}`} onClick={() => {
+            setShowSort(!showSort);
+            if (showFilters) setShowFilters(false); // Fecha o filtro se o ordenar for aberto
+          }}>
+            Ordenar
+          </button>
+
+        </div>
+
+        {/* SOBREPOSIÇÃO ESCURA */}
+        {showSort && <div className="modal-backdrop" onClick={() => setShowSort(false)}></div>}
+        {showFilters && <div className="modal-backdrop" onClick={() => setShowFilters(false)}></div>}
+
         <aside className="filters-sidebar">
-          <Filtro />
+          <Filtro
+            listaMontadoras={listaMontadoras}
+            montadoraSelecionada={montadoraSelecionada}
+            handleMontadoraChange={handleMontadoraChange}
+            carregandoCascata={carregandoCascata}
+            listaFamilias={listaFamilias}
+            familiaSelecionada={familiaSelecionada}
+            handleFamiliaChange={handleFamiliaChange}
+            listaSubFamilias={listaSubFamilias}
+            subFamiliaSelecionada={subFamiliaSelecionada}
+            handleSubFamiliaChange={handleSubFamiliaChange}
+            carregandoSubFamilias={carregandoSubFamilias}
+            className={showFilters ? 'visivel' : ''}
+            onClose={() => setShowFilters(false)}
+          />
         </aside>
+
+        <div className="ordenar-wrapper">
+          <Ordenar
+            ordenacaoAtual={ordenacao}
+            onMudarOrdenacao={handleMudarOrdenacao}
+            onClose={() => setShowSort(false)}
+            visivel={showSort ? 'visivel' : ''}
+          />
+        </div>
 
         <section className="search-results">
           <CardsProdutos

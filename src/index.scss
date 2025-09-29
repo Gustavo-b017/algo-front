@@ -1,0 +1,68 @@
+// index.scss
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
+  //border: 1px solid red;
+}
+
+:root {
+  --azul: #022e4c;
+  --vermelho: #ce0f2d;
+  --cinza-claro: rgba(230, 228, 228, 0.306);
+  --branco: #fff;
+  --cinza-escuro: #333;
+}
+
+html {
+  // Configuração mobile-first para a fonte
+  font-size: 62.5%; // 1rem = 10px
+}
+
+body {
+  font-size: 1.6rem;
+  background-color: var(--cinza-claro);
+  color: var(--azul); 
+}
+
+.container {
+  padding: 0 1.5rem; 
+  background-color: var(--branco);
+}
+
+hr {
+  margin: 40px auto;
+}
+
+h2 {
+  font-family: Arial, sans-serif;
+  font-size: 1.7rem; // Rem para ser responsivo
+  font-weight: 800;
+  color: var(--cinza-escuro);
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+/* Telas maiores que 768px (tablet e desktop) */
+@media (min-width: 768px) {
+    html {
+        font-size: 70%; // Aumenta um pouco
+    }
+    .container {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 0; // Remove padding para usar a margem automática
+    }
+}
+
+/* Telas maiores que 1024px (desktop) */
+@media (min-width: 1024px) {
+    html {
+        font-size: 100%; // Valor final para telas grandes
+    }
+}

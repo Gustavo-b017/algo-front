@@ -1,0 +1,71 @@
+{
+  "avaliacoes": {
+    "total": 100,
+    "resumo": [
+      {
+        "estrelas": 5,
+        "porcentagem": 34
+      },
+      {
+        "estrelas": 4,
+        "porcentagem": 55
+      },
+      {
+        "estrelas": 3,
+        "porcentagem": 5
+      },
+      {
+        "estrelas": 2,
+        "porcentagem": 5
+      },
+      {
+        "estrelas": 1,
+        "porcentagem": 1
+      }
+    ],
+    "comentarios": [
+      {
+        "nome": "Francisco José",
+        "perfil": "./imagens/perfil.jpeg",
+        "tempo": "2 meses atrás",
+        "texto": "Loja fantástica, uma das melhores experiências em compra online. Vendedor me chamou no WhatsApp logo após o pagamento, ofereceu suporte, tirou dúvidas, perguntei de outras peças, recebi indicações de onde encontraria. Para mim a nota é 1000.",
+        "estrelas": 5
+      },
+      {
+        "nome": "Maria Silva",
+        "perfil": "./imagens/perfil.jpeg",
+        "tempo": "1 mês atrás",
+        "texto": "Ótimo produto, chegou bem rápido e a embalagem estava perfeita. Recomendo a todos.",
+        "estrelas": 4
+      },
+      {
+        "nome": "João Oliveira",
+        "perfil": "./imagens/perfil.jpeg",
+        "tempo": "2 meses atrás",
+        "texto": "Loja fantástica, uma das melhores experiências em compra online. Vendedor me chamou no WhatsApp logo após o pagamento, ofereceu suporte, tirou dúvidas, perguntei de outras peças, recebi indicações de onde encontraria. Para mim a nota é 1000.",
+        "estrelas": 5
+      },
+      {
+        "nome": "Ana Costa",
+        "perfil": "./imagens/perfil.jpeg",
+        "tempo": "3 semanas atrás",
+        "texto": "Produto de qualidade inferior ao esperado. A instalação foi um pouco complicada.",
+        "estrelas": 3
+      },
+      {
+        "nome": "Pedro Souza",
+        "perfil": "./imagens/perfil.jpeg",
+        "tempo": "1 semana atrás",
+        "texto": "Não recebi o item correto. Tive que entrar em contato com o suporte para resolver o problema. Fiquei desapontado.",
+        "estrelas": 2
+      },
+      {
+        "nome": "Juliana Lima",
+        "perfil": "./imagens/perfil.jpeg",
+        "tempo": "2 meses atrás",
+        "texto": "Loja fantástica, uma das melhores experiências em compra online. Vendedor me chamou no WhatsApp logo após o pagamento, ofereceu suporte, tirou dúvidas, perguntei de outras peças, recebi indicações de onde encontraria. Para mim a nota é 1000.",
+        "estrelas": 5
+      }
+    ]
+  }
+}

@@ -1,26 +1,213 @@
+// cardCarrinho.scss
+// Mobile-first SCSS para CardCarrinho.jsx
 
-.carrinho-titulo {
-  text-align: center;
-  margin: 40px 0;
-  flex-direction: column;
+// Variáveis 
+$bg: #f7f7f9;
+$card-bg: #ffffff;
+$muted: #6b7280;
+$accent: #0b3a66;
+$danger: #c53030;
+$success: #059669;
+$border: #e6e6e9;
+$shadow: 0 6px 18px rgba(8, 15, 30, 0.06);
+$radius: 12px;
+$gap: 12px;
+
+
+/* Card */
+.produto-card-carrinho {
+  display: flex;
+  flex-direction: row;
+  gap: $gap;
+  background: $card-bg;
+  border: 1px solid $border;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  overflow: hidden;
+  width: 100%;
+
 }
 
-.carrinho-container {
+/* Imagem com barra lateral azul */
+.carrinho-imagem-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-
-// CARROSEL
-.carousel-items {
-  display: flex;
-  gap: 20px; /* <--- Adicionar ou ajustar esta linha */
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  padding: 10px 0;
+  align-items: center;
+  background: linear-gradient(to right, $accent 0 16px, transparent 16px);
   border-radius: 8px;
-  padding: 0%;
+  width: 40%;
+
+  .produto-imagem-carrinho {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    padding-left: 16px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: transparent;
+    display: block;
+  }
+}
+
+/* info */
+.produto-info-carrinho {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(229, 229, 229, 1);
+  gap: 10px;
+  width: 60%;
+  padding: 10px;
+}
+
+/* Detalhes do produto */
+.carrinho-detalhes-produto {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 6px;
+
+  .produto-nome-carrinho {
+    margin: 0;
+    padding-bottom: 5px;
+    font-size: 1rem;
+    color: #0f1724;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+  }
+
+  .produto-marca-carrinho {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 0.9;
+    color: $muted;
+  }
+
+  /* Preços */
+  .carrinho-precos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+    line-height: 0.9;
+
+    .preco-antigo-carrinho {
+      font-size: 0.85rem;
+      color: $muted;
+      margin: 0;
+
+      span {
+        text-decoration: line-through;
+        color: $muted;
+        font-weight: 600;
+      }
+    }
+
+    .preco-novo-carrinho {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+
+      strong {
+        font-weight: 900;
+        color: $success;
+      }
+    }
+
+    .preco-parcelado-carrinho {
+      margin: 0;
+      font-size: 0.85rem;
+      color: $muted;
+
+      strong {
+        font-weight: 700;
+        color: #111827;
+      }
+    }
+  }
+}
+
+/* Ações do carrinho */
+.carrinho-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 6px;
+
+  /* Caixa de quantidade */
+  .carrinho-quantidade-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    width: 90px;
+    gap: 5px;
+    border: 2px solid rgba(121, 129, 135, 1);
+    border-radius: 8px;
+
+    .carrinho-btn-menos {
+      background: transparent;
+      border: none;
+      font-weight: 800;
+      font-size: 1.5rem;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      color: $danger;
+    }
+
+    .carrinho-btn-lixo,
+    .carrinho-btn-mais {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 15px;
+      height: 15px;
+      margin: 2px;
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    .carrinho-quantidade {
+      min-width: 26px;
+      text-align: center;
+      font-weight: 700;
+    }
+  }
+}
+
+/* subtotal e remover */
+.carrinho-subtotal {
+  margin: 0;
+  font-weight: 700;
+  color: $danger;
+  font-size: 1rem;
+}
+
+/* ======= A partir de telas médias, layout em linha (imagem | info | ações) ======= */
+@media (min-width: 720px) {
+
+  .produto-card-carrinho {
+    max-width: 700px;
+  }
+
+  .carrinho-imagem-container .produto-imagem-carrinho {
+    max-width: none;
+    max-height: 150px;
+  }
+
+  .carrinho-actions .carrinho-quantidade-group {
+    padding: 6px;
+    width: 120px;
+    gap: 15px;
+  }
+
+  .carrinho-actions .carrinho-quantidade {
+    font-size: 1rem;
+  }
+
 }

@@ -1,144 +1,243 @@
+/* header.scss */
+
+/* Variáveis rápidas */
+:root {
+  --azul: #022e4c;
+  --bg: #fff;
+  --gap-xs: 0.5rem;
+  --gap-sm: 1rem;
+  --gap-md: 1.5rem;
+  --radius: 10px;
+  --header-vertical-padding-mobile: 0.6rem;
+  --header-vertical-padding-desktop: 20px;
+}
+
+/* Container principal - mobile first */
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 2rem 0px 2rem 0px;
-    background: #fff;
-    box-sizing: border-box;
-    gap: 1.5rem;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--bg);
+  padding: var(--header-vertical-padding-mobile) 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: stretch;
+  justify-content: space-between;
+
+  /* limite centralizado no desktop, mas no mobile usamos largura total */
+  @media (min-width: 992px) {
     max-width: 1200px;
     margin: 0 auto;
-
-    .menu-btn img {
-        width: 43px;
-        height: 26px;
-    }
-
-    .logo img {
-        width: 73px;
-        height: 60px;
-    }
-
-    .header-busca {
-        flex: 1;
-        padding-right: 100px;
-    }
-
-    .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-
-        .cadastro-btn {
-            width: 30px;
-            height: 30px;
-        }
-
-        .carrinho-btn {
-            width: 40px;
-            height: 38px;
-        }
-    }
-
-
-    button {
-        display: flex;
-        background: none;
-        border: none;
-        color: var(--azul);
-        font-size: 13px;
-        font-weight: 700;
-        cursor: pointer;
-        align-items: center;
-        gap: 5px;
-
-    }
-
-
-}
-
-.menu-btn:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s;
-}
-
-.header-actions button:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s;
-}
-
-
-
-/* =======================================
-// MEDIA QUERIES PARA RESPONSIVIDADE
-// ======================================= */
-
-/* Telas de tablet (tamanho entre 768px e 1024px) */
-@media (max-width: 1024px) {
-  .header {
-    //padding: 20px 40px; /* Reduz o padding lateral */
-    //gap: 20px; /* Reduz o espaçamento entre os elementos */
   }
 
-  .logo img {
-    width: 60px; /* Diminui o tamanho da logo */
-    height: auto;
-  }
-
-  .header-busca {
-    padding-right: 20px; /* Reduz o padding do campo de busca */
-  }
-}
-
-/* Telas de celular (tamanho até 767px) */
-@media (max-width: 767px) {
-  .header {
-    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
-    justify-content: space-between; /* Espalha os itens principais */
-    padding: 15px 20px; /* Padding menor */
-    gap: 10px; /* Espaçamento mínimo */
-  }
-
-  .header-menu {
-    order: 1; /* Define a ordem, para o ícone de menu ficar à esquerda */
-    
-    .menu-btn img {
-      width: 30px; /* Diminui o ícone de menu */
-      height: auto;
-    }
-  }
-
-  .logo {
-    order: 2; /* Logo ao lado do menu */
-    flex-grow: 1; /* Permite que a logo ocupe o espaço restante */
+  /* linha superior: menu / logo / actions */
+  &-top {
     display: flex;
-    justify-content: center;
-    
-    img {
-      width: 50px; /* Diminui ainda mais a logo */
-      height: auto;
-    }
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.875rem;
+    /* padding lateral mínimo no mobile */
+    gap: var(--gap-sm);
   }
 
-  .header-actions {
-    order: 3; /* Ações ficam à direita */
-    gap: 5px; /* Reduz o espaçamento entre os botões */
-    
-    button {
-      font-size: 0; /* Oculta o texto para economizar espaço */
+  /* Botão de menu */
+  .header-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
-      
+    .menu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      padding: 0.25rem;
+      cursor: pointer;
+
       img {
-        width: 24px; /* Diminui os ícones de ação */
+        width: clamp(8px, 8vw, 35px);
+        display: block;
+      }
+    }
+
+    /* Logo central - mobile: centro flexível */
+    .logo {
+      cursor: pointer;
+
+      img {
+        width: clamp(28px, 9vw, 45px);
         height: auto;
       }
     }
   }
 
-  .header-busca {
-    order: 4; /* Move a barra de busca para uma nova linha */
-    flex-basis: 100%; /* Ocupa 100% da largura */
-    margin-top: 10px; /* Adiciona um espaço superior */
-    padding-right: 0; /* Remove o padding do desktop */
+  /* ações (user + carrinho) */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--azul);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 0.25rem;
+
+      img {
+        display: block;
+        width: clamp(20px, 8.5vw, 40px);
+        height: clamp(20px, 8vw, 30px);
+      }
+
+      span {
+        display: none;
+      }
+    }
   }
+
+  /* ----------------------------------------------------------
+     BUSCA: no mobile ocupa linha inteira abaixo da header-top,
+     no desktop volta a ficar entre logo e ações.
+     ---------------------------------------------------------- */
+  .header-busca {
+    order: 2;
+    /* força a ficar abaixo no mobile */
+    width: 100%;
+    padding: 1rem 0.875rem;
+    /* alinhamento com header-top */
+    box-sizing: border-box;
+
+    /* para evitar que a busca grude nas bordas em phones com notch */
+    padding-left: calc(0rem + env(safe-area-inset-left));
+    padding-right: calc(0rem + env(safe-area-inset-right));
+  }
+
+  /* botões genéricos do header (aplicado em header-top) */
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--azul);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    gap: 0.35rem;
+  }
+}
+
+/* Hover effects - polidos */
+.header .menu-btn:hover,
+.header .header-actions button:hover {
+  transform: translateY(-2px) scale(1.02);
+  transition: transform 160ms ease;
+}
+
+/* ========================
+   DESKTOP / TABLET (maior que 768px)
+   - restaura layout em uma única linha
+   - mantém padding e espaçamentos do seu design anterior
+   ======================== */
+@media (min-width: 768px) {
+  .header {
+    padding: var(--header-vertical-padding-desktop) 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: var(--gap-md);
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    /* no desktop, reorganizamos os elementos como antes:
+       .header-menu | .logo | .header-busca (flex:1) | .header-actions */
+    .header-top {
+      display: contents;
+      /* permite as crianças ficarem na mesma linha do .header */
+    }
+
+    .header-menu {
+      order: 0;
+      margin-right: 0;
+    }
+
+    .logo {
+      flex: 0 0 auto;
+      order: 1;
+      margin-right: 0;
+
+      img {
+        width: 73px;
+        height: 60px;
+      }
+    }
+
+    .header-busca {
+      order: 2;
+      flex: 1 1 auto;
+      padding: 0;
+      max-width: none;
+      padding-right: 100px;
+      /* mantém seu padding-right atual para desktop */
+    }
+
+    .header-actions {
+      order: 3;
+      gap: 30px;
+      align-items: center;
+
+      button {
+        span {
+          display: inline-block;
+        }
+
+        /* mostrar texto no desktop */
+      }
+
+      .cadastro-btn {
+        img {
+          width: 30px;
+          height: 30px;
+        }
+      }
+
+      .carrinho-btn {
+        img {
+          width: 40px;
+          height: 38px;
+        }
+      }
+    }
+  }
+}
+
+/* Desktop largo - limita container */
+@media (min-width: 992px) {
+  .header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Pequenas melhorias de acessibilidade & truncamento de texto */
+.header .logo img {
+  display: block;
+}
+
+.header .header-actions button {
+  line-height: 1;
+}
+
+.header .mu-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

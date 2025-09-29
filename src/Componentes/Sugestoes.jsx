@@ -1,6 +1,6 @@
 // Sugestoes.jsx
 import React from 'react';
-import '/public/style/sugestao.css';
+import '/public/style/sugestao.scss';
 
 // O componente agora recebe também a função de clique
 function Sugestoes({ dadosSimilares, onSugestaoClick }) {
@@ -18,18 +18,21 @@ function Sugestoes({ dadosSimilares, onSugestaoClick }) {
         <div className="sugestoes-bloco">
           <h2 className="secao-titulo">Produtos Similares</h2>
           <div className="aplicacoes-scroll-limitada">
-            <div className="aplicacoes-grid">
+            <div className="aplicacoes-grid-sugestao">
               {similares.map((produto, index) => (
                 <div
                   key={produto.id || index}
-                  className="aplicacao-card"
+                  className="aplicacao-card-sugestao"
                   onClick={() => onSugestaoClick(produto)} // Adicione o evento de clique
                 >
                   <div className="aplicacao-header">
+
+                    <p>{produto.nomeProduto}</p>
                     <p><strong>Ref:</strong> {produto.codigoReferencia}</p>
                     <p><strong>Marca:</strong> {produto.marca}</p>
                   </div>
                 </div>
+                
               ))}
             </div>
           </div>

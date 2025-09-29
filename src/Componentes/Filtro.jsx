@@ -1,73 +1,83 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import '/public/style/filtros.scss';
+import Montadora from './Montadora';
+import Familia from './Familia';
+import SubFamilia from './SubFamilia';
 
-// Componente para os seletores customizados
-function CustomSelect({ options, value, onChange, placeholder }) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef();
-
-    useEffect(() => {
-        function handleClickOutside(e) {
-            if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const selectedLabel = options.find(opt => opt.value === value)?.label || placeholder;
-
-    return (
-        <div className={`custom-select${open ? ' open' : ''}`} ref={ref}>
-            <div
-                className="custom-select-selected"
-                onClick={() => setOpen(!open)}
-            >
-                {selectedLabel}
-            </div>
-            <ul className="custom-select-options">
-                {options.map((opt, i) => (
-                    <li
-                        key={i}
-                        className={opt.value === value ? 'selected' : ''}
-                        onClick={() => {
-                            onChange(opt.value);
-                            setOpen(false);
-                        }}
-                    >
-                        {opt.label}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
 
 function Filtro({
-    query, setQuery,
-    placa, setPlaca,
-    marcas = [],
-    marcaSelecionada, setMarcaSelecionada,
-    ordem, setOrdem,
-    sugestoes = [],
-    mostrarSugestoes = false,
-    carregandoSugestoes = false,
+    setQuery,
     setMostrarSugestoes,
-    dropdownRef
-}) {
-    const handleSelect = (sugestao) => {
-        setQuery(sugestao);
-        setMostrarSugestoes(false);
-    };
 
-    const marcaOptions = marcas.map(m => ({ value: m, label: m }));
-    const ordemOptions = [
-        { value: 'asc', label: 'Crescente' },
-        { value: 'desc', label: 'Decrescente' }
-    ];
+    listaMontadoras,
+    montadoraSelecionada,
+    onMontadoraChange,
+
+    handleMontadoraChange,
+    carregandoCascata,
+    listaFamilias,
+    familiaSelecionada,
+    handleFamiliaChange,
+    listaSubFamilias,        // Novas props
+    subFamiliaSelecionada,   // Novas props
+    handleSubFamiliaChange,  // Novas props
+    carregandoSubFamilias,   // Novas props
+    className,
+    onClose,
+
+    onFiltroChange, // NOVO: Callback para notificar o componente pai sobre as mudanças
+    filtrosIniciais // NOVO: Recebe os filtros iniciais do componente pai
+
+}) {
 
     return (
-        <div className="filtros-container">
-            <h3>Filtros</h3>
+        <div className={`filtros-container ${className}`}>
+            <div className="filtros-header">
+                <h3>Filtros</h3>
+                <button className="fechar-modal-btn" onClick={onClose}>&times;</button>
+            </div>
+            
+            <h4>Pesquisa por marca de carro:</h4>
+            <Montadora
+                listaMontadoras={listaMontadoras}
+                valorSelecionado={montadoraSelecionada.id}
+                onChange={handleMontadoraChange}
+                carregando={carregandoCascata}
+            />
+
+            <Familia
+                listaFamilias={listaFamilias}
+                montadoraId={montadoraSelecionada.id}
+                valorSelecionadoId={familiaSelecionada.id}
+                onChange={handleFamiliaChange}
+                carregando={carregandoCascata}
+            />
+
+            <SubFamilia
+                listaSubFamilias={listaSubFamilias}
+                familiaId={familiaSelecionada.id}
+                valorSelecionadoId={subFamiliaSelecionada.id}
+                onChange={handleSubFamiliaChange}
+                carregando={carregandoSubFamilias}
+            />
+
+            {/* NOVO FILTRO: MARCAS DINÂMICAS */}
+            <div className="filtro-grupo">
+                <h4>Marcas</h4>
+                <ul>
+                    {listaMontadoras.map((montadora) => (
+                        <li key={montadora.id}>
+                            <input
+                                id={`montadora-${montadora.id}`}
+                                type="checkbox"
+                                // Você pode adicionar um `checked` aqui se tiver o estado de seleção
+                                onChange={() => onMontadoraChange(montadora)}
+                            />
+                            <label htmlFor={`montadora-${montadora.id}`}>{montadora.nome}</label>
+                        </li>
+                    ))}
+                </ul>
+            </div>
 
             {/* Filtro: Categoria da Peça */}
             <div className="filtro-grupo">
@@ -123,6 +133,7 @@ function Filtro({
                     <li><input id="21" type="checkbox" /><label htmlFor='21'>MAZDA</label></li>
                 </ul>
             </div>
+
 
             {/* Filtro: Fabricante */}
             <div className="filtro-grupo">

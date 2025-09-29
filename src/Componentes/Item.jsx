@@ -1,7 +1,8 @@
 // src/Paginas/Item.jsx
 import React, { useState } from 'react';
 import '/public/style/item.scss';
-import playIcon from '/public/imagens/icones/play_icon.png';
+import arrow_left from "../../public/imagens/icones/arrow-left.png";
+import arrow_right from "../../public/imagens/icones/arrow-right.png";
 
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
@@ -9,8 +10,7 @@ const formatBRL = (v) =>
 // O componente agora recebe os dados diretamente via props
 function Item({ dadosItem, onSave }) {
   const [hoverIndex, setHoverIndex] = useState(null);
-  const [quantidade, setQuantidade] = useState(1); // 1. CRIAR ESTADO PARA A QUANTIDADE
-
+  const [quantidade, setQuantidade] = useState(1);
 
   // Se, por alguma razão, os dados não chegarem, mostramos uma mensagem.
   if (!dadosItem) {
@@ -28,11 +28,14 @@ function Item({ dadosItem, onSave }) {
       url_imagem: dados.imagemReal,
       preco_original: dados.precoOriginal,
       preco_final: dados.preco,
+      //parcelas: dados.parcelas.qtd,
       desconto: dados.descontoPercentual,
       marca: dados.marca,
       quantidade: quantidade // Adiciona a quantidade selecionada
     });
   };
+
+
 
   return (
     <div className="item-page-container">
@@ -119,46 +122,46 @@ function Item({ dadosItem, onSave }) {
           </div>
 
           <div className="compra-opcoes">
-        <div className="quantidade-selector ">
-          <span>Quantidade:</span>
-          {/* 2. CONTROLAR O VALOR DO SELECT COM O ESTADO */}
-          <select value={quantidade} onChange={(e) => setQuantidade(Number(e.target.value))}>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-            <option value={5}>5</option>
-          </select>
-        </div>
-        <button className="comprar-agora-btn">Comprar Agora</button>
-        <button className="adicionar-sacola-btn" onClick={handleSaveClick}>Adicionar à sacola</button>
 
-            <div className="frete-calc-container">
-              <p>Calcular frete:</p>
-              <div className="frete-input-wrapper">
-                <input type="text" placeholder="Insira o CEP" className="frete-input" />
-                <button className="frete-btn">OK</button>
-              </div>
+            <div className="quantidade-selector ">
+              <span>Quantidade:</span>
+              {/* 2. CONTROLAR O VALOR DO SELECT COM O ESTADO */}
+              <select value={quantidade} onChange={(e) => setQuantidade(Number(e.target.value))}>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+              </select>
+            </div>
+
+            <button className="adicionar-sacola-btn" onClick={handleSaveClick}>Adicionar à sacola</button>
+            <button className="comprar-agora-btn">Comprar Agora</button>
+
+          </div>
+
+          <div className="frete-calc-container">
+            <p>Calcular frete:</p>
+            <div className="frete-input-wrapper">
+              <input type="text" placeholder="Insira o CEP" className="frete-input" />
             </div>
           </div>
 
           <div className="vendedor-info">
             <p><strong>Vendido por:</strong> Loja Brigadeiro</p>
             <p>Av Brigadeiro Luis Antônio, 2000 - Bela Vista, São Paulo - SP</p>
-            <p>Referência OEM: <strong>DISCO FREIO</strong></p>
+            <p>Referência OEM: {dados.familia?.descricao}</p>
           </div>
         </div>
       </div>
 
-      <hr />
-
       {/* Seção de Informações do Produto */}
       <div className="produto-informacoes-adicionais">
-        <h2 className="secao-titulo-tabela">Informações do Produto</h2>
+        <h2 className="secao-titulo-tabela">Mais Informações</h2>
 
         <div className="produto-tabela-info">
+          <div className="produto-tabela-titulo"><span>{dados.nomeProduto}</span></div>
           <div className="tabela-descricao-geral">
-            <p><span>O PRODUTO</span></p>
             <p>
               Desenvolvida para discos ventilados, esta pastilha de freio em cerâmica oferece frenagens mais suaves e silenciosas,
               com menos acúmulo de poeira nas rodas. Sua formulação garante alta durabilidade e resistência ao calor,
@@ -213,7 +216,7 @@ function Item({ dadosItem, onSave }) {
 
           <div className="tabela-linha">
             <div className="tabela-label">Largura</div>
-            <div className="tabela-valor">-{dados.largura}</div>
+            <div className="tabela-valor">-{dados.dimensoes}</div>
           </div>
 
           <div className="tabela-linha">
@@ -233,12 +236,11 @@ function Item({ dadosItem, onSave }) {
         </div>
       </div>
 
-      <hr />
-
+      {/* Seção de Modelos Compatíveis */}
       <div className="item-aplicacoes">
         <h2 className="secao-titulo">Modelos Compatíveis</h2>
-        <div className="aplicacoes-scroll-limitada">
-          <div className="aplicacoes-grid">
+        <div className="aplicacoes-carousel-wrapper">
+          <div className="aplicacoes-grid"> 
             {dados.aplicacoes.map((aplicacao, index) => (
               <div
                 key={aplicacao.id || index}
@@ -254,7 +256,6 @@ function Item({ dadosItem, onSave }) {
 
                 {hoverIndex === index && (
                   <div className="aplicacao-detalhes">
-                    <hr />
                     <p><strong>Motor:</strong> {aplicacao.motor}</p>
                     <p><strong>Combustível:</strong> {aplicacao.combustivel}</p>
                     <p><strong>Potência:</strong> {aplicacao.hp}</p>

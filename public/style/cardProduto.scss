@@ -8,93 +8,127 @@
     --cinza_escuro: #666968;
 }
 
-/* ===============================
-// ESTILOS DA MENSAGEM DE FEEDBACK
-// =============================== */
+/* =======================================
+// ESTILOS PADRÃO (MOBILE-FIRST)
+// ======================================= */
 
 .feedback-message-seach {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     font-family: Arial, sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     text-align: left;
     line-height: 1.5;
     width: 100%;
+    margin-top: 0px;
     padding-bottom: 0.5rem;
-    padding-left: 1rem;
 }
 
 /* Container para a grade de cards */
 .cards-grid {
     display: grid;
-    padding-left: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    margin: 0 auto;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    gap: 8px;
 }
 
-/* Estilo individual de cada card de produto */
+/* Cards de produto */
 .produto-card {
     display: flex;
     flex-direction: column;
+    text-align: center;
     border-radius: 8px;
     overflow: hidden;
-    text-align: center;
     cursor: pointer;
     position: relative;
-    width: 230px;
-    height: auto;
-    margin-bottom: 20px;
+    height: 210px;
+    margin-bottom: 5px;
     flex-shrink: 0;
-    background-color: #dcdbdb;
-    border: 2px solid #dcdbdb;
+    background-color: #fff;
+    border: 1px solid #dcdbdb93;
 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.148);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     .produto-imagem {
         width: 100%;
-        height: 150px;
-        min-height: 150px;
+        height: 90px;
+        min-height: 90px;
         object-fit: contain;
         object-position: center;
+        margin-top: 10px;
         background-color: #fff;
-        border-bottom-right-radius: 11px;
-        border-bottom-left-radius: 11px;
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
 
     .produto-info {
-        padding: 15px;
+        padding: 10px;
         display: flex;
         flex-direction: column;
+        align-items: center;
         background-color: #dcdbdb;
         width: 100%;
         height: 100%;
 
+        border-top-left-radius: 8px; 
+        border-top-right-radius: 8px;
+
         .produto-nome {
             text-align: center;
-            font-size: 14px;
+            font-size: 0.95rem;
             font-weight: bold;
             color: #333;
-            line-height: 1.4;
-            margin: 0 0 10px;
-            padding: 0 5px;
+            line-height: 1.2;
+            height: auto;
         }
 
-        p {
-            font-size: 12px;
-            color: #666;
-            margin: 1px 0;
-            text-align: left;
-        }
+        .produto-precos {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0%;
+            padding: 0%;
+            line-height: 1.2;
+            border: none;
 
-        span {
-            font-weight: bold;
-            color: #333;
+            .preco-antigo {
+                font-size: 10px;
+                color: #888;
+                text-decoration: line-through;
+            }
+
+            .preco-novo {
+                font-size: 10px;
+                font-weight: bold;
+                color: #333;
+                margin: 0%;
+
+                .preco-principal {
+                    font-size: 1.1rem;
+                    color: #238B23;
+                    font-weight: 900;
+                }
+            }
+
+            .preco-parcelado {
+                font-size: 0.8rem;
+            }
         }
     }
+}
 
+.tag-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #D20404;
+    color: #fff;
+    padding: 3px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    border-bottom-right-radius: 8px;
+    z-index: 5;
 }
 
 .produto-card:hover {
@@ -102,26 +136,34 @@
     box-shadow: 0 6px 12px rgba(4, 2, 64, 0.272);
 }
 
-.add-carrinho {
-    width: 80%;
-    padding: 12px 10px;
-    margin-top: 15px;
-    margin-left: 20%;
-    border: none;
-    border-radius: 20px;
-    background-color: var(--vermelho);
-    color: #fff;
-    font-size: 0.6rem;
-    font-weight: 500;
-    text-transform: uppercase;
+
+// NOVO ESTILO: BOTÃO DO CARRINHO COM POSICIONAMENTO ABSOLUTO
+.add-carrinho-btn {
+    position: absolute; 
+    bottom: 115px; // 10px da borda inferior do `produto-card`
+    right: 10px; // 10px da borda direita do `produto-card`
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #88888866;
+    border-radius: 50%; // Deixa o botão redondo
+    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    img {
+        width: 70%;
+        height: 70%;
+    }
 }
 
-.add-carrinho:hover {
-    background-color: #a80c25;
+.add-carrinho-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Controles de paginação */
@@ -173,4 +215,71 @@
     text-align: center;
     flex: 0.5;
     color: var(--azul);
+}
+
+
+/* =======================================
+// ESTILOS PARA DESKTOP (SOBRESCRITA)
+// ======================================= */
+@media (min-width: 768px) {
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        margin: 0 auto;
+        gap: 15px;
+    }
+
+    .produto-card {
+        height: auto;
+
+        .produto-imagem {
+            height: 150px;
+            min-height: 150px;
+        }
+
+        .add-carrinho-btn {
+            width: 40px;
+            height: 40px;
+            bottom: 190px;
+            //display: none;
+        }
+
+        .produto-info {
+            padding: 15px;
+
+            .produto-nome {
+                font-size: 1rem;
+                font-weight: bold;
+                line-height: 1.4;
+                margin-top: 5px;
+            }
+
+            .produto-precos {
+                line-height: 1.5;
+
+                .preco-antigo {
+                    font-size: 1rem;
+                }
+
+                .preco-novo {
+                    color: #888;
+                    font-size: 1rem;
+                }
+
+                .preco-principal {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(55, 50, 50, 0.683);
+        }
+
+        .tag-message {
+            font-size: 12px;
+            width: 30%;
+        }
+    }
 }
