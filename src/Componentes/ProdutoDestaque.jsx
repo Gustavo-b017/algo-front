@@ -6,8 +6,8 @@ import axios from "axios";
 import arrow_left from "/public/imagens/icones/arrow-left.png";
 import arrow_right from "/public/imagens/icones/arrow-right.png";
 
-const API_URL = import.meta.env.VITE_API_URL;
-//const API_URL = 'http://127.0.0.1:5000';
+//const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = 'http://127.0.0.1:5000';
 
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';

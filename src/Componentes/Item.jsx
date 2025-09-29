@@ -7,6 +7,10 @@ import arrow_right from "../../public/imagens/icones/arrow-right.png";
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
+// NOVO: formatador seguro para score (exibe com 3 casas, se vier número)
+const formatScore = (s) =>
+  typeof s === 'number' && Number.isFinite(s) ? s.toFixed(3) : null;
+
 // O componente agora recebe os dados diretamente via props
 function Item({ dadosItem, onSave }) {
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -34,8 +38,6 @@ function Item({ dadosItem, onSave }) {
       quantidade: quantidade // Adiciona a quantidade selecionada
     });
   };
-
-
 
   return (
     <div className="item-page-container">
@@ -94,8 +96,17 @@ function Item({ dadosItem, onSave }) {
         <div className="produto-info-section">
           <h1 className="produto-titulo">{dados.nomeProduto}</h1>
           <div className="produto-rating">
-            {/* Ícones de estrelas aqui, se houver */}
-            <span>⭐⭐⭐⭐⭐(45 avaliações)</span>
+
+            {/* NOVO: badge de relevância da API ao lado das estrelas */}
+            {formatScore(dados.score) !== null && (
+              <span
+                className="produto-score-badge"
+                title="Relevância da busca (score da API)"
+                style={{ marginLeft: '8px', fontSize: '0.9rem', opacity: 0.85 }}
+              >
+              Pontos: {formatScore(dados.score)}
+              </span>
+            )}
           </div>
           <p className="produto-codigo">CÓD: <strong>{dados.id}</strong></p>
           <p className="produto-marca">Marca: <strong>{dados.marca}</strong></p>
@@ -233,6 +244,12 @@ function Item({ dadosItem, onSave }) {
             <div className="tabela-label">Comprimento</div>
             <div className="tabela-valor">-{dados.comprimento}</div>
           </div>
+
+          {/* NOVO: linha explícita para o score da API */}
+          <div className="tabela-linha">
+            <div className="tabela-label">Score (API)</div>
+            <div className="tabela-valor">{formatScore(dados.score) ?? '-'}</div>
+          </div>
         </div>
       </div>
 
@@ -240,7 +257,7 @@ function Item({ dadosItem, onSave }) {
       <div className="item-aplicacoes">
         <h2 className="secao-titulo">Modelos Compatíveis</h2>
         <div className="aplicacoes-carousel-wrapper">
-          <div className="aplicacoes-grid"> 
+          <div className="aplicacoes-grid">
             {dados.aplicacoes.map((aplicacao, index) => (
               <div
                 key={aplicacao.id || index}
