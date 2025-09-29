@@ -1,0 +1,52 @@
+// src/Componentes/cardCarrinho.scss
+// ... (seu SCSS existente) ...
+
+/* =======================================
+// LAYOUT DA PÁGINA DO CARRINHO
+// ======================================= */
+
+.carrinho-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: transparent;
+}
+
+.carrinho-layout {
+    gap: 1.5rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.carrinho-produtos {
+    width: 100%;
+}
+
+.carrinho-resumo {
+    width: 100%;
+}
+
+/* =======================================
+// ESTILOS PARA DESKTOP
+// ======================================= */
+@media (min-width: 768px) {
+
+    .carrinho-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+
+        .carrinho-produtos {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+
+        .carrinho-resumo {
+            width: 30%;
+        }
+    }
+}

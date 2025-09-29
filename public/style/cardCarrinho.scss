@@ -13,12 +13,6 @@ $shadow: 0 6px 18px rgba(8, 15, 30, 0.06);
 $radius: 12px;
 $gap: 12px;
 
-.carrinho-container {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  background: transparent;
-}
 
 /* Card */
 .produto-card-carrinho {
@@ -30,6 +24,7 @@ $gap: 12px;
   border-radius: $radius;
   box-shadow: $shadow;
   overflow: hidden;
+  width: 100%;
 
 }
 

@@ -5,6 +5,8 @@ import Footer from '../Componentes/Footer';
 import Header from '../Componentes/Header';
 import { useNavigate } from 'react-router-dom';
 import CardCarrinho from '../Componentes/CardCarrinho';
+import ResumoCompra from '../Componentes/ResumoCompra';
+import '/public/style/carrinho.scss';
 import '/public/style/cardProduto.scss';
 import '/public/style/cardCarrinho.scss';
 import '/public/style/footer.scss';
@@ -49,7 +51,7 @@ function Carrinho() {
             alert("Não foi possível remover o item do carrinho.");
         }
     };
-    
+
     // FUNÇÃO para atualizar a quantidade
     const handleUpdateQuantidade = async (id_api_externa, novaQuantidade) => {
         // Impede que a quantidade seja menor que 1
@@ -68,11 +70,14 @@ function Carrinho() {
         }
     };
 
-
     const handleCardClick = (produto) => {
         const params = new URLSearchParams({ id: produto.id_api_externa, nomeProduto: produto.nome });
         navigate(`/produto?${params.toString()}`);
     };
+
+    // <<-- CALCULA OS VALORES DO CARRINHO A PARTIR DA LISTA DE PRODUTOS
+    const subtotal = produtos.reduce((acc, item) => acc + (item.quantidade * item.preco_final), 0);
+    const totalItens = produtos.reduce((acc, item) => acc + item.quantidade, 0);
 
     if (carregando) {
         return (
@@ -89,12 +94,20 @@ function Carrinho() {
             <div className="main-content">
                 <h2 className="carrinho-titulo">Seu Carrinho</h2>
                 <div className="carrinho-container">
-                    <CardCarrinho
-                        produtos={produtos}
-                        handleCardClick={handleCardClick}
-                        handleRemoverItem={handleRemoverItem}
-                        handleUpdateQuantidade={handleUpdateQuantidade}
-                    />
+                    <div className="carrinho-produtos">
+                        <CardCarrinho
+                            produtos={produtos}
+                            handleCardClick={handleCardClick}
+                            handleRemoverItem={handleRemoverItem}
+                            handleUpdateQuantidade={handleUpdateQuantidade}
+                        />
+                    </div>
+                    <div className="carrinho-resumo">
+                        <ResumoCompra
+                            subtotal={subtotal}
+                            totalItens={totalItens}
+                        />
+                    </div>
                 </div>
             </div>
             <Footer />
