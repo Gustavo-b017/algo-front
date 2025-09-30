@@ -1,58 +1,56 @@
 // src/Componentes/Pesquisa.jsx
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '/public/style/campos.scss';
 
-// const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = 'http://127.0.0.1:5000';
 
-function Pesquisa({ query: queryProp, setQuery: setQueryProp, placa: placaProp, setPlaca: setPlacaProp, dropdownRef: dropdownRefProp, onSearchSubmit }) {
-    // controlado pelo pai? (senão, usa fallback interno)
-    const controlledQuery = typeof queryProp !== 'undefined' && typeof setQueryProp === 'function';
-    const controlledPlaca = typeof placaProp !== 'undefined' && typeof setPlacaProp === 'function';
-
-    const [queryInt, setQueryInt] = useState(queryProp ?? '');
-    const [placaInt, setPlacaInt] = useState(placaProp ?? '');
-    const query = controlledQuery ? queryProp : queryInt;
-    const setQuery = controlledQuery ? setQueryProp : setQueryInt;
-    const placa = controlledPlaca ? placaProp : placaInt;
-    const setPlaca = controlledPlaca ? setPlacaProp : setPlacaInt;
-
-    const localRef = useRef(null);
-    const dropdownRef = dropdownRefProp || localRef;
-
+function Pesquisa() {
+    const [query, setQuery] = useState('');
+    const [placa, setPlaca] = useState('DME8I14');
     const [sugestoes, setSugestoes] = useState([]);
     const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
     const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
+    const dropdownRef = useRef(null);
+    const navigate = useNavigate();
 
-    // fecha lista ao clicar fora
     useEffect(() => {
-        const handle = (e) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setMostrarSugestoes(false);
-        };
-        document.addEventListener('mousedown', handle);
-        return () => document.removeEventListener('mousedown', handle);
-    }, [dropdownRef]);
-
-    // autocomplete com debounce
-    useEffect(() => {
-        if (!query) { setSugestoes([]); return; }
+        if (!query) {
+            setSugestoes([]);
+            setMostrarSugestoes(false);
+            return;
+        }
         const t = setTimeout(() => {
             setCarregandoSugestoes(true);
-            axios.get(`${API_URL}/autocomplete`, { params: { prefix: query } })
-                .then(r => setSugestoes(r.data?.sugestoes || []))
+            axios
+                .get(`${API_URL}/autocomplete`, { params: { prefix: query } })
+                .then(res => setSugestoes(res.data?.sugestoes || []))
                 .catch(() => setSugestoes([]))
                 .finally(() => setCarregandoSugestoes(false));
         }, 300);
         return () => clearTimeout(t);
     }, [query]);
 
-    const submit = (termo, placaVal) => {
-        if (typeof onSearchSubmit === 'function') onSearchSubmit(termo, placaVal);
+    const onSearchSubmit = (termo, placaValor) => {
+        const params = new URLSearchParams();
+        if (termo) params.set('termo', termo);
+        if (placaValor) params.set('placa', placaValor.toUpperCase());
+        if ([...params.keys()].length) {
+            navigate(`/resultados?${params.toString()}`);
+        }
     };
 
-    const handleSubmit = (e) => { e.preventDefault(); submit(query, placa); };
-    const handleSelect = (s) => { setQuery(s); setMostrarSugestoes(false); submit(s, placa); };
+    const handleSelect = (s) => {
+        setQuery(s);
+        setMostrarSugestoes(false);
+        onSearchSubmit(s, placa);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSearchSubmit(query, placa);
+    };
 
     return (
         <form className="busca" onSubmit={handleSubmit}>
@@ -73,7 +71,6 @@ function Pesquisa({ query: queryProp, setQuery: setQueryProp, placa: placaProp, 
                 >
                     {mostrarSugestoes ? '✕' : '☰'}
                 </button>
-
                 {mostrarSugestoes && query && (
                     <ul className="sugestoes-list">
                         {carregandoSugestoes ? (

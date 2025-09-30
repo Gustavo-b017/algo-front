@@ -1,136 +1,124 @@
 // src/Paginas/Resultados.jsx
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Header from '../Componentes/Header.jsx';
 import Categorias from '../Componentes/Categorias.jsx';
 import Filtro from '../Componentes/Filtro.jsx';
-import Ordenar from '../Componentes/Ordenar.jsx';
 import CardsProdutos from '../Componentes/CardsProdutos.jsx';
 import Footer from '../Componentes/Footer.jsx';
-
 import '/public/style/resultados.scss';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+const API_URL = 'http://127.0.0.1:5000';
 
-// UI -> params da API
-const mapOrdenacaoToParams = (uiValue) => {
-  switch (uiValue) {
-    case 'relevancia':        return { ordenar_por: 'score',             ordem: 'desc' };
-    case 'menor-preco':       return { ordenar_por: 'menor_preco',       ordem: 'asc'  };
-    case 'maior-preco':       return { ordenar_por: 'maior_preco',       ordem: 'desc' };
-    case 'melhor-avaliacao':  return { ordenar_por: 'mais_bem_avaliados',ordem: 'desc' };
-    default:                  return { ordenar_por: 'score',             ordem: 'desc' };
-  }
-};
-
-// params -> UI
-const mapParamsToOrdenacao = (ordenar_por, ordem) => {
-  if (ordenar_por === 'menor_preco')        return 'menor-preco';
-  if (ordenar_por === 'maior_preco')        return 'maior-preco';
-  if (ordenar_por === 'mais_bem_avaliados') return 'melhor-avaliacao';
-  return 'relevancia';
-};
+// default defensivo para direção
+const defaultOrderFor = (ordenarPor) =>
+  ordenarPor === 'menor_preco' ? 'asc' : 'desc';
 
 function Resultados() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // barra de pesquisa (controlada pela URL)
-  const [query, setQuery]   = useState(searchParams.get('termo') || '');
-  const [placa, setPlaca]   = useState(searchParams.get('placa') || '');
-
-  // filtros em cascata (não essenciais, mas mantidos)
+  // ------- Cascata -------
   const [listaMontadoras, setListaMontadoras] = useState([]);
-  const [listaFamilias,   setListaFamilias]   = useState([]);
-  const [listaSubFamilias,setListaSubFamilias]= useState([]);
+  const [listaFamilias, setListaFamilias] = useState([]);
+  const [listaSubFamilias, setListaSubFamilias] = useState([]);
 
   const [montadoraSelecionada, setMontadoraSelecionada] = useState({
-    id:   searchParams.get('marca_id') || '',
-    nome: searchParams.get('marca')    || ''
+    id: '',
+    nome: searchParams.get('marca') || '',
   });
   const [familiaSelecionada, setFamiliaSelecionada] = useState({
-    id:   searchParams.get('familia_id')  || '',
-    nome: searchParams.get('familia_nome')|| ''
+    id: searchParams.get('familia_id') || '',
+    nome: searchParams.get('familia_nome') || '',
   });
   const [subFamiliaSelecionada, setSubFamiliaSelecionada] = useState({
-    id:   searchParams.get('subfamilia_id')  || '',
-    nome: searchParams.get('subfamilia_nome')|| ''
+    id: searchParams.get('subfamilia_id') || '',
+    nome: searchParams.get('subfamilia_nome') || '',
   });
 
-  const [carregandoCascata, setCarregandoCascata]       = useState(false);
-  const [carregandoSubFamilias, setCarregandoSubFamilias]= useState(false);
+  const [carregandoCascata, setCarregandoCascata] = useState(false);
+  const [carregandoSubFamilias, setCarregandoSubFamilias] = useState(false);
 
-  // resultados
-  const [resultados, setResultados]     = useState([]);
-  const [paginaAtual, setPaginaAtual]   = useState(parseInt(searchParams.get('pagina') || '1', 10));
+  // ------- Resultados -------
+  const [resultados, setResultados] = useState([]);
+  const [paginaAtual, setPaginaAtual] = useState(
+    parseInt(searchParams.get('pagina') || '1', 10)
+  );
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [carregandoTabela, setCarregandoTabela] = useState(false);
-  const [feedbackMessage, setFeedbackMessage]   = useState('');
+  const [feedbackMessage, setFeedbackMessage] = useState('');
 
-  const dropdownRef = useRef(null);
+  // ------- Ordenação -------
+  const ordenarPorInit = searchParams.get('ordenar_por') || 'score';
+  const ordemInit = searchParams.get('ordem') || defaultOrderFor(ordenarPorInit);
+  const [ordenarPor, setOrdenarPor] = useState(ordenarPorInit);
+  const [ordem, setOrdem] = useState(ordemInit);
 
-  // UI ordenação
-  const ordenar_por_ini = searchParams.get('ordenar_por') || 'score';
-  const ordem_ini       = searchParams.get('ordem')       || 'desc';
-  const [ordenacao, setOrdenacao] = useState(mapParamsToOrdenacao(ordenar_por_ini, ordem_ini));
-
-  // modais mobile
+  // ------- UI lateral -------
   const [showFilters, setShowFilters] = useState(false);
-  const [showSort,    setShowSort]    = useState(false);
 
-  // ---------- carregar dados da cascata ----------
+  // Load cascata
   useEffect(() => {
-    let mounted = true;
-    async function carregar() {
+    async function carregarCascata() {
       setCarregandoCascata(true);
       try {
-        const [mont, fam] = await Promise.all([
+        const [resMontadoras, resFamilias] = await Promise.all([
           axios.get(`${API_URL}/montadoras`),
           axios.get(`${API_URL}/familias`),
         ]);
-        if (!mounted) return;
-        setListaMontadoras(mont.data || []);
-        setListaFamilias(fam.data || []);
-      } catch (e) {
-        console.error('Erro ao carregar cascata', e);
+        setListaMontadoras(resMontadoras.data);
+        setListaFamilias(resFamilias.data);
       } finally {
-        mounted && setCarregandoCascata(false);
+        setCarregandoCascata(false);
       }
     }
-    carregar();
-    return () => { mounted = false; };
+    carregarCascata();
   }, []);
 
-  // ---------- subfamílias quando muda a família ----------
+  // Subfamílias
   useEffect(() => {
-    if (!familiaSelecionada.id) {
+    const famId = familiaSelecionada.id;
+    if (!famId) {
       setListaSubFamilias([]);
       return;
     }
     setCarregandoSubFamilias(true);
-    axios.get(`${API_URL}/familias/${familiaSelecionada.id}/subfamilias`)
-      .then(res => setListaSubFamilias(res.data || []))
-      .catch(err => console.error('Erro ao buscar subfamílias', err))
+    setListaSubFamilias([]);
+    axios
+      .get(`${API_URL}/familias/${famId}/subfamilias`)
+      .then((res) => setListaSubFamilias(res.data))
+      .catch(() => {})
       .finally(() => setCarregandoSubFamilias(false));
   }, [familiaSelecionada.id]);
 
-  // ---------- busca principal (reage à URL) ----------
+  // Busca principal reagindo à URL
   useEffect(() => {
-    const params = Object.fromEntries(searchParams.entries());
+    const raw = Object.fromEntries(searchParams.entries());
+    const params = {
+      ...raw,
+      ordenar_por: raw.ordenar_por || ordenarPorInit,
+      ordem: raw.ordem || defaultOrderFor(raw.ordenar_por || ordenarPorInit),
+    };
 
-    // dispara se: termo OU (marca + familia_id)
-    if (params.termo || (params.marca && params.familia_id)) {
+    if (ordenarPor !== params.ordenar_por) setOrdenarPor(params.ordenar_por);
+    if (ordem !== params.ordem) setOrdem(params.ordem);
+
+    const temBuscaLivre = !!params.termo;
+    const temCascata = !!(params.marca && params.familia_id);
+
+    if (temBuscaLivre || temCascata) {
       setCarregandoTabela(true);
-      axios.get(`${API_URL}/pesquisar`, { params })
-        .then(res => {
+      axios
+        .get(`${API_URL}/pesquisar`, { params })
+        .then((res) => {
           setResultados(res.data?.dados || []);
           setPaginaAtual(res.data?.pagina || 1);
           setTotalPaginas(res.data?.total_paginas || 1);
           setFeedbackMessage(res.data?.mensagem || '');
         })
-        .catch(err => console.error('Erro na busca', err))
+        .catch(() => {})
         .finally(() => setCarregandoTabela(false));
     } else {
       setResultados([]);
@@ -140,58 +128,34 @@ function Resultados() {
     }
   }, [searchParams]);
 
-  // ---------- sincroniza estado local com a URL ----------
-  useEffect(() => {
-    const termoURL  = searchParams.get('termo') || '';
-    const placaURL  = searchParams.get('placa') || '';
-    const ordPorURL = searchParams.get('ordenar_por') || 'score';
-    const ordemURL  = searchParams.get('ordem') || 'desc';
-    const pageURL   = parseInt(searchParams.get('pagina') || '1', 10);
-
-    if (termoURL !== query) setQuery(termoURL);
-    if (placaURL !== placa) setPlaca(placaURL);
-
-    const ordUI = mapParamsToOrdenacao(ordPorURL, ordemURL);
-    if (ordUI !== ordenacao) setOrdenacao(ordUI);
-
-    if (pageURL !== paginaAtual) setPaginaAtual(pageURL);
-  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ---------- handlers ----------
-  const handleLinhaClick = (produto) => {
-    const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
-    navigate(`/produto?${params.toString()}`);
-  };
-
-  // paginação (sem mutar o mesmo objeto!)
-  const handlePageChange = (pagina) => {
-    setSearchParams(prev => {
+  // Helper que preserva ordenação
+  const pushParams = (updater) => {
+    setSearchParams((prev) => {
       const p = new URLSearchParams(prev);
-      p.set('pagina', String(pagina));
+      if (!p.get('ordenar_por')) p.set('ordenar_por', ordenarPor || 'score');
+      if (!p.get('ordem')) p.set('ordem', ordem || defaultOrderFor(ordenarPor));
+      updater(p);
       return p;
     });
   };
 
-  // submit da barra (termo/placa)
-  const handleSearchSubmit = (termo, placaVal) => {
-    const { ordenar_por, ordem } = mapOrdenacaoToParams(ordenacao);
-    const next = {
-      pagina: '1',
-      ordenar_por,
-      ordem,
-    };
-    if (termo)    next.termo = termo;
-    if (placaVal) next.placa = placaVal;
-
-    // ao pesquisar por termo, limpamos filtros de cascata da URL
-    setMontadoraSelecionada({ id: '', nome: '' });
-    setFamiliaSelecionada({ id: '', nome: '' });
-    setSubFamiliaSelecionada({ id: '', nome: '' });
-
-    setSearchParams(next);
+  // Paginação
+  const handlePageChange = (pagina) => {
+    pushParams((p) => p.set('pagina', String(pagina)));
   };
 
-  // cascata
+  // Categoria → busca livre (preserva ordenação)
+  const handleCategoryClick = (categoryName) => {
+    const p = new URLSearchParams({
+      termo: categoryName,
+      ordenar_por: ordenarPor,
+      ordem,
+      pagina: '1',
+    });
+    navigate(`/resultados?${p.toString()}`);
+  };
+
+  // Cascata
   const handleMontadoraChange = (id, nome) => {
     setMontadoraSelecionada({ id, nome });
     setFamiliaSelecionada({ id: '', nome: '' });
@@ -203,92 +167,79 @@ function Resultados() {
     setSubFamiliaSelecionada({ id: '', nome: '' });
 
     if (montadoraSelecionada.nome && id) {
-      const { ordenar_por, ordem } = mapOrdenacaoToParams(ordenacao);
-      setSearchParams({
+      const p = new URLSearchParams({
         marca: montadoraSelecionada.nome,
         familia_id: id,
         familia_nome: nome,
-        pagina: '1',
-        ordenar_por,
+        ordenar_por: ordenarPor,
         ordem,
+        pagina: '1',
       });
+      navigate(`/resultados?${p.toString()}`);
     }
   };
 
   const handleSubFamiliaChange = (id, nome) => {
     setSubFamiliaSelecionada({ id, nome });
     if (montadoraSelecionada.nome && familiaSelecionada.id) {
-      const { ordenar_por, ordem } = mapOrdenacaoToParams(ordenacao);
-      setSearchParams({
+      const p = new URLSearchParams({
         marca: montadoraSelecionada.nome,
         familia_id: familiaSelecionada.id,
         familia_nome: familiaSelecionada.nome,
-        pagina: '1',
-        ordenar_por,
+        ordenar_por: ordenarPor,
         ordem,
+        pagina: '1',
         ...(id ? { subfamilia_id: id, subfamilia_nome: nome } : {}),
       });
+      navigate(`/resultados?${p.toString()}`);
     }
   };
 
-  // ordenação (UI -> URL)
-  const handleMudarOrdenacao = (nova) => {
-    setOrdenacao(nova);
-    const { ordenar_por, ordem } = mapOrdenacaoToParams(nova);
-    setSearchParams(prev => {
-      const p = new URLSearchParams(prev);
-      p.set('ordenar_por', ordenar_por);
-      p.set('ordem', ordem);
+  // Ordenação (agora na sidebar)
+  const onChangeOrdenarPor = (value) => {
+    setOrdenarPor(value);
+    pushParams((p) => {
+      p.set('ordenar_por', value);
+      if (!p.get('ordem')) p.set('ordem', defaultOrderFor(value));
       p.set('pagina', '1');
-      return p;
+    });
+  };
+  const onChangeOrdem = (value) => {
+    setOrdem(value);
+    pushParams((p) => {
+      p.set('ordem', value);
+      p.set('pagina', '1');
     });
   };
 
-  // clique nas categorias do topo
-  const handleCategoryClick = (categoryName) => {
-    const { ordenar_por, ordem } = mapOrdenacaoToParams(ordenacao);
-    const next = new URLSearchParams({
-      termo: categoryName,
-      pagina: '1',
-      ordenar_por,
-      ordem,
-    });
-    navigate(`/resultados?${next.toString()}`);
+  // Click card
+  const handleLinhaClick = (produto) => {
+    const p = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
+    navigate(`/produto?${p.toString()}`);
   };
 
   return (
     <div className="container">
-      <Header
-        query={query} setQuery={setQuery}
-        placa={placa} setPlaca={setPlaca}
-        dropdownRef={dropdownRef}
-        onSearchSubmit={handleSearchSubmit}
-      />
-
+      <Header />
       <Categorias onCategoryClick={handleCategoryClick} />
 
       <main className="search-page-container">
         <div className="opcoes-mobile">
           <button
             className={`btn-filtro ${showFilters ? 'ativo' : ''}`}
-            onClick={() => { setShowFilters(v => !v); if (showSort) setShowSort(false); }}
+            onClick={() => setShowFilters((v) => !v)}
           >
             Filtros
           </button>
-
-          <button
-            className={`btn-ordenar ${showSort ? 'ativo' : ''}`}
-            onClick={() => { setShowSort(v => !v); if (showFilters) setShowFilters(false); }}
-          >
-            Ordenar
-          </button>
         </div>
 
-        {showSort    && <div className="modal-backdrop" onClick={() => setShowSort(false)} />}
-        {showFilters && <div className="modal-backdrop" onClick={() => setShowFilters(false)} />}
+        {showFilters && (
+          <div className="modal-backdrop" onClick={() => setShowFilters(false)} />
+        )}
 
         <aside className="filters-sidebar">
           <Filtro
+            // cascata
             listaMontadoras={listaMontadoras}
             montadoraSelecionada={montadoraSelecionada}
             handleMontadoraChange={handleMontadoraChange}
@@ -300,19 +251,16 @@ function Resultados() {
             subFamiliaSelecionada={subFamiliaSelecionada}
             handleSubFamiliaChange={handleSubFamiliaChange}
             carregandoSubFamilias={carregandoSubFamilias}
+            // ordenação (novo)
+            ordenarPor={ordenarPor}
+            ordem={ordem}
+            onChangeOrdenarPor={onChangeOrdenarPor}
+            onChangeOrdem={onChangeOrdem}
+            // ui
             className={showFilters ? 'visivel' : ''}
             onClose={() => setShowFilters(false)}
           />
         </aside>
-
-        <div className="ordenar-wrapper">
-          <Ordenar
-            ordenacaoAtual={ordenacao}
-            onMudarOrdenacao={handleMudarOrdenacao}
-            onClose={() => setShowSort(false)}
-            visivel={showSort ? 'visivel' : ''}
-          />
-        </div>
 
         <section className="search-results">
           <CardsProdutos
