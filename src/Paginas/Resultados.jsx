@@ -10,7 +10,9 @@ import CardsProdutos from '../Componentes/CardsProdutos.jsx';
 import Footer from '../Componentes/Footer.jsx';
 import '/public/style/resultados.scss';
 
-const API_URL = 'http://127.0.0.1:5000';
+const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = 'http://127.0.0.1:5000';
+
 
 // default defensivo para direção
 const defaultOrderFor = (ordenarPor) =>
