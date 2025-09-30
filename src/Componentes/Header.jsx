@@ -1,3 +1,4 @@
+// src/Componentes/Header.jsx
 import React from "react";
 import "/public/style/header.scss";
 
@@ -8,7 +9,7 @@ import carrinho_icon from "/public/imagens/icones/carrinho.svg";
 
 import Pesquisa from "./Pesquisa.jsx";
 
-function Header() {
+function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit }) {
     return (
         <div className="header">
             <div className="header-menu">
@@ -20,12 +21,19 @@ function Header() {
             </div>
 
             <div className="header-busca">
-                <Pesquisa />
+                <Pesquisa
+                    query={query}
+                    setQuery={setQuery}
+                    placa={placa}
+                    setPlaca={setPlaca}
+                    dropdownRef={dropdownRef}
+                    onSearchSubmit={onSearchSubmit}
+                />
             </div>
 
             <div className="header-actions">
                 <button><img src={user_icon} alt={"User icon"} className="cadastro-btn" /><span>Entre/Cadastro</span></button>
-                <button><img src={carrinho_icon} alt={"Carrinho icon"} className="carrinho-btn"  onClick={() => window.location.href = "/carrinho"}/><span>Carrinho</span></button>
+                <button><img src={carrinho_icon} alt={"Carrinho icon"} className="carrinho-btn" onClick={() => window.location.href = "/carrinho"} /><span>Carrinho</span></button>
             </div>
         </div>
     );
