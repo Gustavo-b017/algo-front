@@ -1,139 +1,111 @@
 // src/Componentes/Filtro.jsx
-import React from 'react';
-import '/public/style/filtros.scss';
-import Montadora from './Montadora';
-import Familia from './Familia';
-import SubFamilia from './SubFamilia';
+import React from "react";
+import "/public/style/filtros.scss";
 
-// Label amigável para cada critério
-const ORDER_OPTIONS = [
-    { value: 'score', label: 'Relevância' },
-    { value: 'menor_preco', label: 'Menor preço' },
-    { value: 'maior_preco', label: 'Maior preço' },
-    { value: 'mais_bem_avaliados', label: 'Melhor avaliação' },
-];
+export default function Filtro({
+    // ordenação
+    ordenacaoAtual,
+    ordemAtual,
+    onOrdenacaoChange,
 
-function Filtro({
-    listaMontadoras,
-    montadoraSelecionada,
-    handleMontadoraChange,
-    carregandoCascata,
+    // família/sub
     listaFamilias,
     familiaSelecionada,
-    handleFamiliaChange,
+    onFamiliaChange,
     listaSubFamilias,
     subFamiliaSelecionada,
-    handleSubFamiliaChange,
+    onSubFamiliaChange,
+    carregandoCascata,
     carregandoSubFamilias,
-    // novo: ordenação
-    ordenarPor,
-    ordem,
-    onChangeOrdenarPor,
-    onChangeOrdem,
-    // ui
-    className,
+
+    // marcas
+    listaMarcasProduto,
+    marcaProdutoSelecionada,
+    onMarcaProdutoChange,
+    carregandoFacetas,
+
+    // >>> NOVO: para modal mobile
+    className = "",
     onClose,
 }) {
-    // wrapper: id -> (id, nome)
-    const onMontadoraChangeIdOnly = (id) => {
-        const nome =
-            (listaMontadoras.find((m) => String(m.id) === String(id)) || {}).nome || '';
-        handleMontadoraChange(id, nome);
-    };
+    const handleOrdenacaoRadio = (e) => onOrdenacaoChange(e.target.value, ordemAtual);
+    const handleOrdemClick = (ord) => ord !== ordemAtual && onOrdenacaoChange(ordenacaoAtual, ord);
 
     return (
         <div className={`filtros-container ${className}`}>
+            {/* header só aparece no mobile (CSS esconde no desktop) */}
             <div className="filtros-header">
                 <h3>Filtros</h3>
-                <button className="fechar-modal-btn" onClick={onClose}>
-                    &times;
-                </button>
+                {onClose && (
+                    <button className="fechar-modal-btn" onClick={onClose} aria-label="Fechar filtros">
+                        &times;
+                    </button>
+                )}
             </div>
 
-            {/* ===== ORDENAR (novo) ===== */}
-            <div className="filtro-grupo filtro-ordenacao">
-                <h4>Ordenar</h4>
-
-                <div className="ordenacao-list">
-                    {ORDER_OPTIONS.map((opt) => {
-                        const id = `ord-${opt.value}`;
-                        return (
-                            <div className="ordenacao-item" key={opt.value}>
-                                <input
-                                    type="radio"
-                                    id={id}
-                                    name="ordenar_por"
-                                    value={opt.value}
-                                    checked={ordenarPor === opt.value}
-                                    onChange={(e) => onChangeOrdenarPor(e.target.value)}
-                                />
-                                <label htmlFor={id}>{opt.label}</label>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <div className="ordem-toggle" role="group" aria-label="Direção da ordem">
-                    <button
-                        type="button"
-                        className={ordem === 'asc' ? 'ativo' : ''}
-                        onClick={() => onChangeOrdem('asc')}
-                    >
-                        Ascendente
-                    </button>
-                    <button
-                        type="button"
-                        className={ordem === 'desc' ? 'ativo' : ''}
-                        onClick={() => onChangeOrdem('desc')}
-                    >
-                        Descendente
-                    </button>
-                </div>
-            </div>
-
-            {/* ===== CASCATA ===== */}
-            <h4>Pesquisa por marca de carro:</h4>
-            <Montadora
-                listaMontadoras={listaMontadoras}
-                valorSelecionado={montadoraSelecionada.id}
-                onChange={onMontadoraChangeIdOnly}
-                carregando={carregandoCascata}
-            />
-
-            <Familia
-                listaFamilias={listaFamilias}
-                montadoraId={montadoraSelecionada.id}
-                valorSelecionadoId={familiaSelecionada.id}
-                onChange={handleFamiliaChange}
-                carregando={carregandoCascata}
-            />
-
-            <SubFamilia
-                listaSubFamilias={listaSubFamilias}
-                familiaId={familiaSelecionada.id}
-                valorSelecionadoId={subFamiliaSelecionada.id}
-                onChange={handleSubFamiliaChange}
-                carregando={carregandoSubFamilias}
-            />
-
-            {/* Exemplo de grupo (mantive) */}
+            {/* ==== Ordenação ==== */}
             <div className="filtro-grupo">
-                <h4>Marcas</h4>
-                <ul>
-                    {listaMontadoras.map((m) => (
-                        <li key={m.id}>
-                            <input
-                                id={`montadora-${m.id}`}
-                                type="checkbox"
-                                onChange={() => handleMontadoraChange(m.id, m.nome)}
-                            />
-                            <label htmlFor={`montadora-${m.id}`}>{m.nome}</label>
-                        </li>
-                    ))}
-                </ul>
+                <div className="filtro-label">Ordenar</div>
+                <div className="ordenacao-radios">
+                    <label><input type="radio" name="ord" value="relevancia" checked={ordenacaoAtual === 'relevancia'} onChange={handleOrdenacaoRadio} /> Relevância</label>
+                    <label><input type="radio" name="ord" value="menor-preco" checked={ordenacaoAtual === 'menor-preco'} onChange={handleOrdenacaoRadio} /> Menor preço</label>
+                    <label><input type="radio" name="ord" value="maior-preco" checked={ordenacaoAtual === 'maior-preco'} onChange={handleOrdenacaoRadio} /> Maior preço</label>
+                    <label><input type="radio" name="ord" value="melhor-avaliacao" checked={ordenacaoAtual === 'melhor-avaliacao'} onChange={handleOrdenacaoRadio} /> Melhor avaliação</label>
+                    <label><input type="radio" name="ord" value="nome" checked={ordenacaoAtual === 'nome'} onChange={handleOrdenacaoRadio} /> Nome</label>
+                </div>
+                <div className="ordem-toggle">
+                    <button type="button" className={`ord-btn ${ordemAtual === 'asc' ? 'active' : ''}`} onClick={() => handleOrdemClick('asc')}>Ascendente</button>
+                    <button type="button" className={`ord-btn ${ordemAtual === 'desc' ? 'active' : ''}`} onClick={() => handleOrdemClick('desc')}>Descendente</button>
+                </div>
+            </div>
+
+            {/* ==== Família ==== */}
+            <div className="filtro-grupo">
+                <label className="filtro-label">Família de produto</label>
+                <select
+                    value={familiaSelecionada.id}
+                    onChange={(e) => {
+                        const id = e.target.value;
+                        const nome = (listaFamilias.find(f => String(f.id) === String(id)) || {}).nome || "";
+                        onFamiliaChange(id, nome);
+                    }}
+                    disabled={carregandoCascata}
+                >
+                    <option value="">Selecione a família</option>
+                    {listaFamilias.map(f => <option key={f.id} value={f.id}>{f.nome}</option>)}
+                </select>
+            </div>
+
+            {/* ==== Subfamília ==== */}
+            <div className="filtro-grupo">
+                <label className="filtro-label">Subfamília (opcional)</label>
+                <select
+                    value={subFamiliaSelecionada.id}
+                    onChange={(e) => {
+                        const id = e.target.value;
+                        if (!id) return onSubFamiliaChange("", "");
+                        const nome = (listaSubFamilias.find(s => String(s.id) === String(id)) || {}).nome || "";
+                        onSubFamiliaChange(id, nome);
+                    }}
+                    disabled={carregandoSubFamilias || !familiaSelecionada.id}
+                >
+                    <option value="">Nenhuma subfamília</option>
+                    {listaSubFamilias.map(s => <option key={s.id} value={s.id}>{s.nome}{typeof s.count === "number" ? ` (${s.count})` : ""}</option>)}
+                </select>
+            </div>
+
+            {/* ==== Marca ==== */}
+            <div className="filtro-grupo">
+                <label className="filtro-label">Marca do produto (opcional)</label>
+                <select
+                    value={marcaProdutoSelecionada}
+                    onChange={(e) => onMarcaProdutoChange(e.target.value)}
+                    disabled={carregandoFacetas || !familiaSelecionada.id}
+                >
+                    <option value="">Todas as marcas</option>
+                    {listaMarcasProduto.map(m => <option key={m.nome} value={m.nome}>{m.nome}{typeof m.count === "number" ? ` (${m.count})` : ""}</option>)}
+                </select>
             </div>
         </div>
     );
 }
-
-export default Filtro;
