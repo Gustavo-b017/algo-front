@@ -1,6 +1,6 @@
 /* =======================================
-// ESTILOS PADRÃO (MOBILE-FIRST)
-// ======================================= */
+   FILTROS – Mobile-first (modal lateral)
+   ======================================= */
 
 .filtros-container {
   position: fixed;
@@ -13,19 +13,15 @@
   padding: 1rem;
   box-sizing: border-box;
   overflow-y: auto;
-
-  transform: translateX(-100%);
-  /* Escondido fora da tela (para a esquerda) */
-  transition: transform 0.3s ease-in-out;
   border-right: 1px solid #ccc;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
 }
-
 .filtros-container.visivel {
   transform: translateX(0);
-  /* Desliza para a tela */
 }
 
-/* Cabeçalho do modal de filtro (apenas mobile) */
+/* Cabeçalho do modal (só mobile) */
 .filtros-header {
   display: flex;
   justify-content: space-between;
@@ -41,8 +37,6 @@
     margin: 0;
   }
 }
-
-/* Botão de fechar do modal de filtro (apenas mobile) */
 .fechar-modal-btn {
   font-size: 2rem;
   background: none;
@@ -51,12 +45,15 @@
   color: rgba(114, 118, 120, 1);
 }
 
+/* Grupos / tipografia base */
 .filtro-grupo {
-  margin: 10px;
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 14px;
   padding-bottom: 15px;
   border-bottom: 1px solid #ddd;
 
-  :last-child {
+  &:last-child {
     border-bottom: none;
     margin-bottom: 0;
   }
@@ -71,12 +68,10 @@
   ul {
     list-style: none;
     padding: 0;
-
     li {
       margin-bottom: 10px;
     }
-
-    :hover {
+    &:hover {
       background-color: #72767815;
     }
   }
@@ -84,7 +79,7 @@
   label {
     display: flex;
     align-items: center;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: #555;
     cursor: pointer;
     position: relative;
@@ -92,20 +87,19 @@
   }
 }
 
-/* =======================================
-// ESTILOS DO CHECKBOX PERSONALIZADO (mobile)
-// ======================================= */
+.filtro-label {
+  font-size: 0.9rem;
+  color: #4f5b66;
+}
 
+/* Checkbox custom */
 .filtro-grupo input[type="checkbox"] {
   position: absolute;
   opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
+  pointer-events: none;
 }
-
 .filtro-grupo label::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 50%;
@@ -117,14 +111,12 @@
   border-radius: 4px;
   transition: all 0.2s ease;
 }
-
-.filtro-grupo input[type="checkbox"]:checked+label::before {
+.filtro-grupo input[type="checkbox"]:checked + label::before {
   background-color: #004e8a;
   border-color: #004e8a;
 }
-
 .filtro-grupo label::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 5px;
   top: 40%;
@@ -136,31 +128,40 @@
   opacity: 0;
   transition: all 0.2s ease;
 }
-
-.filtro-grupo input[type="checkbox"]:checked+label::after {
+.filtro-grupo input[type="checkbox"]:checked + label::after {
   opacity: 1;
 }
 
+/* Inputs simples */
+.filtro-grupo select {
+  appearance: none;
+  padding: 10px 12px;
+  border: 1px solid #d4d8de;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #f9fafb;
+  transition: border-color 0.2s, background 0.2s;
+}
+.filtro-grupo select:focus {
+  outline: none;
+  background: #fff;
+  border-color: var(--azul, #0b66c3);
+}
 
-/* =========================
-// ESTILOS DO INPUT (mobile)
-// ========================= */
-
+/* Campo livre + aplicar (se usar) */
 .filtro-input-group {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
 }
-
 .filtro-input-group input {
   width: 100%;
   padding: 5px;
   border: none;
   border-radius: 4px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   font-size: 1.1rem;
 }
-
 .aplicar-btn {
   width: 100%;
   padding: 5px;
@@ -172,22 +173,53 @@
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
 .aplicar-btn:hover {
   background-color: #011f33;
 }
 
+/* Ordenação */
+.ordenacao-radios {
+  display: grid;
+  gap: 6px;
+}
+.ordenacao-radios label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #3e4852;
+  font-size: 0.92rem;
+}
+.ordem-toggle {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.ord-btn {
+  border: 1px solid #d4d8de;
+  background: #f9fafb;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.ord-btn.active {
+  background: #0b66c3;
+  border-color: #0b66c3;
+  color: #fff;
+}
 
-/* =======================================
-// ESTILOS PARA DESKTOP
-// ======================================= */
+/* ===========================
+     DESKTOP (>=768px)
+     – Sidebar sticky e grid
+     =========================== */
 @media (min-width: 768px) {
-
-  /* Oculta a sobreposição no desktop */
+  /* sem backdrop no desktop */
   .modal-backdrop {
     display: none;
   }
 
+  /* container vira “estático”; sticky fica no visual .pretty */
   .filtros-container {
     position: static;
     width: 100%;
@@ -196,163 +228,109 @@
     background: none;
     z-index: auto;
     border: none;
+    padding: 0;
   }
 
-  /* Oculta o cabeçalho do modal em desktop */
   .filtros-header {
-
     border: none;
     margin: 0;
-
     .fechar-modal-btn {
       display: none;
     }
   }
 
-  .filtro-grupo {
-    margin: 0;
-
-    label {
-      font-size: 13px;
-    }
+  .filtro-grupo label {
+    font-size: 13px;
   }
-
-  .filtro-grupo label::before {
-    width: 14px;
-    height: 14px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-  }
-
-  .filtro-grupo label::after {
-    left: 5px;
-    width: 5px;
-    height: 10px;
-    border-width: 0 2px 2px 0;
-  }
-
   .filtro-grupo h4 {
     font-size: 1rem;
     margin-bottom: 10px;
   }
+}
 
-  .filtro-grupo {
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    .aplicar-btn {
-      padding: 8px;
-      font-size: 14px;
-    }
-  }
-
-  .filtro-input-group {
-    input {
-      padding: 8px;
-      font-size: 12px;
-    }
-  }
+/* Aparência “clean” da caixa no desktop */
+.filtros-container.pretty {
+  position: sticky;
+  top: 96px;
+  background: #fff;
+  border: 1px solid #e6e8ec;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
+}
+.filtros-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2b3640;
+  margin: 0 0 12px 0;
 }
 
 /* ===========================
-   ORDENAR – radios e toggle
-   ===========================*/
-   .filtro-ordenacao {
-    .ordenacao-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-  
-    .ordenacao-item {
-      position: relative;
-      display: flex;
-      align-items: center;
-      padding-left: 24px;
-  
-      input[type="radio"] {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-      }
-  
-      /* círculo externo */
-      label::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 6px;
-        width: 14px;
-        height: 14px;
-        border: 2px solid #999;
-        background: #f7f7f7;
-        border-radius: 50%;
-        transition: all .2s ease;
-      }
-  
-      /* ponto interno quando checked */
-      label::after {
-        content: '';
-        position: absolute;
-        left: 4px;
-        top: 10px;
-        width: 8px;
-        height: 8px;
-        background: transparent;
-        border-radius: 50%;
-        transition: all .2s ease;
-        opacity: 0;
-      }
-  
-      input[type="radio"]:checked + label::before {
-        border-color: #004e8a;
-        background: #004e8a22;
-      }
-      input[type="radio"]:checked + label::after {
-        background: #004e8a;
-        opacity: 1;
-      }
-  
-      label {
-        font-size: 1.05rem;
-        color: #555;
-        cursor: pointer;
-      }
-    }
-  
-    /* segmented control ASC/DESC */
-    .ordem-toggle {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-  
-      button {
-        border: 1px solid #cfd6dd;
-        background: #fff;
-        font-size: .95rem;
-        padding: 8px 10px;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all .15s ease;
-        color: #445566;
-  
-        &.ativo {
-          background: #004e8a;
-          color: #fff;
-          border-color: #004e8a;
-          box-shadow: 0 2px 10px rgba(0,0,0,.05);
-        }
-  
-        &:hover {
-          border-color: #004e8a;
-        }
-      }
-    }
+     LAYOUT – página de resultados
+     =========================== */
+.search-page-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 991px) {
+  .search-page-container {
+    grid-template-columns: 1fr;
   }
-  
-  /* ajustes desktop opcionais */
-  @media (min-width: 768px) {
-    .filtro-ordenacao .ordenacao-item label { font-size: .95rem; }
-    .filtro-ordenacao .ordem-toggle button { font-size: .9rem; padding: 6px 8px; }
+}
+.filters-sidebar {
+  position: relative;
+}
+
+.search-results {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 992px) {
+  .search-results {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  
+}
+
+/* impede o scroll da página quando o painel está aberto no mobile */
+.no-scroll {
+  overflow: hidden;
+}
+
+/* botão "Filtros" só no mobile */
+.filters-mobile-bar {
+  margin: 8px 0 12px;
+}
+.btn-open-filters {
+  display: none;
+  border: 1px solid #d4d8de;
+  background: #0b66c3;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+@media (max-width: 767px) {
+  .btn-open-filters {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .filters-sidebar {
+    display: none;
+  } /* esconde a coluna fixa no mobile */
+}
+
+/* backdrop do modal mobile */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 998;
+}
+
+/* já estava mobile-first: .filtros-container ocupa 70% e entra da esquerda.
+   Os cards já ficam em 1 coluna por padrão: .search-results { grid-template-columns: 1fr }.
+   No desktop (>=992px) viram 3 colunas como você configurou. */
