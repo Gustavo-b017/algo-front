@@ -90,6 +90,12 @@ $espacamento-p: 0.5rem;
         justify-content: space-between;
         align-items: start;
 
+        h4 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: $cor-secundaria;
+        }
+
         p {
             font-size: 1.2rem;
             font-weight: bold;
@@ -113,6 +119,10 @@ $espacamento-p: 0.5rem;
             }
         }
     }
+
+    .resumo-compra-linha {
+        display: none;
+    }
 }
 
 // Seção de Botões de Ação
@@ -121,6 +131,13 @@ $espacamento-p: 0.5rem;
     flex-direction: column;
     gap: $espacamento-m;
     margin-top: 1rem;
+    position: sticky;
+    bottom: 0%;
+    left: 0%;
+    padding: 1rem;
+    width: 100%;
+    background-color: #fff;
+    z-index: 10;
 
     button {
         width: 100%;
@@ -177,7 +194,37 @@ $espacamento-p: 0.5rem;
         }
 
         .frete-input-group {
+            height: auto;
 
+            .cep-input {
+                padding: 6px 6px;
+            }
+
+        }
+
+        .resumo-linha {
+            line-height: 0;
+        }
+
+        .resumo-total h4 {
+            font-size: 1rem;
+        }
+
+        .resumo-compra-linha {
+            display: block;
+            margin: 15px 0;
+        }
+
+        .resumo-botoes-acoes {
+            gap: 10px;
+            margin-top: 0.2rem;
+            position: static;
+            background-color: transparent;
+            padding: 0;
+
+            button {
+                font-size: 0.9rem;
+            }
         }
 
     }

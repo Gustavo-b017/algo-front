@@ -11,13 +11,12 @@ function ResumoCompra({ subtotal, totalItens }) {
     // Valores de frete e total simulados para demonstração
     const valorFrete = 0; // Exemplo de frete grátis
     const valorTotalComFrete = subtotal + valorFrete;
-    const valorTotalPix = valorTotalComFrete * 0.9; // Exemplo de 10% de desconto no Pix
 
     return (
         <div className="resumo-compra-container">
             <div className="titulo-resumo-compra">
                 <h1>Resumo da Compra</h1>
-                <hr/>
+                <hr />
             </div>
             {/* Seção de Frete */}
             <div className="resumo-frete-carrinho">
@@ -26,7 +25,7 @@ function ResumoCompra({ subtotal, totalItens }) {
                     <input type="text" placeholder="00000-000" className="cep-input" />
                     <button className="frete-ok-btn">OK</button>
                 </div>
-                <a href="#" className="cep-link">Não sei o CEP</a>
+                <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" className="cep-link">Não sei o CEP</a>
             </div>
 
             {/* Seção de Valores */}
@@ -39,11 +38,14 @@ function ResumoCompra({ subtotal, totalItens }) {
                     <p>Produtos ({totalItens} itens):</p>
                     <p>{formatBRL(subtotal)}</p>
                 </div>
+
+                <hr className="resumo-compra-linha" />
+
                 <div className="resumo-total">
-                    <p>Total:</p>
+                    <h4>Total:</h4>
                     <div className="valores-total-group">
                         <p className="valor-pix">
-                            {formatBRL(valorTotalPix)} no PIX
+                            {formatBRL(valorTotalComFrete)} no PIX
                         </p>
                         <p className="valor-cartao">
                             ou {formatBRL(valorTotalComFrete)} no cartão

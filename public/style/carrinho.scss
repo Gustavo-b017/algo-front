@@ -5,18 +5,22 @@
 // LAYOUT DA PÁGINA DO CARRINHO
 // ======================================= */
 
+.main-content {
+    margin: 0 auto;
+
+    h2 {
+        padding: 10px 0 15px 0;
+        margin: 0%;
+        font-size: 1.4rem;
+        color: rgba(4, 39, 67, 1);
+    }
+}
+
 .carrinho-container {
     display: flex;
     flex-direction: column;
     gap: 14px;
     background: transparent;
-}
-
-.carrinho-layout {
-    gap: 1.5rem;
-    padding: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .carrinho-produtos {
@@ -32,6 +36,17 @@
 // ======================================= */
 @media (min-width: 768px) {
 
+    .main-content {
+        gap: 1.5rem;
+        padding: 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        h2 {
+            padding: 0 0 20px 50px;
+        }
+    }
+
     .carrinho-container {
         flex-direction: row;
         flex-wrap: wrap;
@@ -46,6 +61,7 @@
         }
 
         .carrinho-resumo {
+            margin-left: 15px;
             width: 30%;
         }
     }
