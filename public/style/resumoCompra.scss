@@ -35,7 +35,7 @@ $espacamento-p: 0.5rem;
 
         .cep-input {
             flex-grow: 1;
-            padding: 8px 6px;
+            padding: 8px 0px 8px 6px;
             border: 1px solid $cor-principal;
             border-top-left-radius: 4px;
             border-bottom-left-radius: 4px;
@@ -63,7 +63,7 @@ $espacamento-p: 0.5rem;
         font-size: 0.8rem;
         color: $cor-secundaria;
         text-decoration: underline;
-        margin-top: $espacamento-p;
+        margin: 0;
         display: inline-block;
     }
 }
@@ -72,12 +72,12 @@ $espacamento-p: 0.5rem;
 // Seção de Valores
 .resumo-valores {
 
-    margin-top: 2rem;
+    margin-top: 1rem;
 
     .resumo-linha {
         display: flex;
         justify-content: space-between;
-        line-height: 0.8;
+        line-height: 0.7;
 
         p {
             font-size: 0.9rem;
@@ -88,6 +88,7 @@ $espacamento-p: 0.5rem;
     .resumo-total {
         display: flex;
         justify-content: space-between;
+        align-items: start;
 
         p {
             font-size: 1.2rem;
@@ -100,6 +101,7 @@ $espacamento-p: 0.5rem;
             line-height: 0.9;
 
             .valor-pix {
+                padding-top: 2px;
                 font-size: 1.2rem;
                 font-weight: 800;
                 color: $cor-desconto;
@@ -108,7 +110,6 @@ $espacamento-p: 0.5rem;
             .valor-cartao {
                 font-size: 0.8rem;
                 color: $cor-secundaria;
-                margin-top: 0;
             }
         }
     }
@@ -119,14 +120,14 @@ $espacamento-p: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: $espacamento-m;
-    margin-top: 2rem;
+    margin-top: 1rem;
 
     button {
         width: 100%;
         padding: 7px;
         border-radius: 8px;
         font-size: 1.1rem;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
         transition: background-color 0.2s;
     }
@@ -144,7 +145,7 @@ $espacamento-p: 0.5rem;
     .escolher-mais-btn {
         background-color: $cor-botao-secundario;
         color: $cor-botao-primario;
-        border: 2px solid $cor-botao-primario;
+        border: 1px solid $cor-botao-primario;
 
         &:hover {
             background-color: #f7f7f7;
@@ -174,6 +175,11 @@ $espacamento-p: 0.5rem;
                 margin: 0%;
             }
         }
+
+        .frete-input-group {
+
+        }
+
     }
 
 }

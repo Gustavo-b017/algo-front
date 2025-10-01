@@ -6,6 +6,7 @@ import Header from '../Componentes/Header';
 import { useNavigate } from 'react-router-dom';
 import CardCarrinho from '../Componentes/CardCarrinho';
 import ResumoCompra from '../Componentes/ResumoCompra';
+import ProdutoDestaque from '../Componentes/ProdutoDestaque';
 import '/public/style/carrinho.scss';
 import '/public/style/cardProduto.scss';
 import '/public/style/cardCarrinho.scss';
@@ -79,6 +80,11 @@ function Carrinho() {
     const subtotal = produtos.reduce((acc, item) => acc + (item.quantidade * item.preco_final), 0);
     const totalItens = produtos.reduce((acc, item) => acc + item.quantidade, 0);
 
+        const handleLinhaClick = (produto) => {
+        const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
+        navigate(`/produto?${params.toString()}`);
+    };
+
     if (carregando) {
         return (
             <div className="loader-container" style={{ height: '100vh' }}>
@@ -107,6 +113,9 @@ function Carrinho() {
                             subtotal={subtotal}
                             totalItens={totalItens}
                         />
+                    </div>
+                    <div className="carrinho-destaque">
+                        <ProdutoDestaque produtoDestaque="pastilha" handleLinhaClick={handleLinhaClick} />
                     </div>
                 </div>
             </div>
