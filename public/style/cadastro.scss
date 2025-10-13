@@ -83,7 +83,7 @@
 }
 
 .card-header p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 400;
     color: var(--cinza-texto);
 }
@@ -106,7 +106,7 @@
 }
 
 .form-group label {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--cinza-texto);
     display: block;
     margin-bottom: 0px;
@@ -115,7 +115,7 @@
 .form-group input {
     width: 100%;
     border: none;
-    font-size: 1.1rem;
+    font-size: 1rem;
     box-sizing: border-box;
 }
 
@@ -151,7 +151,7 @@
     align-items: center;
     margin: 15px 0;
     gap: 8px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--cinza-texto);
 }
 
@@ -170,7 +170,7 @@
     border-radius: 9px;
     background-color: var(--azul-escuro);
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -238,7 +238,7 @@
 /* Estilos do link de login */
 .login-link {
     margin-top: 15px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--cinza-texto);
 }
 
@@ -251,114 +251,51 @@
     text-decoration: underline;
 }
 
-
 /* =======================================
 // MEDIA QUERIES PARA DESKTOP
 // ======================================= */
 @media (min-width: 1024px) {
+
     .cadastro-page-container {
-        flex-direction: row; // Desktop: linha
-        justify-content: flex-end; // Empurra o formulário para a direita
-        align-items: center; // Centraliza verticalmente
-        padding: 0; // Remove padding global, o fundo se encarrega
-        overflow: hidden; // Garante que a "onda" não crie scroll
+        padding: 0%;
+    }
+
+    /* Fundo azul do desktop */
+    .background-azul {
+        top: 0;
+        width: 50%;
+        height: 100vh;
+        margin: 0 auto;
+        transform: translateY(-50%);
+        border-bottom-left-radius: 13px;
+        border-bottom-right-radius: 13px;
+    }
+
+    .cadastro-form-card {
+        width: 30%;
+        padding: 30px 80px;
+
+        .card-header {
+            width: 100%;
+        }
     }
 
     .cadastro-header {
-        position: absolute; // Posiciona o logo independentemente
-        top: 2rem; // 20px do topo
-        left: 2rem; // 20px da esquerda
-        max-width: none; // Permite que o logo mantenha seu tamanho
-        width: auto;
-        padding: 0;
-    }
+        max-width: none;
+        padding: 20px 0 50px 50px;
 
-    .cadastro-logo {
-        width: 6rem; // Logo maior no desktop
-    }
-
-    .background-azul {
-        top: 0;
-        margin: 0 auto;
-        width: 80%;
-        height: 60%; 
-        z-index: 1;
-        transform: translateY(-50%); // Ajusta a posição vertical da "onda"
-    }
-    
-    .cadastro-form-card {
-        position: relative; // Para o z-index funcionar
-        z-index: 2; // Garante que o formulário fique acima da onda
-        width: 45rem; // Largura maior no desktop
-        max-width: 45rem; // Controla a largura máxima
-        padding: 4rem; // Mais padding no desktop
-        border-radius: 2rem;
-        box-shadow: 0 0.8rem 4rem var(--sombra-card); // Sombra mais proeminente
-        margin-right: 15vw; // Empurra o formulário para a direita, 15% da largura da viewport
-        transform: translateY(0); // Remove o translate do mobile
-    }
-
-    .card-header {
-        margin-bottom: 4rem; // Mais espaço no desktop
-    }
-
-    .card-header h2 {
-        font-size: 2.8rem; // Fonte maior para o título
-        line-height: 4rem;
-    }
-
-    .card-header p {
-        font-size: 1.6rem; // Fonte maior para a descrição
-    }
-
-    .form-group {
-        padding: 1.2rem; // Mais padding nos campos
-        border-radius: 1rem;
-    }
-
-    .form-group label {
-        font-size: 1.4rem; // Fonte maior para labels
-    }
-
-    .form-group input {
-        font-size: 1.6rem; // Fonte maior para inputs
-    }
-
-    .checkbox-group {
-        margin: 2rem 0; // Mais margem
-        font-size: 1.4rem; // Fonte maior
-    }
-    
-    .checkbox-input {
-        width: 1.8rem;
-        height: 1.8rem;
+        .cadastro-logo {
+            width: 70px;
+            height: auto;
+        }
     }
 
     .create-account-btn {
-        padding: 1.5rem; // Mais padding no botão
-        font-size: 1.8rem; // Fonte maior
-    }
-
-    .separator-container {
-        margin: 3rem 0; // Mais margem
-    }
-
-    .separator-text {
-        font-size: 1.4rem; // Fonte maior
-    }
-
-    .social-login {
-        gap: 2rem; // Mais espaço entre os botões sociais
-        margin-bottom: 3rem; // Mais margem
+        padding: 15px;
     }
 
     .social-btn {
-        width: 5rem; // Botões sociais maiores
-        height: 5rem;
+        border: none;
     }
 
-    .login-link {
-        margin-top: 3rem; // Mais margem
-        font-size: 1.4rem; // Fonte maior
-    }
 }

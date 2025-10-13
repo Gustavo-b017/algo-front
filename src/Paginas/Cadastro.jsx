@@ -9,7 +9,7 @@ function Cadastro() {
       <div className="background-azul"></div>
 
       <header className="cadastro-header">
-        <img src={logo} alt="Logo Âncora" className="cadastro-logo" />
+        <img src={logo} alt="Logo Âncora" className="cadastro-logo" onClick={() => window.location.href = "/"}/>
       </header>
       
       <div className="cadastro-form-card">
