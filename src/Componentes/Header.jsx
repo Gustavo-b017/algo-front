@@ -32,7 +32,7 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
             </div>
 
             <div className="header-actions">
-                <button><img src={user_icon} alt={"User icon"} className="cadastro-btn" /><span>Entre/Cadastro</span></button>
+                <button><img src={user_icon} alt={"User icon"} className="cadastro-btn" onClick={() => window.location.href = "/cadastro"} /><span>Entre/Cadastro</span></button>
                 <button><img src={carrinho_icon} alt={"Carrinho icon"} className="carrinho-btn" onClick={() => window.location.href = "/carrinho"} /><span>Carrinho</span></button>
             </div>
         </div>
