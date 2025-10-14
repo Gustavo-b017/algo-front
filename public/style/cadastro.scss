@@ -1,0 +1,318 @@
+// public/style/cadastro.scss
+
+/* Variáveis de cor */
+:root {
+    --branco: #fff;
+    --azul-escuro: rgba(33, 33, 33, 1);
+    --azul-claro: #14354c;
+    --cinza-texto: #666;
+    --borda-input: #ccc;
+    --sombra-card: rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos globais da página */
+.cadastro-page-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.background-azul {
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+    height: 60vh;
+    background-color: #022e4c;
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
+    z-index: 1;
+}
+
+/* Os elementos que precisam ficar por cima do fundo azul */
+.cadastro-header,
+.cadastro-form-card {
+    position: relative;
+    z-index: 2;
+}
+
+.cadastro-header {
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+    padding-bottom: 40px;
+
+    .cadastro-logo {
+        width: 40px;
+        height: auto;
+    }
+}
+
+/* Estilos do cartão de formulário */
+.cadastro-form-card {
+    width: 90%;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px var(--sombra-card);
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.card-header {
+    margin-bottom: 30px;
+    width: 150px;
+    margin: 0 auto;
+}
+
+.card-header h2 {
+    font-size: 1.6rem;
+    color: rgba(33, 33, 33, 1);
+    margin-bottom: 1px;
+    text-transform: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    line-height: 37.5px;
+    letter-spacing: -0.5px;
+}
+
+.card-header p {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--cinza-texto);
+}
+
+/* Estilos do formulário */
+.cadastro-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    text-align: left;
+    position: relative;
+    border: 1px solid rgba(224, 224, 224, 1);
+    padding: 10px;
+}
+
+.form-group:hover {
+    border-color: rgba(33, 33, 33, 1);
+}
+
+.form-group label {
+    font-size: 1rem;
+    color: var(--cinza-texto);
+    display: block;
+    margin-bottom: 0px;
+}
+
+.form-group input {
+    width: 100%;
+    border: none;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper input {
+    padding-right: 100px;
+}
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+.eye-icon svg {
+    color: var(--cinza-texto);
+}
+
+/* Estilos do checkbox */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    gap: 8px;
+    font-size: 1rem;
+    color: var(--cinza-texto);
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 13px;
+    height: 13px;
+    border: 1px solid var(--borda-input);
+    accent-color: var(--azul-escuro);
+}
+
+/* Botão de criar conta */
+.create-account-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 9px;
+    background-color: var(--azul-escuro);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-account-btn:hover {
+    background-color: #011f33;
+}
+
+/* Estilos do separador */
+.separator {
+    margin: 10px 0;
+    font-size: 12px;
+    color: var(--cinza-texto);
+    position: relative;
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: var(--borda-input);
+}
+
+.separator::before {
+    left: 0;
+}
+
+.separator::after {
+    right: 0;
+}
+
+/* Estilos dos botões sociais */
+.social-login {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.social-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--borda-input);
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    padding: 2px;
+    align-items: center;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+}
+
+.social-btn img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Estilos do link de login */
+.login-link {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: var(--cinza-texto);
+}
+
+.login-link a {
+    color: var(--azul-escuro);
+    font-weight: 800;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* =======================================
+// MEDIA QUERIES PARA DESKTOP
+// ======================================= */
+@media (min-width: 1024px) {
+
+    .cadastro-page-container {
+        padding: 0%;
+    }
+
+    /* Fundo azul do desktop */
+    .background-azul {
+        top: 0;
+        width: 50%;
+        height: 100vh;
+        margin: 0 auto;
+        transform: translateY(-50%);
+        border-bottom-left-radius: 13px;
+        border-bottom-right-radius: 13px;
+    }
+
+    .cadastro-form-card {
+        width: 30%;
+        padding: 30px 80px;
+
+        .card-header {
+            width: 100%;
+        }
+    }
+
+    .cadastro-header {
+        max-width: none;
+        padding: 20px 0 50px 50px;
+
+        .cadastro-logo {
+            width: 70px;
+            height: auto;
+        }
+    }
+
+    .create-account-btn {
+        padding: 15px;
+    }
+
+    .social-btn {
+        border: none;
+    }
+
+.rodapé-cadastro {
+    position: absolute;
+    width: 100%;
+    bottom: 0%;
+    
+    /* Propriedades para centralização vertical */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+
+    text-align: center;
+    background-color: #011f33;
+    font-size: 0.7rem;
+    color: var(--cinza-texto);
+}
+
+}
