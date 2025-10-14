@@ -16,6 +16,19 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (r) => r,
+  (err) => {
+    if (err?.response?.status === 401) {
+      localStorage.removeItem("access_token");
+      if (window.location.pathname !== "/login") {
+        window.location.assign("/login");
+      }
+    }
+    return Promise.reject(err);
+  }
+);
+
 // helpers
 export const getFamilias = () => api.get("/familias").then(r => r.data);
 export const getSubfamilias = (familiaId) =>

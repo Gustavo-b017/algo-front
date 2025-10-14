@@ -8,18 +8,26 @@ import Carrinho from './Paginas/Carrinho.jsx';
 import Cadastro from './Paginas/Cadastro.jsx';
 import Login from './Paginas/Login.jsx';
 import Perfil from './Paginas/Perfil.jsx';
+import RequireAuth from "./components/RequireAuth.jsx";
 
 function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} /> 
+        <Route path="/" element={<Home />} />
         <Route path="/produto" element={<Produto />} />
         <Route path="/resultados" element={<Resultados />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/perfil" element={<Perfil />} />
         <Route path="/carrinho" element={<Carrinho />} />
+        <Route
+          path="/perfil"
+          element={
+            <RequireAuth>
+              <Perfil />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </div>
   );
