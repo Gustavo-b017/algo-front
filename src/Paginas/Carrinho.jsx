@@ -13,8 +13,8 @@ import '/public/style/cardCarrinho.scss';
 import '/public/style/footer.scss';
 import '/public/style/produtoDestaque.scss';
 
-const API_URL = import.meta.env.VITE_API_URL;
-// const API_URL = 'http://127.0.0.1:5000';
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = 'http://127.0.0.1:5000';
 
 function Carrinho() {
     const [produtos, setProdutos] = useState([]);
@@ -80,7 +80,7 @@ function Carrinho() {
     const subtotal = produtos.reduce((acc, item) => acc + (item.quantidade * item.preco_final), 0);
     const totalItens = produtos.reduce((acc, item) => acc + item.quantidade, 0);
 
-        const handleLinhaClick = (produto) => {
+    const handleLinhaClick = (produto) => {
         const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
         navigate(`/produto?${params.toString()}`);
     };

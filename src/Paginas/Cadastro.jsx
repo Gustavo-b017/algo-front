@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '/public/style/cadastro.scss';
 import logo from '/public/imagens/logo_ancora.svg';
+import { authRegister } from '../lib/api';
 
 function Cadastro() {
+    const [primeiroNome, setPrimeiroNome] = useState("");
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [err, setErr] = useState("");
+    const [ok, setOk] = useState("");
+
+    async function onSubmit(e) {
+        e.preventDefault();
+        setErr(""); setOk("");
+        try {
+            const r = await authRegister({ nome: primeiroNome, email, senha });
+            if (r?.success) {
+                setOk("Conta criada! Faça login para continuar.");
+                setTimeout(() => window.location.href = "/login", 600);
+            } else {
+                setErr(r?.error || "Falha ao cadastrar");
+            }
+        } catch {
+            setErr("Erro de rede");
+        }
+    }
+
     return (
         <div className="cadastro-page-container">
-
             <div className="background-azul"></div>
-
             <header className="cadastro-header">
                 <img src={logo} alt="Logo Âncora" className="cadastro-logo" onClick={() => window.location.href = "/"} />
             </header>
@@ -18,33 +39,21 @@ function Cadastro() {
                     <p>Maneira simples e rápida de continuar suas compras</p>
                 </div>
 
-                <form className="cadastro-form">
+                <form className="cadastro-form" onSubmit={onSubmit}>
                     <div className="form-group">
                         <label htmlFor="primeiroNome">Primeiro Nome</label>
-                        <input
-                            type="text"
-                            id="primeiroNome"
-                            placeholder="Marcos"
-                        />
+                        <input id="primeiroNome" value={primeiroNome} onChange={e => setPrimeiroNome(e.target.value)} required />
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="email">Endereço de email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="marcos@exemplo.com"
-                        />
+                        <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="senha">Senha</label>
                         <div className="password-input-wrapper">
-                            <input
-                                type="password"
-                                id="senha"
-                                placeholder="************"
-                            />
+                            <input id="senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} required />
                             <span className="eye-icon">
                                 {/* Ícone de olho (substitua por um SVG ou ícone real se tiver) */}
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -63,6 +72,9 @@ function Cadastro() {
                     <button type="submit" className="create-account-btn">
                         CRIAR CONTA
                     </button>
+                    
+                    {err && <p style={{ color: "tomato", marginTop: 8 }}>{err}</p>}
+                    {ok && <p style={{ color: "seagreen", marginTop: 8 }}>{ok}</p>}
                 </form>
 
                 <div className="separator">ou se inscreva com</div>
@@ -83,7 +95,7 @@ function Cadastro() {
                 </div>
 
                 <p className="login-link">
-                    Já possui uma conta? <a href="#">Faça o LOGIN</a>
+                    Já possui uma conta? <a href="/login">Faça o LOGIN</a>
                 </p>
             </div>
 
