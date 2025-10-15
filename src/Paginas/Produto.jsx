@@ -1,37 +1,40 @@
 // src/Paginas/Produto.jsx
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+// 1. Remova a importação direta do axios
+// import axios from 'axios'; 
+// 2. Importe a sua instância configurada 'api'
+import { api } from '../lib/api'; 
 import Item from '../Componentes/Item';
 import Sugestoes from '../Componentes/Sugestoes';
-import axios from 'axios';
 import Header from '../Componentes/Header';
-import Categorias from '../Componentes/Categorias'
-import ProdutoDestaque from '../Componentes/ProdutoDestaque'
+import Categorias from '../Componentes/Categorias';
+import ProdutoDestaque from '../Componentes/ProdutoDestaque';
 import Footer from '../Componentes/Footer';
 import Avaliacoes from '../Componentes/avaliacoes';
-
-// const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'http://127.0.0.1:5000';
 
 function Produto() {
   const [searchParams] = useSearchParams();
   const [dadosCompletos, setDadosCompletos] = useState(null);
   const [erro, setErro] = useState(null);
   const [carregando, setCarregando] = useState(true);
-  const navigate = useNavigate(); // Inicialize o hook de navegação
+  const navigate = useNavigate();
 
   const salvarProduto = async (dadosDoItem) => {
     try {
-      const res = await axios.post(`${API_URL}/salvar_produto`, dadosDoItem);
+      // 3. Use 'api.post' em vez de 'axios.post' e remova a URL base
+      const res = await api.post('/salvar_produto', dadosDoItem);
       alert(res.data.message);
     } catch (error) {
       console.error("Erro ao salvar produto:", error);
-      alert("Erro ao salvar o produto. Verifique o console.");
+      // O interceptor em api.js já vai lidar com o redirecionamento em caso de 401
+      if (error.response?.status !== 401) {
+        alert("Erro ao salvar o produto. Verifique o console.");
+      }
     }
   };
 
   const handleSugestaoClick = (produto) => {
-    // Redireciona para a mesma página, mas com novos parâmetros
     const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
     navigate(`/produto?${params.toString()}`);
   };
@@ -51,10 +54,11 @@ function Produto() {
         setCarregando(false);
         return;
       }
-      setCarregando(true); // Reinicia o estado de carregamento para o novo produto
+      setCarregando(true);
       try {
         const params = new URLSearchParams({ id, nomeProduto });
-        const res = await axios.get(`${API_URL}/produto_detalhes?${params.toString()}`);
+        // 4. Use 'api.get' para consistência
+        const res = await api.get(`/produto_detalhes?${params.toString()}`);
         setDadosCompletos(res.data);
       } catch (error) {
         console.error('Erro ao carregar detalhes do produto:', error);

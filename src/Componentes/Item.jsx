@@ -1,22 +1,23 @@
 // src/Paginas/Item.jsx
 import React, { useState } from 'react';
 import '/public/style/item.scss';
-import arrow_left from "../../public/imagens/icones/arrow-left.png";
-import arrow_right from "../../public/imagens/icones/arrow-right.png";
+import { useAuth } from '../contexts/auth-context'; // 1. Importe o hook de autenticação
+import { useNavigate } from 'react-router-dom'; // 2. Importe o useNavigate para redirecionar
+
 
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
-// NOVO: formatador seguro para score (exibe com 3 casas, se vier número)
 const formatScore = (s) =>
   typeof s === 'number' && Number.isFinite(s) ? s.toFixed(3) : null;
 
-// O componente agora recebe os dados diretamente via props
 function Item({ dadosItem, onSave }) {
   const [hoverIndex, setHoverIndex] = useState(null);
   const [quantidade, setQuantidade] = useState(1);
 
-  // Se, por alguma razão, os dados não chegarem, mostramos uma mensagem.
+  const { user } = useAuth(); // 3. Obtenha o usuário do contexto de autenticação
+  const navigate = useNavigate(); // 4. Inicialize o hook de navegação
+
   if (!dadosItem) {
     return <div className="empty-state-container"><h1>Informações do item não disponíveis.</h1></div>;
   }
@@ -24,7 +25,15 @@ function Item({ dadosItem, onSave }) {
   const dados = dadosItem;
 
   const handleSaveClick = () => {
-    // 3. ENVIAR A QUANTIDADE JUNTO COM OS OUTROS DADOS
+    // 5. Verifique se o usuário está logado ANTES de tentar salvar
+    if (!user) {
+      // Se não estiver logado, redirecione para a página de login
+      alert("Você precisa fazer login para adicionar itens ao carrinho.");
+      navigate('/login');
+      return; // Interrompe a execução da função
+    }
+
+    // Se o usuário estiver logado, chame a função onSave normalmente
     onSave({
       id_api_externa: dados.id,
       nome: dados.nomeProduto,
@@ -32,10 +41,9 @@ function Item({ dadosItem, onSave }) {
       url_imagem: dados.imagemReal,
       preco_original: dados.precoOriginal,
       preco_final: dados.preco,
-      //parcelas: dados.parcelas.qtd,
       desconto: dados.descontoPercentual,
       marca: dados.marca,
-      quantidade: quantidade // Adiciona a quantidade selecionada
+      quantidade: quantidade
     });
   };
 
@@ -104,7 +112,7 @@ function Item({ dadosItem, onSave }) {
                 title="Relevância da busca (score da API)"
                 style={{ marginLeft: '8px', fontSize: '0.9rem', opacity: 0.85 }}
               >
-              Pontos: {formatScore(dados.score)}
+                Pontos: {formatScore(dados.score)}
               </span>
             )}
           </div>
@@ -133,10 +141,8 @@ function Item({ dadosItem, onSave }) {
           </div>
 
           <div className="compra-opcoes">
-
             <div className="quantidade-selector ">
               <span>Quantidade:</span>
-              {/* 2. CONTROLAR O VALOR DO SELECT COM O ESTADO */}
               <select value={quantidade} onChange={(e) => setQuantidade(Number(e.target.value))}>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
@@ -146,9 +152,9 @@ function Item({ dadosItem, onSave }) {
               </select>
             </div>
 
+            {/* O botão agora usa a nova lógica handleSaveClick */}
             <button className="adicionar-sacola-btn" onClick={handleSaveClick}>Adicionar à sacola</button>
             <button className="comprar-agora-btn">Comprar Agora</button>
-
           </div>
 
           <div className="frete-calc-container">
