@@ -45,7 +45,7 @@ export default function Filtro({
 
             {/* ==== Ordenação ==== */}
             <div className="filtro-grupo">
-                <div className="filtro-label">Ordenar</div>
+                <h4>Ordenar</h4>
                 <div className="ordenacao-radios">
                     <label><input type="radio" name="ord" value="relevancia" checked={ordenacaoAtual === 'relevancia'} onChange={handleOrdenacaoRadio} /> Relevância</label>
                     <label><input type="radio" name="ord" value="menor-preco" checked={ordenacaoAtual === 'menor-preco'} onChange={handleOrdenacaoRadio} /> Menor preço</label>
@@ -61,7 +61,7 @@ export default function Filtro({
 
             {/* ==== Família ==== */}
             <div className="filtro-grupo">
-                <label className="filtro-label">Família de produto</label>
+                <h4>Família de produto</h4>
                 <select
                     value={familiaSelecionada.id}
                     onChange={(e) => {
@@ -78,7 +78,7 @@ export default function Filtro({
 
             {/* ==== Subfamília ==== */}
             <div className="filtro-grupo">
-                <label className="filtro-label">Subfamília (opcional)</label>
+                <h4>Subfamília (opcional)</h4>
                 <select
                     value={subFamiliaSelecionada.id}
                     onChange={(e) => {
@@ -96,7 +96,7 @@ export default function Filtro({
 
             {/* ==== Marca ==== */}
             <div className="filtro-grupo">
-                <label className="filtro-label">Marca do produto (opcional)</label>
+                <h4>Marca do produto (opcional)</h4>
                 <select
                     value={marcaProdutoSelecionada}
                     onChange={(e) => onMarcaProdutoChange(e.target.value)}

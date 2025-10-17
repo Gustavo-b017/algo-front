@@ -55,7 +55,7 @@
     flex-direction: row;
     /* Layout em linha no desktop */
     align-items: flex-start;
-    gap: 2rem;
+    gap: 1rem;
     padding: 0;
     max-width: 1200px;
     margin: 0 auto;
@@ -71,11 +71,6 @@
     display: block;
     flex-shrink: 0;
     width: 20%;
-  }
-
-  /* Exibe a sidebar de filtros no desktop */
-  .filters-sidebar {
-    display: block;
   }
 
   /* Oculta a barra de ordenação */
