@@ -3,24 +3,22 @@
 :root {
   /* segurança para variáveis inexistentes */
   --azul: var(--azul, #022e4c);
-  --radius: 10px;
+  --radius: 20px;
   --gap: 0.5rem;
 }
 
 .busca {
   display: flex;
   flex-direction: row;
-  /* mobile: coluna (campo full-width) */
   width: 100%;
   box-sizing: border-box;
   gap: 0.5rem;
 
-  /* Input e select dentro da busca: full width por padrão */
-  input,
+  .campo-input,
   .custom-select-selected {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.7rem;
     background: #fff;
     border: 1.5px solid var(--azul);
     box-sizing: border-box;
@@ -35,13 +33,12 @@
     align-items: center;
     gap: 0.5rem;
 
-    /* para que o input ocupe corretamente o espaço */
     input,
     .custom-select-selected {
       flex: 1 1 auto;
       min-width: 0;
-      border-bottom-left-radius: var(--radius);
-      border-top-left-radius: var(--radius);
+      border-bottom-left-radius: 13px;
+      border-top-left-radius: 13px;
     }
 
     /* Botão de busca/toggle (touch target maior no mobile) */
@@ -54,7 +51,6 @@
       border: none;
       font-size: 18px;
       padding: 0px;
-      /* alvo touch maior */
       width: 24px;
       height: 24px;
       display: flex;
@@ -70,10 +66,11 @@
   }
 
   .campo-placa {
+
     input,
     .custom-select-selected {
-      border-bottom-right-radius: var(--radius);
-      border-top-right-radius: var(--radius);
+      border-bottom-right-radius: 13px;
+      border-top-right-radius: 13px;
     }
   }
 }
@@ -83,7 +80,7 @@
 .custom-select-options {
   /* Propriedades de posicionamento e layout já estão boas */
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + 0.3rem);
   /* Aumenta o espaçamento entre a barra e a lista */
   left: 0;
   width: 100%;
@@ -95,10 +92,8 @@
   /* Melhora o visual do contêiner */
   background-color: #fff;
   border: 1px solid var(--cinza_claro, #e6e6e6);
-  /* Borda mais suave */
-  border-radius: var(--radius);
+  border-radius: 5px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  /* Sombra elegante */
 
   list-style: none;
   padding: 0;
@@ -111,9 +106,7 @@
     border-bottom: 1px solid var(--cinza_claro, #e6e6e6);
     color: var(--azul);
     transition: background 0.2s ease, color 0.2s ease;
-    /* Transições mais suaves */
-    font-size: 0.9rem;
-    /* Tamanho da fonte levemente menor para clareza */
+    font-size: 0.7rem;
 
     /* Arredonda o topo e base da lista */
     &:first-child {
@@ -183,29 +176,25 @@
     flex-direction: row;
     align-items: center;
     gap: 0.625rem;
-  }
 
-  /* Quando em linha, cada campo pode ter sua largura relativa:
-     .campo-busca ocupa a maior parte; outros campos (ex: categoria) podem ter flex-basis fixo */
-  .busca .campo-busca {
-    flex: 1 1 60%;
-    min-width: 0;
+    .campo-input,
+    .custom-select-selected {
+      font-size: 0.9rem;
+      padding: 0.45rem 0.75rem;
+    
+      border-radius: 10px !important;
+    }
 
-    .toggle-btn {
-      right: 10px;
+    .campo-busca {
+      flex: 1 1 60%;
+      min-width: 0;
+
+      .toggle-btn {
+        right: 10px;
+      }
     }
   }
 
-  /* se tiver select ao lado, por exemplo:
-     .busca .campo-select { flex: 0 0 140px; } */
-  .busca input,
-  .busca .custom-select-selected {
-    font-size: 1rem;
-    padding: 0.55rem 0.85rem;
-    border-radius: var(--radius);
-  }
-
-  /* reduzir o tamanho do botão toggle no desktop */
   .campo-busca .toggle-btn {
     width: 46px;
     height: 46px;
@@ -217,6 +206,10 @@
   .custom-select-options {
     top: calc(100% + 0.35rem);
     max-height: 320px;
+
+    li {
+      font-size: 0.9rem;
+    }
   }
 }
 

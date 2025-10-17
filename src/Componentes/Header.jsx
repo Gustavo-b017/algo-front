@@ -17,15 +17,17 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
         <div className="header">
             {/* Menu (toggle futuro) */}
             <div className="header-menu">
+
                 <button type="button" className="menu-btn" aria-label="Abrir menu">
                     <img src={menu_icon} alt="Menu" />
                 </button>
-            </div>
 
-            {/* Logo como irmão direto (mais previsível para o CSS e acessível) */}
-            <Link to="/" className="logo" aria-label="Página inicial">
-                <img src={logo} alt="Rede Ancora - Logo" />
-            </Link>
+                {/* Logo como irmão direto (mais previsível para o CSS e acessível) */}
+                <Link to="/" className="logo" aria-label="Página inicial">
+                    <img src={logo} className="img-logo" alt="Rede Ancora - Logo" />
+                </Link>
+
+            </div>
 
             {/* Busca ocupa a linha inteira no mobile */}
             <div className="header-busca">
@@ -44,23 +46,26 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
                 {ready && (
                     user ? (
                         <div className="user-box">
+
+                            <div className="user-text">
+                                <span>Olá, {user.nome?.split(" ")[0] || "Minha conta"}</span>
+                                <button type="button" onClick={logout} className="user-logout-btn">Sair</button>
+                            </div>
                             <Link to="/perfil" className="user-link" title="Minha conta">
                                 <img src={user_icon} alt="" aria-hidden="true" className="user-icon" />
-                                <span>{user.nome?.split(" ")[0] || "Minha conta"}</span>
                             </Link>
-                            <button type="button" onClick={logout} className="user-logout-btn">Sair</button>
                         </div>
                     ) : (
                         <Link to="/login" className="cadastro-btn">
-                            <img src={user_icon} alt="" aria-hidden="true" />
-                            <span>Entre/Cadastro</span>
+                            <span>Entre /{"\n"}Cadastro </span>
+                            <img src={user_icon} alt="" aria-hidden="true" className="user-icon" />
+                            
                         </Link>
                     )
                 )}
 
                 <Link to="/carrinho" className="carrinho-btn" title="Abrir carrinho">
                     <img src={carrinho_icon} alt="Carrinho" />
-                    <span>Carrinho</span>
                 </Link>
             </div>
         </div>

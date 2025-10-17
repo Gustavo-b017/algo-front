@@ -67,27 +67,26 @@
     display: flex;
     align-items: center;
     gap: var(--gap-xs);
+    padding-right: 100px;
 
     .menu-btn {
       padding: 0.25rem;
 
       img {
         display: block;
-        width: clamp(16px, 6vw, 32px);
+        width: clamp(15px, 6vw, 32px);
         height: auto;
       }
     }
   }
 
-  /* ==============================
-       Logo (irmão de .header-menu)
-       ============================== */
+  /* Logo  */
   .logo {
     cursor: pointer;
 
-    img {
+    .img-logo {
       display: block;
-      width: clamp(28px, 9vw, 45px);
+      width: clamp(18px, 8.5vw, 45px);
       height: auto;
     }
   }
@@ -96,13 +95,10 @@
        Busca (linha inteira no mobile)
        ============================== */
   .header-busca {
-    order: 2; /* força descer no mobile */
+    order: 2;
     width: 100%;
-    padding: 1rem 0.875rem; /* alinhado ao respiro lateral */
-
+    padding: 0.3rem 0;
     box-sizing: border-box;
-    padding-left: calc(0rem + env(safe-area-inset-left));
-    padding-right: calc(0rem + env(safe-area-inset-right));
   }
 
   /* ==============================
@@ -118,48 +114,52 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
+
+      .user-text {
+        display: flex;
+        display: none;
+        flex-direction: column;
+        align-items: flex-end;
+        font-size: 0.9rem;
+        font-weight: 500;
+        width: max-content;
+        color: var(--azul);
+
+        .user-logout-btn {
+          color: var(--vermelho);
+          padding: 0;
+        }
+      }
     }
 
     .user-link {
-      align-items: center;
-
       .user-icon {
         display: block;
-        width: clamp(20px, 8.5vw, 32px);
-        height: clamp(20px, 8vw, 32px);
+        width: clamp(18px, 6vw, 30px);
+        height: auto;
       }
-
-      span {
-        display: none;
-      } /* só mostra no ≥768px */
-    }
-
-    .user-logout-btn {
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      color: var(--vermelho);
     }
 
     /* Visitante */
     .cadastro-btn {
+      gap: 5px;
       img {
-        width: 28px;
-        height: 28px;
+        width: clamp(18px, 6vw, 30px);
+        height: auto;
       }
+
       span {
         display: none;
-      } /* só mostra no ≥768px */
+        padding-right: 5px;
+      }
     }
 
-    /* Carrinho (agora a classe está no botão/link, não na IMG) */
+    /* Carrinho */
     .carrinho-btn {
       img {
-        width: 32px;
-        height: 30px;
+        width: clamp(20px, 7vw, 35px);
+        height: auto;
       }
-      span {
-        display: none;
-      } /* só mostra no ≥768px */
     }
   }
 }
@@ -176,7 +176,6 @@
 
 /* ==============================
      Tablet / Desktop (≥768px)
-     - Tudo em uma linha
      ============================== */
 @media (min-width: 768px) {
   .header {
@@ -186,14 +185,11 @@
     justify-content: flex-start;
     flex-wrap: nowrap;
     gap: var(--gap-md);
-    padding-left: 1rem;
-    padding-right: 1rem;
 
-    /* Ordenação dos irmãos:
-         .header-menu | .logo | .header-busca (flex:1) | .header-actions */
     .header-menu {
       order: 0;
     }
+
     .logo {
       order: 1;
     }
@@ -203,45 +199,26 @@
       flex: 1 1 auto;
       padding: 0;
       max-width: none;
-      padding-right: 100px; /* preservado do seu design */
+      padding-right: 100px;
     }
 
     .header-actions {
       order: 3;
-      gap: 30px;
+      gap: 10px;
       align-items: center;
 
       /* Mostrar textos no desktop */
       .user-link span,
-      .cadastro-btn span,
-      .carrinho-btn span {
+      .cadastro-btn span {
         display: inline-block;
       }
 
-      .cadastro-btn img {
-        width: 30px;
-        height: 30px;
-      }
-      .carrinho-btn img {
-        width: 40px;
-        height: 38px;
+      .user-box {
+        .user-text {
+          display: flex;
+        }
       }
     }
 
-    /* Logo maior no desktop */
-    .logo img {
-      width: 73px;
-      height: 60px;
-    }
-  }
-}
-
-/* ==============================
-     Desktop largo (≥992px)
-     ============================== */
-@media (min-width: 992px) {
-  .header {
-    padding-left: 0;
-    padding-right: 0;
   }
 }
