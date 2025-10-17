@@ -29,8 +29,8 @@
 /* Estilo do item de categoria no carrossel */
 .categorias_grid {
   display: flex;
-  flex-wrap: nowrap; /* Impede que os itens quebrem a linha */
-  gap: 10px; /* Espaçamento entre os itens */
+  flex-wrap: nowrap; 
+  gap: 10px; 
 }
 
 .categorias_grid button {
@@ -68,8 +68,8 @@
 }
 
 .categorias_grid p {
-  width: 50px;
-  font-size: 0.75rem;
+  width: 51px;
+  font-size: 0.5rem;
   font-weight: 800;
   text-transform: uppercase;
   color: var(--azul);
@@ -77,6 +77,7 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   text-align: center;
+
 }
 
 /* =======================================
