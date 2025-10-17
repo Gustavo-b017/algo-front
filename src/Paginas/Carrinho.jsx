@@ -1,6 +1,9 @@
 // src/Paginas/Carrinho.jsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// 1. Remova a importação direta
+// import axios from 'axios'; 
+// 2. Importe a instância 'api'
+import { api } from '../lib/api'; 
 import Footer from '../Componentes/Footer';
 import Header from '../Componentes/Header';
 import { useNavigate } from 'react-router-dom';
@@ -13,20 +16,16 @@ import '/public/style/cardCarrinho.scss';
 import '/public/style/footer.scss';
 import '/public/style/produtoDestaque.scss';
 
-const API_URL = import.meta.env.VITE_API_URL;
-// const API_URL = 'http://127.0.0.1:5000';
-
 function Carrinho() {
     const [produtos, setProdutos] = useState([]);
     const [carregando, setCarregando] = useState(true);
-    const [mensagem, setMensagem] = useState('');
     const navigate = useNavigate();
-
 
     const buscarProdutosCarrinho = async () => {
         setCarregando(true);
         try {
-            const res = await axios.get(`${API_URL}/carrinho`);
+            // 3. Use 'api.get'
+            const res = await api.get('/carrinho');
             if (res.data.success) {
                 setProdutos(res.data.produtos);
             }
@@ -43,9 +42,8 @@ function Carrinho() {
 
     const handleRemoverItem = async (id_api_externa) => {
         try {
-            // Usando a nova rota POST com o corpo da requisição
-            await axios.post(`${API_URL}/carrinho/produto/remover`, { id_api_externa });
-            // Recarrega a lista de produtos após a remoção
+            // 4. Use 'api.post'
+            await api.post('/carrinho/produto/remover', { id_api_externa });
             buscarProdutosCarrinho();
         } catch (error) {
             console.error("Erro ao remover o item:", error);
@@ -55,15 +53,13 @@ function Carrinho() {
 
     // FUNÇÃO para atualizar a quantidade
     const handleUpdateQuantidade = async (id_api_externa, novaQuantidade) => {
-        // Impede que a quantidade seja menor que 1
         if (novaQuantidade < 1) return;
-
         try {
-            await axios.post(`${API_URL}/carrinho/produto/atualizar-quantidade`, {
+            // 5. Use 'api.post'
+            await api.post('/carrinho/produto/atualizar-quantidade', {
                 id_api_externa,
                 quantidade: novaQuantidade
             });
-            // Recarrega o carrinho para atualizar a interface
             buscarProdutosCarrinho();
         } catch (error) {
             console.error("Erro ao atualizar a quantidade:", error);
@@ -80,7 +76,7 @@ function Carrinho() {
     const subtotal = produtos.reduce((acc, item) => acc + (item.quantidade * item.preco_final), 0);
     const totalItens = produtos.reduce((acc, item) => acc + item.quantidade, 0);
 
-        const handleLinhaClick = (produto) => {
+    const handleLinhaClick = (produto) => {
         const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
         navigate(`/produto?${params.toString()}`);
     };
