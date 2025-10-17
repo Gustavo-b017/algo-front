@@ -1,7 +1,6 @@
 // src/Componentes/CardCarrinho.jsx
 import React from 'react';
 import '/public/style/cardCarrinho.scss';
-import '/public/style/produtoDestaque.scss';
 import trash_icon from '../../public/imagens/icones/trash.svg'
 import plus_icon from '../../public/imagens/icones/plus.svg'
 

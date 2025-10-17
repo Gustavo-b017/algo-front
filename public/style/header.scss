@@ -1,125 +1,50 @@
-/* header.scss */
+/* public/style/header.scss */
 
-/* Variáveis rápidas */
+/* ==============================
+   Design tokens
+   ============================== */
 :root {
   --azul: #022e4c;
   --bg: #fff;
+  --vermelho: #ce0f2d;
+
+  --gap-2xs: 0.35rem;
   --gap-xs: 0.5rem;
   --gap-sm: 1rem;
   --gap-md: 1.5rem;
+
   --radius: 10px;
+
   --header-vertical-padding-mobile: 0.6rem;
   --header-vertical-padding-desktop: 20px;
+
+  --font-12: 12px;
+  --font-13: 13px;
 }
 
-/* Container principal - mobile first */
+/* ==============================
+     Header (mobile-first)
+     ============================== */
 .header {
   box-sizing: border-box;
   width: 100%;
   background: var(--bg);
   padding: var(--header-vertical-padding-mobile) 0;
+
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
   align-items: stretch;
   justify-content: space-between;
+  gap: var(--gap-xs);
 
-  /* limite centralizado no desktop, mas no mobile usamos largura total */
+  /* Container central no desktop */
   @media (min-width: 992px) {
     max-width: 1200px;
     margin: 0 auto;
   }
 
-  /* linha superior: menu / logo / actions */
-  &-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 0.875rem;
-    /* padding lateral mínimo no mobile */
-    gap: var(--gap-sm);
-  }
-
-  /* Botão de menu */
-  .header-menu {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    .menu-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: none;
-      padding: 0.25rem;
-      cursor: pointer;
-
-      img {
-        width: clamp(8px, 8vw, 35px);
-        display: block;
-      }
-    }
-
-    /* Logo central - mobile: centro flexível */
-    .logo {
-      cursor: pointer;
-
-      img {
-        width: clamp(28px, 9vw, 45px);
-        height: auto;
-      }
-    }
-  }
-
-  /* ações (user + carrinho) */
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: var(--azul);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 0.25rem;
-
-      img {
-        display: block;
-        width: clamp(20px, 8.5vw, 40px);
-        height: clamp(20px, 8vw, 30px);
-      }
-
-      span {
-        display: none;
-      }
-    }
-  }
-
-  /* ----------------------------------------------------------
-     BUSCA: no mobile ocupa linha inteira abaixo da header-top,
-     no desktop volta a ficar entre logo e ações.
-     ---------------------------------------------------------- */
-  .header-busca {
-    order: 2;
-    /* força a ficar abaixo no mobile */
-    width: 100%;
-    padding: 1rem 0.875rem;
-    /* alinhamento com header-top */
-    box-sizing: border-box;
-
-    /* para evitar que a busca grude nas bordas em phones com notch */
-    padding-left: calc(0rem + env(safe-area-inset-left));
-    padding-right: calc(0rem + env(safe-area-inset-right));
-  }
-
-  /* botões genéricos do header (aplicado em header-top) */
+  /* Reset base para botões/links dentro do header */
+  a,
   button {
     display: inline-flex;
     align-items: center;
@@ -127,25 +52,132 @@
     background: none;
     border: none;
     color: var(--azul);
-    font-size: 13px;
+    font-size: var(--font-13);
     font-weight: 700;
     cursor: pointer;
-    gap: 0.35rem;
+    gap: var(--gap-2xs);
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  /* ==============================
+       Menu (lado esquerdo)
+       ============================== */
+  .header-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+
+    .menu-btn {
+      padding: 0.25rem;
+
+      img {
+        display: block;
+        width: clamp(16px, 6vw, 32px);
+        height: auto;
+      }
+    }
+  }
+
+  /* ==============================
+       Logo (irmão de .header-menu)
+       ============================== */
+  .logo {
+    cursor: pointer;
+
+    img {
+      display: block;
+      width: clamp(28px, 9vw, 45px);
+      height: auto;
+    }
+  }
+
+  /* ==============================
+       Busca (linha inteira no mobile)
+       ============================== */
+  .header-busca {
+    order: 2; /* força descer no mobile */
+    width: 100%;
+    padding: 1rem 0.875rem; /* alinhado ao respiro lateral */
+
+    box-sizing: border-box;
+    padding-left: calc(0rem + env(safe-area-inset-left));
+    padding-right: calc(0rem + env(safe-area-inset-right));
+  }
+
+  /* ==============================
+       Ações (conta/cadastro + carrinho)
+       ============================== */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+
+    /* Grupo logado */
+    .user-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-link {
+      align-items: center;
+
+      .user-icon {
+        display: block;
+        width: clamp(20px, 8.5vw, 32px);
+        height: clamp(20px, 8vw, 32px);
+      }
+
+      span {
+        display: none;
+      } /* só mostra no ≥768px */
+    }
+
+    .user-logout-btn {
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      color: var(--vermelho);
+    }
+
+    /* Visitante */
+    .cadastro-btn {
+      img {
+        width: 28px;
+        height: 28px;
+      }
+      span {
+        display: none;
+      } /* só mostra no ≥768px */
+    }
+
+    /* Carrinho (agora a classe está no botão/link, não na IMG) */
+    .carrinho-btn {
+      img {
+        width: 32px;
+        height: 30px;
+      }
+      span {
+        display: none;
+      } /* só mostra no ≥768px */
+    }
   }
 }
 
-/* Hover effects - polidos */
+/* ==============================
+     Efeitos de hover
+     ============================== */
 .header .menu-btn:hover,
+.header .header-actions a:hover,
 .header .header-actions button:hover {
   transform: translateY(-2px) scale(1.02);
   transition: transform 160ms ease;
 }
 
-/* ========================
-   DESKTOP / TABLET (maior que 768px)
-   - restaura layout em uma única linha
-   - mantém padding e espaçamentos do seu design anterior
-   ======================== */
+/* ==============================
+     Tablet / Desktop (≥768px)
+     - Tudo em uma linha
+     ============================== */
 @media (min-width: 768px) {
   .header {
     padding: var(--header-vertical-padding-desktop) 0;
@@ -157,27 +189,13 @@
     padding-left: 1rem;
     padding-right: 1rem;
 
-    /* no desktop, reorganizamos os elementos como antes:
-       .header-menu | .logo | .header-busca (flex:1) | .header-actions */
-    .header-top {
-      display: contents;
-      /* permite as crianças ficarem na mesma linha do .header */
-    }
-
+    /* Ordenação dos irmãos:
+         .header-menu | .logo | .header-busca (flex:1) | .header-actions */
     .header-menu {
       order: 0;
-      margin-right: 0;
     }
-
     .logo {
-      flex: 0 0 auto;
       order: 1;
-      margin-right: 0;
-
-      img {
-        width: 73px;
-        height: 60px;
-      }
     }
 
     .header-busca {
@@ -185,8 +203,7 @@
       flex: 1 1 auto;
       padding: 0;
       max-width: none;
-      padding-right: 100px;
-      /* mantém seu padding-right atual para desktop */
+      padding-right: 100px; /* preservado do seu design */
     }
 
     .header-actions {
@@ -194,50 +211,37 @@
       gap: 30px;
       align-items: center;
 
-      button {
-        span {
-          display: inline-block;
-        }
-
-        /* mostrar texto no desktop */
+      /* Mostrar textos no desktop */
+      .user-link span,
+      .cadastro-btn span,
+      .carrinho-btn span {
+        display: inline-block;
       }
 
-      .cadastro-btn {
-        img {
-          width: 30px;
-          height: 30px;
-        }
+      .cadastro-btn img {
+        width: 30px;
+        height: 30px;
       }
+      .carrinho-btn img {
+        width: 40px;
+        height: 38px;
+      }
+    }
 
-      .carrinho-btn {
-        img {
-          width: 40px;
-          height: 38px;
-        }
-      }
+    /* Logo maior no desktop */
+    .logo img {
+      width: 73px;
+      height: 60px;
     }
   }
 }
 
-/* Desktop largo - limita container */
+/* ==============================
+     Desktop largo (≥992px)
+     ============================== */
 @media (min-width: 992px) {
   .header {
     padding-left: 0;
     padding-right: 0;
   }
-}
-
-/* Pequenas melhorias de acessibilidade & truncamento de texto */
-.header .logo img {
-  display: block;
-}
-
-.header .header-actions button {
-  line-height: 1;
-}
-
-.header .mu-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

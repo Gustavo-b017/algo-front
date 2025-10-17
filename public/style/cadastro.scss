@@ -1,318 +1,388 @@
-// public/style/cadastro.scss
-
-/* Variáveis de cor */
+/* ==============================
+   Tokens
+   ============================== */
 :root {
-    --branco: #fff;
-    --azul-escuro: rgba(33, 33, 33, 1);
-    --azul-claro: #14354c;
-    --cinza-texto: #666;
-    --borda-input: #ccc;
-    --sombra-card: rgba(0, 0, 0, 0.1);
+  --bg: #fff;
+  --brand-azul: #022e4c;
+
+  --text-1: #212121;
+  --text-2: #666666;
+
+  --border-100: #e0e0e0;
+  --shadow-100: rgba(0, 0, 0, 0.1);
+
+  --radius-sm: 9px;
+  --radius-md: 13px;
+  --radius-lg: 20px;
+
+  --gap-xs: 8px;
+  --gap-sm: 12px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+
+  --fs-12: 12px;
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+
+  --container-w: 1200px;
 }
 
-/* Estilos globais da página */
+/* ==============================
+     Layout base
+     ============================== */
 .cadastro-page-container {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  box-sizing: border-box;
+  background: var(--bg);
 }
 
 .background-azul {
-    position: absolute;
-    bottom: 0;
-    width: 90%;
-    height: 60vh;
-    background-color: #022e4c;
-    border-top-left-radius: 13px;
-    border-top-right-radius: 13px;
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  width: 90%;
+  height: 89vh;
+  background-color: #022e4c;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  z-index: 1;
 }
 
-/* Os elementos que precisam ficar por cima do fundo azul */
+/* Elementos que ficam acima do fundo azul */
 .cadastro-header,
 .cadastro-form-card {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
 .cadastro-header {
-    width: 100%;
-    max-width: 400px;
-    text-align: left;
-    padding-bottom: 40px;
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+  padding-bottom: 40px;
 
-    .cadastro-logo {
-        width: 40px;
-        height: auto;
-    }
+  .cadastro-logo {
+    width: 40px;
+    height: auto;
+    display: block;
+  }
 }
 
-/* Estilos do cartão de formulário */
+/* ==============================
+     Cartão do formulário
+     ============================== */
 .cadastro-form-card {
-    width: 90%;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px var(--sombra-card);
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center;
+  width: 90%;
+  max-width: 520px;
+  background-color: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px var(--shadow-100);
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .card-header {
-    margin-bottom: 30px;
-    width: 150px;
-    margin: 0 auto;
+  margin-bottom: 30px;
 }
 
 .card-header h2 {
-    font-size: 1.6rem;
-    color: rgba(33, 33, 33, 1);
-    margin-bottom: 1px;
-    text-transform: none;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-style: bold;
-    line-height: 37.5px;
-    letter-spacing: -0.5px;
+  font-size: 1.6rem;
+  color: var(--text-1);
+  margin-bottom: 4px;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .card-header p {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--cinza-texto);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-2);
 }
 
-/* Estilos do formulário */
+/* ==============================
+     Formulário
+     ============================== */
 .cadastro-form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
 }
 
 .form-group {
-    text-align: left;
-    position: relative;
-    border: 1px solid rgba(224, 224, 224, 1);
-    padding: 10px;
-}
+  text-align: left;
+  position: relative;
+  border: 1px solid var(--border-100);
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: border-color 0.2s ease;
+  background: #fff;
 
-.form-group:hover {
-    border-color: rgba(33, 33, 33, 1);
-}
+  &:hover {
+    border-color: var(--text-1);
+  }
 
-.form-group label {
-    font-size: 1rem;
-    color: var(--cinza-texto);
+  label {
+    font-size: var(--fs-14);
+    color: var(--text-2);
     display: block;
-    margin-bottom: 0px;
-}
+    margin-bottom: 4px;
+  }
 
-.form-group input {
+  input {
     width: 100%;
     border: none;
-    font-size: 1rem;
+    font-size: var(--fs-16);
     box-sizing: border-box;
+    padding: 6px 0;
+    color: var(--text-1);
+
+    &:focus {
+      outline: none;
+    }
+  }
 }
 
-.form-group input:focus {
-    outline: none;
-}
-
+/* Campo senha */
 .password-input-wrapper {
-    position: relative;
-}
+  position: relative;
 
-.password-input-wrapper input {
-    padding-right: 100px;
-}
+  input {
+    padding-right: 44px; /* espaço pro botão de olho */
+  }
 
-.eye-icon {
+  .toggle-password {
     position: absolute;
     top: 50%;
-    right: 0px;
+    right: 6px;
     transform: translateY(-50%);
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: var(--text-2);
+
+    svg {
+      display: block;
+    }
+  }
 }
 
-.eye-icon svg {
-    color: var(--cinza-texto);
-}
-
-/* Estilos do checkbox */
+/* Checkbox termos */
 .checkbox-group {
-    display: flex;
-    align-items: center;
-    margin: 15px 0;
-    gap: 8px;
-    font-size: 1rem;
-    color: var(--cinza-texto);
+  display: flex;
+  align-items: center;
+  margin: 6px 0 2px;
+  gap: 8px;
+  font-size: var(--fs-14);
+  color: var(--text-2);
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border-100);
+    accent-color: var(--brand-azul);
+  }
+
+  .link-inline {
+    color: var(--brand-azul);
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
-.checkbox-group input[type="checkbox"] {
-    width: 13px;
-    height: 13px;
-    border: 1px solid var(--borda-input);
-    accent-color: var(--azul-escuro);
-}
-
-/* Botão de criar conta */
+/* Botão principal */
 .create-account-btn {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 9px;
-    background-color: var(--azul-escuro);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--text-1); /* teu “azul-escuro” original era #212121 */
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
 }
 
-.create-account-btn:hover {
-    background-color: #011f33;
+/* Mensagens */
+.form-feedback {
+  min-height: 24px; /* evita “pular” layout */
+  margin-top: 6px;
+
+  .msg {
+    margin: 0;
+    font-size: var(--fs-14);
+  }
+  .msg.error {
+    color: tomato;
+  }
+  .msg.success {
+    color: seagreen;
+  }
 }
 
-/* Estilos do separador */
+/* Separador social */
 .separator {
-    margin: 10px 0;
-    font-size: 12px;
-    color: var(--cinza-texto);
-    position: relative;
-}
+  margin: 14px 0 10px;
+  font-size: var(--fs-12);
+  color: var(--text-2);
+  position: relative;
 
-.separator::before,
-.separator::after {
-    content: '';
+  &::before,
+  &::after {
+    content: "";
     position: absolute;
     top: 50%;
     width: 40%;
     height: 1px;
-    background-color: var(--borda-input);
-}
-
-.separator::before {
+    background-color: var(--border-100);
+  }
+  &::before {
     left: 0;
-}
-
-.separator::after {
+  }
+  &::after {
     right: 0;
+  }
 }
 
-/* Estilos dos botões sociais */
+/* Login social */
 .social-login {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
 
-.social-btn {
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--borda-input);
+  .social-btn {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--border-100);
     border-radius: 50%;
     background-color: #fff;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     padding: 2px;
-    align-items: center;
-}
-
-.social-btn:hover {
-    transform: translateY(-2px);
-}
-
-.social-btn img {
-    width: 100%;
-    height: 100%;
-}
-
-/* Estilos do link de login */
-.login-link {
-    margin-top: 15px;
-    font-size: 1rem;
-    color: var(--cinza-texto);
-}
-
-.login-link a {
-    color: var(--azul-escuro);
-    font-weight: 800;
-}
-
-.login-link a:hover {
-    text-decoration: underline;
-}
-
-/* =======================================
-// MEDIA QUERIES PARA DESKTOP
-// ======================================= */
-@media (min-width: 1024px) {
-
-    .cadastro-page-container {
-        padding: 0%;
-    }
-
-    /* Fundo azul do desktop */
-    .background-azul {
-        top: 0;
-        width: 50%;
-        height: 100vh;
-        margin: 0 auto;
-        transform: translateY(-50%);
-        border-bottom-left-radius: 13px;
-        border-bottom-right-radius: 13px;
-    }
-
-    .cadastro-form-card {
-        width: 30%;
-        padding: 30px 80px;
-
-        .card-header {
-            width: 100%;
-        }
-    }
-
-    .cadastro-header {
-        max-width: none;
-        padding: 20px 0 50px 50px;
-
-        .cadastro-logo {
-            width: 70px;
-            height: auto;
-        }
-    }
-
-    .create-account-btn {
-        padding: 15px;
-    }
-
-    .social-btn {
-        border: none;
-    }
-
-.rodapé-cadastro {
-    position: absolute;
-    width: 100%;
-    bottom: 0%;
-    
-    /* Propriedades para centralização vertical */
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding-top: 10px;
 
-    text-align: center;
-    background-color: #011f33;
-    font-size: 0.7rem;
-    color: var(--cinza-texto);
+    &:hover {
+      transform: translateY(-2px);
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
+/* Link para login */
+.login-link {
+  margin-top: 10px;
+  font-size: var(--fs-14);
+  color: var(--text-2);
+
+  a {
+    color: var(--text-1);
+    font-weight: 800;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Rodapé — preserva tua classe com acento e cria um alias sem acento */
+.rodapé-cadastro,
+.rodape-cadastro {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  background-color: #011f33;
+  font-size: 0.78rem;
+  color: #ffffff; /* melhora contraste */
+  padding: 10px 12px;
+}
+
+/* ==============================
+     Acessibilidade de foco
+     ============================== */
+.cadastro-form-card a:focus-visible,
+.cadastro-form-card button:focus-visible,
+.cadastro-form-card input:focus-visible {
+  outline: 2px solid var(--brand-azul);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ==============================
+     Desktop
+     ============================== */
+@media (min-width: 1024px) {
+  .cadastro-page-container {
+    padding: 0;
+  }
+
+  /* Fundo azul do desktop */
+  .background-azul {
+    top: 0;
+    width: 50%;
+    height: 100vh;
+    margin: 0 auto;
+    transform: translateY(-50%);
+    border-bottom-left-radius: 13px;
+    border-bottom-right-radius: 13px;
+  }
+
+  .cadastro-header {
+    max-width: none;
+    padding: 20px 0 50px 50px;
+
+    .cadastro-logo {
+      width: 70px;
+      height: auto;
+    }
+  }
+
+  .cadastro-form-card {
+    width: 30%;
+    min-width: 420px;
+    padding: 30px 40px;
+  }
+
+  .create-account-btn {
+    padding: 15px;
+  }
+
+  .social-login .social-btn {
+    border: none;
+  }
 }

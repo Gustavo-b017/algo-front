@@ -1,11 +1,10 @@
 // src/Paginas/Produto.jsx
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { api } from '../lib/api'; // Use a instância 'api' configurada
+import { api } from '../lib/api';
 import Item from '../Componentes/Item';
 import Sugestoes from '../Componentes/Sugestoes';
 import Header from '../Componentes/Header';
-import Categorias from '../Componentes/Categorias';
 import ProdutoDestaque from '../Componentes/ProdutoDestaque';
 import Footer from '../Componentes/Footer';
 import Avaliacoes from '../Componentes/avaliacoes';
@@ -52,17 +51,17 @@ function Produto() {
         setCarregando(false);
         return;
       }
-      
+
       setCarregando(true);
       setErro(null); // Limpa erros anteriores
-      
+
       try {
         const params = new URLSearchParams({ id });
         // Adiciona o nome do produto aos parâmetros APENAS se ele existir na URL
         if (nomeProduto) {
           params.set('nomeProduto', nomeProduto);
         }
-        
+
         // Requisição agora usa a instância 'api' que já tem o timeout e baseURL
         const res = await api.get(`/produto_detalhes?${params.toString()}`);
         setDadosCompletos(res.data);
@@ -94,10 +93,10 @@ function Produto() {
       </div>
     );
   }
-  
+
   // Renderização segura caso dadosCompletos ou item ainda seja nulo
   if (!dadosCompletos || !dadosCompletos.item) {
-     return (
+    return (
       <div className="empty-state-container">
         <h1>Produto não encontrado.</h1>
       </div>
@@ -107,7 +106,7 @@ function Produto() {
   return (
     <div className="container">
       <Header />
-      
+
       <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
 
       <Sugestoes

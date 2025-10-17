@@ -1,8 +1,8 @@
-/* src/Estilosao/tabela.css */
+/* public/style/cardProduto.scss */
 
 :root {
     --azul: #022e4c;
-    --vermelho: #ad3b4c;
+    --vermelho: #ce0f2d;
     --branco: #ffffff;
     --cinza_claro: #e5e5e5;
     --cinza_escuro: #666968;
@@ -169,25 +169,20 @@
 /* Controles de paginação */
 .tabela-controle {
     display: flex;
-    margin: 2rem auto;
+    margin: 2rem 0;
     font-size: 1rem;
     font-weight: 600;
     justify-content: center;
     align-items: center;
-    padding: 0;
+    flex-wrap: wrap;
 }
 
 .tabela-controle button {
-    display: flex;
     padding: 0.5rem 1.4rem;
     font-size: 0.9rem;
     background-color: var(--vermelho);
     color: var(--branco);
     border: none;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    padding: 10px 7px;
     border-radius: 6px;
     cursor: pointer;
 }
@@ -219,7 +214,6 @@
 .paginacao-info {
     text-align: center;
     flex: 0.5;
-    min-width: 150px;
     color: var(--azul);
 }
 
@@ -228,61 +222,61 @@
 // ESTILOS PARA DESKTOP (SOBRESCRITA)
 // ======================================= */
 @media (min-width: 768px) {
-    
+
     .cards-grid {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         margin: 0 auto;
         gap: 15px;
     }
-    
+
     .produto-card {
         height: auto;
-        
+
         .produto-imagem {
             height: 150px;
             min-height: 150px;
         }
-        
+
         .add-carrinho-btn {
             width: 40px;
             height: 40px;
             bottom: 190px;
             //display: none;
         }
-        
+
         .produto-info {
             padding: 15px;
-            
+
             .produto-nome {
                 font-size: 1rem;
                 font-weight: bold;
                 line-height: 1.4;
                 margin-top: 5px;
             }
-            
+
             .produto-precos {
                 line-height: 1.5;
-                
+
                 .preco-antigo {
                     font-size: 1rem;
                 }
-                
+
                 .preco-novo {
                     color: #888;
                     font-size: 1rem;
                 }
-                
+
                 .preco-principal {
                     font-size: 1.5rem;
                 }
             }
         }
-        
+
         .produto-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(55, 50, 50, 0.683);
         }
-        
+
         .tag-message {
             font-size: 12px;
             width: 30%;

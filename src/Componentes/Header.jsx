@@ -15,14 +15,19 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
 
     return (
         <div className="header">
+            {/* Menu (toggle futuro) */}
             <div className="header-menu">
-                <button className="menu-btn"><img src={menu_icon} alt={"Menu"} /></button>
-
-                <div className="logo" onClick={() => window.location.href = "/"}>
-                    <img src={logo} alt={"Rede Ancora - Logo"} />
-                </div>
+                <button type="button" className="menu-btn" aria-label="Abrir menu">
+                    <img src={menu_icon} alt="Menu" />
+                </button>
             </div>
 
+            {/* Logo como irmão direto (mais previsível para o CSS e acessível) */}
+            <Link to="/" className="logo" aria-label="Página inicial">
+                <img src={logo} alt="Rede Ancora - Logo" />
+            </Link>
+
+            {/* Busca ocupa a linha inteira no mobile */}
             <div className="header-busca">
                 <Pesquisa
                     query={query}
@@ -34,21 +39,29 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
                 />
             </div>
 
+            {/* Ações (login/conta + carrinho) */}
             <div className="header-actions">
                 {ready && (
                     user ? (
-                        <div className="user-box" style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                        <div className="user-box">
                             <Link to="/perfil" className="user-link" title="Minha conta">
-                                {/* Mostra nome/primeiro nome; ajuste ao seu gosto */}
-                                {user.nome?.split(" ")[0] || "Minha conta"}
+                                <img src={user_icon} alt="" aria-hidden="true" className="user-icon" />
+                                <span>{user.nome?.split(" ")[0] || "Minha conta"}</span>
                             </Link>
-                            <button onClick={logout} className="user-logout-btn">Sair</button>
+                            <button type="button" onClick={logout} className="user-logout-btn">Sair</button>
                         </div>
                     ) : (
-                        <Link to="/login" className="user-link">Entre/Cadastro</Link>
+                        <Link to="/login" className="cadastro-btn">
+                            <img src={user_icon} alt="" aria-hidden="true" />
+                            <span>Entre/Cadastro</span>
+                        </Link>
                     )
                 )}
-                <button onClick={() => window.location.href = "/carrinho"} ><img src={carrinho_icon} alt={"Carrinho icon"} className="carrinho-btn" /><span>Carrinho</span></button>
+
+                <Link to="/carrinho" className="carrinho-btn" title="Abrir carrinho">
+                    <img src={carrinho_icon} alt="Carrinho" />
+                    <span>Carrinho</span>
+                </Link>
             </div>
         </div>
     );

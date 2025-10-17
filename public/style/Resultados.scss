@@ -1,349 +1,91 @@
-/* =========================================================
-   VARIÁVEIS
-   ========================================================= */
-:root {
-  --azul: #0b66c3;
-  --azul-escuro: #022e4c;
-  --cinza-100: #f9fafb;
-  --cinza-200: #f0f2f4;
-  --cinza-300: #e6e8ec;
-  --cinza-400: #d4d8de;
-  --cinza-500: #a7b1bb;
-  --texto-1: #2b3640;
-  --texto-2: #4f5b66;
-  --texto-3: #445566;
-  --shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
-}
-
-/* =========================================================
-     REGRAS GERAIS
-     ========================================================= */
-body.no-scroll {
-  overflow: hidden;
-}
-
-/* =========================================================
-     LAYOUT – PÁGINA DE RESULTADOS (MOBILE FIRST)
-     ========================================================= */
+/* ==============================
+// ESTILOS PADRÃO (MOBILE-FIRST)
+// =============================*/
 .search-page-container {
   display: flex;
-  flex-direction: column; /* mobile: coluna */
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
   padding: 0;
   position: relative;
 }
 
-.filters-mobile-bar {
+/* Container dos botões em mobile */
+.opcoes-mobile {
+  display: flex;
   width: 100%;
-  padding: 0 0.75rem;
-  margin: 0.5rem 0;
-}
-.btn-open-filters {
-  width: 100%;
-  border: 1px solid var(--cinza-400);
-  background: var(--cinza-200);
-  color: #787a7c;
-  font-weight: 700;
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-.btn-open-filters:hover {
-  background: #fff;
-  color: var(--azul-escuro);
-  border-color: var(--azul);
+  gap: 1rem;
 }
 
-/* Área dos resultados */
+.opcoes-mobile button {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  background-color: rgba(217, 217, 217, 1);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: rgba(120, 122, 124, 1);
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.opcoes-mobile button:hover {
+  background-color: #f0f0f0;
+  color: #022e4c;
+}
+
+.opcoes-mobile .ativo {
+  background-color: #022e4c;
+  color: #fff;
+  border-color: #022e4c;
+}
+
+/* Seção de resultados da busca */
 .search-results {
   width: 100%;
-  justify-content: center;
-  min-width: 0;
 }
 
-/* Backdrop do off-canvas mobile */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 999;
-}
 
-/* =========================================================
-FILTROS – OFF-CANVAS MOBILE (70% DA LARGURA)
-========================================================= */
-.filtros-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 70%;
-  max-width: 420px;
-  height: 100vh;
-  background: #fff;
-  border-right: 1px solid var(--cinza-300);
-  padding: 16px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  transform: translateX(-100%);
-  transition: transform 0.28s ease-in-out;
-  z-index: 1000;
-}
-.filtros-container.visivel {
-  transform: translateX(0);
-}
-
-.filtros-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--cinza-300);
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-}
-.filtros-title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--texto-1);
-}
-.fechar-modal-btn {
-  background: none;
-  border: 0;
-  cursor: pointer;
-  font-size: 1.75rem;
-  color: #727678;
-}
-
-/* Blocos de filtro */
-.filtro-grupo {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 10px 0 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--cinza-300);
-}
-.filtro-label {
-  font-size: 0.92rem;
-  color: var(--texto-2);
-}
-
-.filtro-grupo select {
-  appearance: none;
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--cinza-400);
-  border-radius: 10px;
-  background: var(--cinza-100);
-  font-size: 0.95rem;
-  transition: border-color 0.2s, background 0.2s;
-}
-.filtro-grupo select:focus {
-  outline: none;
-  background: #fff;
-  border-color: var(--azul);
-}
-
-/* Radios ordenação */
-.ordenacao-radios {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.ordenacao-radios label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  color: #3e4852;
-  font-size: 0.92rem;
-}
-.ordenacao-radios input[type="radio"] {
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #999;
-  position: relative;
-}
-.ordenacao-radios input[type="radio"]:checked {
-  border-color: var(--azul);
-  box-shadow: inset 0 0 0 4px rgba(11, 102, 195, 0.25);
-}
-.ordenacao-radios input[type="radio"]:checked::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border-radius: 50%;
-  background: var(--azul);
-}
-
-/* Toggle ASC/DESC */
-.ordem-toggle {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
-}
-.ordem-toggle .ord-btn {
-  flex: 1 1 0;
-  border: 1px solid var(--cinza-400);
-  background: #fff;
-  color: var(--texto-3);
-  font-size: 0.9rem;
-  padding: 8px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.15s;
-}
-.ordem-toggle .ord-btn:hover {
-  border-color: var(--azul);
-}
-.ordem-toggle .ord-btn.active {
-  background: var(--azul);
-  color: #fff;
-  border-color: var(--azul);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-}
-
-/* Checkboxes */
-.filtro-grupo input[type="checkbox"] {
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  border: 2px solid #ffffff;
-  cursor: pointer;
-}
-.filtro-grupo input[type="checkbox"]:checked {
-  background: var(--azul);
-  border-color: var(--azul);
-}
-.filtro-grupo input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  left: 4px;
-  top: 1px;
-  width: 4px;
-  height: 8px;
-  border: 2px solid #fff;
-  border-top: 0;
-  border-left: 0;
-  transform: rotate(45deg);
-}
-
+/* =======================================
+// ESTILOS DESKTOP
+// ======================================= */
 @media (min-width: 768px) {
-  .modal-backdrop {
-    display: none;
-  }
-  
   .search-page-container {
     flex-direction: row;
+    /* Layout em linha no desktop */
     align-items: flex-start;
-    gap: 30px;
+    gap: 2rem;
+    padding: 0;
+    max-width: 1200px;
     margin: 0 auto;
-    width: 100%;
   }
-  
-  .filters-sidebar {
-    display: block;
-    width: 30%;
-    max-width: 350px;
-    min-width: 200px; /* mínimo solicitado */
-  }
-  
-  .filtros-container {
-    position: static;
-    transform: none;
-    height: auto;
-    width: 100%;
-    background: #fff;
-    border: none;
-    padding: 0;
-  }
-  .filtros-header {
-    border: 0;
-    margin: 0;
-    padding: 0;
-  }
-  .fechar-modal-btn {
+
+  /* Oculta os botões de filtro e ordenação em desktop */
+  .opcoes-mobile {
     display: none;
   }
-  
-  .filtros-container.pretty {
-    position: sticky;
-    top: 96px;
-    background: #fff;
-    border: 1px solid var(--cinza-300);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: var(--shadow);
+
+  /* Exibe a sidebar de filtros em desktop */
+  .filters-sidebar {
+    display: block;
+    flex-shrink: 0;
+    width: 20%;
   }
-  
-}
 
-.search-results {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px; /* mobile gap */
-  align-content: flex-start;
-}
+  /* Exibe a sidebar de filtros no desktop */
+  .filters-sidebar {
+    display: block;
+  }
 
-/* Mensagens/alertas devem ocupar a linha inteira */
-.feedback-message-search,
-.feedback-message,
-[role="alert"].feedback-message-search {
-  
-  width: auto;
-}
+  /* Oculta a barra de ordenação */
+  .ordenar-wrapper {
+    display: none;
+  }
 
-/* mobile: um por linha */
-.search-results > * {
-  width: auto;
-  max-width: 300px;
-  height: auto;
-}
-
-/* desktop: 300px fixos por card + gap 20px */
-@media (min-width: 992px) {
+  /* A seção de resultados da busca ocupa o espaço restante */
   .search-results {
-    gap: 20px;
+    flex-grow: 1;
   }
-  .search-results > * {
-    flex: 0 0 300px; /* largura fixa */
-    max-width: 300px;
-  }
-}
 
-/* itens de largura total (ex.: paginação) */
-.empty-state,
-.paginacao {
-  flex: 1 1 100%;
-}
-
-/* cards fluidos */
-.cards-grid{
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-/* =========================================================
-BOTÕES / AÇÕES
-========================================================= */
-.aplicar-btn {
-  width: 100%;
-  padding: 10px;
-  background: var(--azul);
-  color: #fff;
-  border: 0;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.aplicar-btn:hover {
-  background: var(--azul-escuro);
 }
