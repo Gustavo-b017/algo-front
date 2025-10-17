@@ -12,13 +12,12 @@
   flex-direction: row;
   width: 100%;
   box-sizing: border-box;
-  gap: 0.5rem;
 
   .campo-input,
   .custom-select-selected {
     width: 100%;
-    padding: 0.3rem 0.5rem;
-    font-size: 0.7rem;
+    padding: 0.4rem 1rem;
+    font-size: 1rem;
     background: #fff;
     border: 1.5px solid var(--azul);
     box-sizing: border-box;
@@ -106,7 +105,7 @@
     border-bottom: 1px solid var(--cinza_claro, #e6e6e6);
     color: var(--azul);
     transition: background 0.2s ease, color 0.2s ease;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 
     /* Arredonda o topo e base da lista */
     &:first-child {
@@ -179,7 +178,7 @@
 
     .campo-input,
     .custom-select-selected {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       padding: 0.45rem 0.75rem;
     
       border-radius: 10px !important;

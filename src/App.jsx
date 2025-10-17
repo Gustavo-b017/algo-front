@@ -9,6 +9,7 @@ import Cadastro from './Paginas/Cadastro.jsx';
 import Login from './Paginas/Login.jsx';
 import Perfil from './Paginas/Perfil.jsx';
 import RequireAuth from "./Componentes/RequireAuth.jsx";
+import "./index.scss";
 
 function App() {
   return (
