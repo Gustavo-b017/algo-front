@@ -70,7 +70,7 @@
         width: 100%;
         height: 100%;
 
-        border-top-left-radius: 8px; 
+        border-top-left-radius: 8px;
         border-top-right-radius: 8px;
 
         .produto-nome {
@@ -136,10 +136,8 @@
     box-shadow: 0 6px 12px rgba(4, 2, 64, 0.272);
 }
 
-
-// NOVO ESTILO: BOTÃO DO CARRINHO COM POSICIONAMENTO ABSOLUTO
 .add-carrinho-btn {
-    position: absolute; 
+    position: absolute;
     bottom: 115px; // 10px da borda inferior do `produto-card`
     right: 10px; // 10px da borda direita do `produto-card`
     width: 30px;
@@ -179,41 +177,42 @@
 
 .tabela-controle button {
     padding: 0.5rem 1.4rem;
-    font-size: 0.9rem;
-    background-color: var(--vermelho);
-    color: var(--branco);
+    font-size: 1rem;
+    color: var(--vermelho);
+    background-color: transparent;
     border: none;
     border-radius: 6px;
     cursor: pointer;
 }
 
 .tabela-controle button:hover {
-    background-color: var(--azul);
+    background-color: transparent;
     transition: 0.2s;
-    color: var(--branco);
+    color: var(--azul);
 }
 
 .tabela-controle button:disabled {
-    background-color: var(--cinza_escuro);
+    background-color: transparent;
+    color: var(--cinza_escuro);
     cursor: not-allowed;
 }
 
 .tabela-controle .botao-proximo {
-    background-color: var(--azul);
-    color: #fff;
+    background-color: transparent;
+    color: var(--azul);
 }
 
 .tabela-controle .botao-proximo:hover {
-    background-color: var(--vermelho);
+    color: var(--vermelho);
 }
 
 .tabela-controle .botao-proximo:disabled {
-    background-color: var(--cinza_escuro);
+    color: var(--cinza_escuro);
 }
 
 .paginacao-info {
     text-align: center;
-    flex: 0.5;
+    flex: 0.4;
     color: var(--azul);
 }
 
@@ -283,4 +282,9 @@
             width: 30%;
         }
     }
+
+    .paginacao-info {
+        flex: 0.2;
+    }
+
 }

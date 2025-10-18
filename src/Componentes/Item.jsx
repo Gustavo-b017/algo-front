@@ -110,13 +110,12 @@ function Item({ dadosItem, onSave }) {
               <span
                 className="produto-score-badge"
                 title="Relevância da busca (score da API)"
-                style={{ marginLeft: '8px', fontSize: '0.9rem', opacity: 0.85 }}
               >
                 Pontos: {formatScore(dados.score)}
               </span>
             )}
           </div>
-          <p className="produto-codigo">CÓD: <strong>{dados.id}</strong></p>
+          <p className="produto-codigo">Código:{dados.id}</p>
           <p className="produto-marca">Marca: <strong>{dados.marca}</strong></p>
 
           <div className="produto-precos">

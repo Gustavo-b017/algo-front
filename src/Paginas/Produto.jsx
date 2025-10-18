@@ -109,12 +109,10 @@ function Produto() {
 
       <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
 
-      <Sugestoes
+      {/* <Sugestoes
         dadosSimilares={dadosCompletos.similares}
         onSugestaoClick={handleSugestaoClick}
-      />
-
-      <hr />
+      /> */}
 
       <ProdutoDestaque produtoDestaque={dadosCompletos.item.nomeProduto} handleLinhaClick={handleLinhaClick} />
       <Avaliacoes />
