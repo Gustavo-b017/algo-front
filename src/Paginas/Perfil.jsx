@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth-context";
 import { authMe, authUpdateMe } from "../lib/api";
 import logo from '/public/imagens/logo_ancora.svg';
+import '../../public/style/perfil.scss';
 
 export default function Perfil() {
   const { user, setUser, ready } = useAuth();

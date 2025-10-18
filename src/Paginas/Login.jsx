@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth-context";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "/public/imagens/logo_ancora.svg";
+import "../../public/style/cadastro.scss";
 
 export default function Login() {
   const { login, user, ready } = useAuth();
@@ -58,6 +59,7 @@ export default function Login() {
             <input
               id="email"
               type="email"
+              className="cadastro-email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -70,6 +72,7 @@ export default function Login() {
             <input
               id="senha"
               type="password"
+              className="cadastro-senha"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               autoComplete="current-password"
@@ -88,6 +91,11 @@ export default function Login() {
           Ainda não tem conta? <a href="/cadastro">Crie a sua.</a>
         </p>
       </div>
+
+      <div className="rodape-cadastro" role="contentinfo">
+        <p>© 2025 pecacerta.com | Design by Gabriel de Mendonça</p>
+      </div>
+      
     </div>
   );
 }

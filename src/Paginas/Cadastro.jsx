@@ -85,6 +85,7 @@ function Cadastro() {
                         <input
                             id="primeiroNome"
                             value={primeiroNome}
+                            className="cadastro-nome"
                             onChange={(e) => setPrimeiroNome(e.target.value)}
                             required
                             disabled={loading}
@@ -99,6 +100,7 @@ function Cadastro() {
                         <input
                             id="email"
                             type="email"
+                            className="cadastro-email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -114,6 +116,7 @@ function Cadastro() {
                         <div className="password-input-wrapper">
                             <input
                                 id="senha"
+                                className="cadastro-senha"
                                 type={mostrarSenha ? "text" : "password"}
                                 value={senha}
                                 onChange={(e) => setSenha(e.target.value)}
@@ -167,10 +170,13 @@ function Cadastro() {
                         {loading ? "ENVIANDO..." : "CRIAR CONTA"}
                     </button>
 
-                    <div className="form-feedback" aria-live="polite" aria-atomic="true">
-                        {err && <p className="msg error">{err}</p>}
-                        {ok && <p className="msg success">{ok}</p>}
-                    </div>
+                    {/* Renderização condicional: só renderiza o container se houver erro OU sucesso */}
+                    {(err || ok) && (
+                        <div className="form-feedback" aria-live="polite" aria-atomic="true">
+                            {err && <p className="msg error">{err}</p>}
+                            {ok && <p className="msg success">{ok}</p>}
+                        </div>
+                    )}
                 </form>
 
                 <div className="separator" role="separator" aria-label="ou">ou se inscreva com</div>
@@ -210,7 +216,7 @@ function Cadastro() {
                 </p>
             </div>
 
-            <div className="rodapé-cadastro" role="contentinfo">
+            <div className="rodape-cadastro" role="contentinfo">
                 <p>© 2025 pecacerta.com | Design by Gabriel de Mendonça</p>
             </div>
         </div>
