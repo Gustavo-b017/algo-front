@@ -10,6 +10,7 @@ import Login from './Paginas/Login.jsx';
 import Perfil from './Paginas/Perfil.jsx';
 import RequireAuth from "./Componentes/RequireAuth.jsx";
 import "./index.scss";
+import "/public/style/notificacoes.scss";
 
 function App() {
   return (

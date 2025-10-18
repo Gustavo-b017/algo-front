@@ -138,7 +138,7 @@ function Carrinho() {
     }
 
     return (
-        <div className="page carrinho-page">
+        <div className="container">
             <Header />
             <main className="main-content">
                 <h2 className="carrinho-titulo">Meu Carrinho</h2>

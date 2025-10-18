@@ -57,7 +57,7 @@ function ResumoCompra({ subtotal, totalItens }) {
             {/* Seção de Ações */}
             <div className="resumo-botoes-acoes">
                 <button className="finalizar-compra-btn">Finalizar Compra</button>
-                <button className="escolher-mais-btn">Escolher mais produtos</button>
+                <button className="escolher-mais-btn" onClick={() => navigate("/")}>Escolher mais produtos</button>
             </div>
         </div>
     );
