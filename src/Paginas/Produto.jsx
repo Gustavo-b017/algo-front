@@ -8,6 +8,7 @@ import Header from '../Componentes/Header';
 import ProdutoDestaque from '../Componentes/ProdutoDestaque';
 import Footer from '../Componentes/Footer';
 import Avaliacoes from '../Componentes/avaliacoes';
+import { useAuth } from '../contexts/auth-context';
 
 function Produto() {
   const [searchParams] = useSearchParams();
@@ -15,12 +16,16 @@ function Produto() {
   const [erro, setErro] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const navigate = useNavigate();
+  const { fetchCartCount } = useAuth(); // NOVO: Consumir fetchCartCount
 
   const salvarProduto = async (dadosDoItem) => {
     try {
       // Requisição agora usa a instância 'api' que injeta o token
       const res = await api.post('/salvar_produto', dadosDoItem);
+
+      fetchCartCount(); // NOVO: Sincroniza o contador no cabeçalho
       alert(res.data.message);
+      
     } catch (error) {
       console.error("Erro ao salvar produto:", error);
       // O interceptor em api.js já redireciona para /login em caso de 401

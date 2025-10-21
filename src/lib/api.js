@@ -137,11 +137,31 @@ export async function signUpAndLogin({ nome, email, senha }) {
 // ---- carrinho ---------------------------------------------------------------
 // Ajuste os paths abaixo se suas rotas forem diferentes no back.
 export const cartGet = () => unwrap(api.get("/carrinho"));
-export const cartAdd = ({ id_api_externa, quantidade = 1 }) =>
-  unwrap(api.post("/carrinho/produto/adicionar", { id_api_externa, quantidade }));
+// export const cartAdd = ({ id_api_externa, quantidade = 1 }) =>
+//   unwrap(api.post("/carrinho/produto/adicionar", { id_api_externa, quantidade }));
 export const cartUpdate = ({ id_api_externa, quantidade }) =>
   unwrap(api.post("/carrinho/produto/atualizar-quantidade", { id_api_externa, quantidade }));
 export const cartRemove = ({ id_api_externa }) =>
   unwrap(api.post("/carrinho/produto/remover", { id_api_externa }));
 export const cartClear = () => unwrap(api.post("/carrinho/limpar"));
-export const cartCount = () => unwrap(api.get("/carrinho/count"));
+//export const cartCount = () => unwrap(api.get("/carrinho/count"));
+
+// CORRIGIDO: Usa a rota ORIGINAL do projeto para salvar/adicionar produto
+export const cartAdd = (dadosDoItem) => 
+  unwrap(api.post("/salvar_produto", dadosDoItem)); //
+
+// NOVO: Calcula a contagem no frontend (Compatível com GET /carrinho)
+export const cartCount = async () => {
+    try {
+        const data = await cartGet();
+        if (data?.produtos) {
+            // Soma a quantidade de todos os produtos no carrinho
+            const count = data.produtos.reduce((acc, item) => acc + (Number(item.quantidade) || 0), 0);
+            return { count };
+        }
+    } catch (e) {
+        // Retorna 0 em caso de erro (ex: 401 Unauthenticated)
+        return { count: 0 }; 
+    }
+    return { count: 0 };
+};

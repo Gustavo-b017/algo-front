@@ -11,7 +11,7 @@ import { useAuth } from "../contexts/auth-context";
 import Pesquisa from "./Pesquisa.jsx";
 
 function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit }) {
-    const { user, logout, ready } = useAuth();
+    const { user, logout, ready, cartItemCount } = useAuth();
 
     return (
         <div className="header">
@@ -66,6 +66,10 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
 
                 <Link to="/carrinho" className="carrinho-btn" title="Abrir carrinho">
                     <img src={carrinho_icon} alt="Carrinho" />
+                    {/* NOVO: Renderiza o badge se houver itens no carrinho */}
+                    {cartItemCount > 0 && (
+                        <span className="carrinho-badge">{cartItemCount}</span>
+                    )}
                 </Link>
             </div>
         </div>

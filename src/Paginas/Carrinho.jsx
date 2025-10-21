@@ -9,6 +9,7 @@ import ResumoCompra from "../Componentes/ResumoCompra";
 import ProdutoDestaque from "../Componentes/ProdutoDestaque";
 
 import { api } from "../lib/api";
+import { useAuth } from "../contexts/auth-context";
 
 // Estilos da página e componentes usados
 import "/public/style/carrinho.scss";
@@ -21,6 +22,7 @@ function Carrinho() {
     const [erro, setErro] = useState("");
 
     const navigate = useNavigate();
+    const { fetchCartCount } = useAuth(); // NOVO: Consumir fetchCartCount
 
     const toNumber = (v) =>
         typeof v === "number"
@@ -65,6 +67,9 @@ function Carrinho() {
                 list.filter((p) => p.id_api_externa !== id_api_externa)
             );
             await api.post("/carrinho/produto/remover", { id_api_externa });
+
+            await fetchCartCount();
+
             // Recarrega para manter servidor <-> cliente sincronizados
             await buscarProdutosCarrinho();
         } catch (error) {
@@ -89,6 +94,7 @@ function Carrinho() {
                 id_api_externa,
                 quantidade: novaQuantidade,
             });
+            await fetchCartCount();
             await buscarProdutosCarrinho();
         } catch (error) {
             console.error("Erro ao atualizar a quantidade:", error);
