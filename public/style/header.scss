@@ -143,6 +143,7 @@
     /* Visitante */
     .cadastro-btn {
       gap: 5px;
+
       img {
         width: clamp(18px, 6vw, 30px);
         height: auto;
@@ -156,9 +157,30 @@
 
     /* Carrinho */
     .carrinho-btn {
+
+      position: relative;
+
       img {
         width: clamp(20px, 7vw, 35px);
         height: auto;
+      }
+      
+      .carrinho-badge {
+          position: absolute;
+          top: -3px; 
+          right: -8px; 
+          min-width: 18px;
+          height: 18px;
+          padding: 0 4px;
+          border-radius: 9px;
+          background-color: var(--vermelho); /* Usa variável de cor */
+          color: var(--bg); /* Usa variável de cor */
+          font-size: 10px;
+          font-weight: 700;
+          line-height: 18px; 
+          text-align: center;
+          pointer-events: none; 
+          z-index: 50;
       }
     }
   }

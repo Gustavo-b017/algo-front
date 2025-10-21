@@ -1,6 +1,7 @@
 // src/Componentes/ResumoCompra.jsx
 import React from 'react';
 import '/public/style/resumoCompra.scss';
+import { useNavigate } from 'react-router-dom';
 
 // Função utilitária para formatar valores em BRL
 const formatBRL = (v) =>
@@ -8,6 +9,7 @@ const formatBRL = (v) =>
 
 // O componente recebe os dados do carrinho como props
 function ResumoCompra({ subtotal, totalItens }) {
+    const navigate = useNavigate();
     // Valores de frete e total simulados para demonstração
     const valorFrete = 0; // Exemplo de frete grátis
     const valorTotalComFrete = subtotal + valorFrete;
