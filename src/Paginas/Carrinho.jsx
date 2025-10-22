@@ -173,11 +173,13 @@ function Carrinho() {
 
         try {
             await cartAdd(itemToAdd);
-            fetchCartCount();
+            
+            await fetchCartCount(); // 1. Atualiza o contador no Header
+            await buscarProdutosCarrinho(); // 2. Atualiza o carrinho na página atual
 
             setNotification({
                 isVisible: true,
-                data: { ...itemToAdd, nomeProduto: itemToAdd.nome }
+                data: { ...itemToAdd, preco_final: itemToAdd.preco_final, url_imagem: itemToAdd.url_imagem }
             });
 
         } catch (error) {
