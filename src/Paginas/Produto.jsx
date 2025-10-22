@@ -10,22 +10,36 @@ import Footer from '../Componentes/Footer';
 import Avaliacoes from '../Componentes/avaliacoes';
 import { useAuth } from '../contexts/auth-context';
 
+import CartNotification from '../Componentes/CartNotification';
+import "/public/style/cartNotification.scss";
+
 function Produto() {
   const [searchParams] = useSearchParams();
   const [dadosCompletos, setDadosCompletos] = useState(null);
   const [erro, setErro] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const navigate = useNavigate();
-  const { fetchCartCount } = useAuth(); // NOVO: Consumir fetchCartCount
+  const { fetchCartCount } = useAuth();
+
+  const [notification, setNotification] = useState({
+    isVisible: false,
+    data: null,
+  });
 
   const salvarProduto = async (dadosDoItem) => {
     try {
       // Requisição agora usa a instância 'api' que injeta o token
       const res = await api.post('/salvar_produto', dadosDoItem);
 
-      fetchCartCount(); // NOVO: Sincroniza o contador no cabeçalho
-      alert(res.data.message);
-      
+      fetchCartCount();
+
+      // SUBSTITUIÇÃO DO ALERT: Ativa a notificação personalizada
+      setNotification({
+        isVisible: true,
+        // Passa os dados COMPLETOs do item para o pop-up
+        data: dadosDoItem
+      });
+
     } catch (error) {
       console.error("Erro ao salvar produto:", error);
       // O interceptor em api.js já redireciona para /login em caso de 401
@@ -122,6 +136,14 @@ function Produto() {
       <ProdutoDestaque produtoDestaque={dadosCompletos.item.nomeProduto} handleLinhaClick={handleLinhaClick} />
       <Avaliacoes />
       <Footer />
+
+      {/* NOVO: Renderiza a notificação no final do container */}
+      <CartNotification
+        isVisible={notification.isVisible}
+        onClose={() => setNotification(v => ({ ...v, isVisible: false }))}
+        productData={notification.data}
+      />
+      
     </div>
   );
 }

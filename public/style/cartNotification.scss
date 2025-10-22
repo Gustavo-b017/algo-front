@@ -1,0 +1,175 @@
+/* public/style/cartNotification.scss */
+
+/* Tokens do Projeto para Coerência Visual */
+:root {
+  --azul: #022e4c;
+  --vermelho: #ce0f2d;
+  --bg-card: #ffffff;
+  --text-1: #212121;
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.1); 
+  --green-success: #0cc267;
+}
+
+/* -------------------------------------------
+   ANIMAÇÕES MINIMALISTAS E ELEGANTES
+   ------------------------------------------- */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* -------------------------------------------
+   CONTAINER PRINCIPAL (Toast)
+   ------------------------------------------- */
+.cart-notification-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    
+    width: 90%;
+    max-width: 320px;
+
+    background-color: var(--bg-card);
+    border: 1px solid var(--azul);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    padding: 12px;
+    
+    font-family: Arial, sans-serif;
+    transition: all 0.3s ease-in-out;
+    
+    /* Aplica a animação de entrada */
+    animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    
+    &.hiding {
+        animation: slideOut 0.3s forwards;
+    }
+}
+
+/* -------------------------------------------
+   HEADER
+   ------------------------------------------- */
+.toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+
+    .check-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--green-success); 
+        stroke: var(--green-success);
+        margin-right: 8px;
+    }
+    
+    p {
+        flex-grow: 1;
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-1);
+    }
+    
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #999;
+        cursor: pointer;
+        transition: color 0.15s;
+        
+        &:hover { color: var(--vermelho); }
+    }
+}
+
+/* -------------------------------------------
+   BODY (Produto)
+   ------------------------------------------- */
+.toast-body {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    .product-thumb {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        flex-shrink: 0;
+        border: 1px solid #f0f0f0;
+        border-radius: 4px;
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+
+        strong {
+            font-size: 0.85rem;
+            color: var(--azul);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        span {
+            font-size: 0.75rem;
+            color: #666;
+        }
+    }
+}
+
+/* -------------------------------------------
+   ACTIONS
+   ------------------------------------------- */
+.toast-actions {
+    margin-top: 15px;
+    
+    .view-cart-btn {
+        width: 100%;
+        padding: 8px;
+        background-color: var(--azul);
+        color: var(--bg-card);
+        border: none;
+        border-radius: 6px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.15s ease;
+        
+        &:hover {
+            background-color: #011f33; 
+            transform: translateY(-1px);
+        }
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 500px) {
+    .cart-notification-toast {
+        right: 10px;
+        left: 10px;
+        max-width: none; 
+        width: auto;
+    }
+}
