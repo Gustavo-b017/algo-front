@@ -2,6 +2,7 @@
 import "/public/style/produtoDestaque.scss";
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 import arrow_left from "/public/imagens/icones/arrow-left.png";
 import arrow_right from "/public/imagens/icones/arrow-right.png";
@@ -12,10 +13,11 @@ const API_URL = import.meta.env.VITE_API_URL;
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
-function ProdutoDestaque({ handleLinhaClick, produtoDestaque }) {
+function ProdutoDestaque({ handleLinhaClick, produtoDestaque, handleQuickAdd }) {
   const [itens, setItens] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const carouselRef = useRef(null);
+  const navigate = useNavigate();
 
   const buscarDestacados = async () => {
     setCarregando(true);
@@ -63,9 +65,21 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque }) {
 
   if (!itens.length) {
     return (
-      <div className="empty-state-container">
-        <h1>Nenhum resultado encontrado...</h1>
-      </div>
+      <section className="produtos-destaque">
+        <h2 className="destaque-titulo">{produtoDestaque}</h2>
+        {/* Reusa a classe estilizada em notificacoes.scss */}
+        <div className="empty-state-container" style={{ maxWidth: '90%' }}>
+          <h1>Nenhum destaque de "{produtoDestaque}" encontrado.</h1>
+          <p>Não foi possível carregar produtos para esta categoria no momento. Tente navegar pelo catálogo completo.</p>
+          <button
+            className="empty-state-action-btn"
+            onClick={() => navigate("/resultados")} // Leva para a página de resultados
+            aria-label="Ver Catálogo Completo"
+          >
+            Ver Catálogo Completo
+          </button>
+        </div>
+      </section>
     );
   }
 
@@ -82,35 +96,58 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque }) {
         </button>
         <div className="carousel-items" ref={carouselRef}>
           {itensParaExibir.map((item) => (
-            <div key={item.id} className="produto-card-detaque" onClick={() => handleLinhaClick?.(item)}>
+            <div key={item.id} className="produto-card-detaque">
 
-              {/* TAG MESSAGE */}
-              <div className="tag-message">{item.descontoPercentual}% OFF</div>
-              {/* iMAGEM */}
-              <img src={item.imagemReal} alt={item.nome} className="produto-img-destaque" />
+              {/* Container principal para clique na linha */}
+              <div onClick={() => handleLinhaClick?.(item)}>
 
-              <div className="produto-info">
-                <p className="produto-nome">{item.nome}</p>
-                <div className="precos">
-                  {typeof item.precoOriginal === 'number' && item.precoOriginal > (item.preco ?? 0) && (
-                    <p className="preco-antigo">
-                      <span>{formatBRL(item.precoOriginal)}</span>
+                {/* TAG MESSAGE */}
+                {item.descontoPercentual > 0 && (
+                  <span className="tag-message">{item.descontoPercentual}% OFF</span>
+                )}
+
+                {/* iMAGEM */}
+                <img src={item.imagemReal} alt={item.nome} className="produto-img-destaque" />
+
+                <div className="produto-info">
+                  <p className="produto-nome">{item.nome}</p>
+                  <div className="precos">
+                    {typeof item.precoOriginal === 'number' && item.precoOriginal > (item.preco ?? 0) && (
+                      <p className="preco-antigo">
+                        <span>{formatBRL(item.precoOriginal)}</span>
+                      </p>
+                    )}
+                    <p className="preco-novo">
+                      Por: <span className="preco-principal">{formatBRL(item.preco)}</span> no Pix
                     </p>
-                  )}
-                  <p className="preco-novo">
-                    Por: <span className="preco-principal">{formatBRL(item.preco)}</span> no Pix
-                  </p>
-                  <p className="preco-parcelado">ou em até 10x de R$50,00</p>
+                    <p className="preco-parcelado">ou em até 10x de R$50,00</p>
+                  </div>
                 </div>
               </div>
+
+              {/* NOVO: Botão de Quick Add separado para Feature Product */}
+              {handleQuickAdd && (
+                <button
+                  className="add-carrinho-btn" // Reutiliza o estilo do cardProduto
+                  style={{ position: 'absolute', bottom: '10px', right: '10px' }} // Posicionamento mais adequado para o destaque
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleQuickAdd(item);
+                  }}
+                  title="Adicionar 1 item ao carrinho"
+                >
+                  <img src="/public/imagens/icones/add-carrinho.png" alt="Ícone de carrinho" />
+                </button>
+              )}
             </div>
+
           ))}
         </div>
         <button className="carousel-arrow right" onClick={() => scrollCarousel("right")}>
           <img src={arrow_right} alt="Arrow right icon" />
         </button>
       </div>
-    </section>
+    </section >
   );
 }
 

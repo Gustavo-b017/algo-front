@@ -7,14 +7,17 @@ import Footer from "../Componentes/Footer";
 import CardCarrinho from "../Componentes/CardCarrinho";
 import ResumoCompra from "../Componentes/ResumoCompra";
 import ProdutoDestaque from "../Componentes/ProdutoDestaque";
+import CartNotification from '../Componentes/CartNotification.jsx';
 
 import { api } from "../lib/api";
 import { useAuth } from "../contexts/auth-context";
+import { cartAdd } from "../lib/api.js";
 
 // Estilos da página e componentes usados
 import "/public/style/carrinho.scss";
 import "/public/style/cardCarrinho.scss";
 import "/public/style/produtoDestaque.scss";
+import "/public/style/cartNotification.scss";
 
 function Carrinho() {
     const [produtos, setProdutos] = useState([]);
@@ -22,7 +25,12 @@ function Carrinho() {
     const [erro, setErro] = useState("");
 
     const navigate = useNavigate();
-    const { fetchCartCount } = useAuth(); // NOVO: Consumir fetchCartCount
+    const { user, fetchCartCount } = useAuth();
+
+    const [notification, setNotification] = useState({
+        isVisible: false,
+        data: null,
+    });
 
     const toNumber = (v) =>
         typeof v === "number"
@@ -143,6 +151,41 @@ function Carrinho() {
         );
     }
 
+    // Handler de Quick Add 
+    const handleQuickAdd = async (produto) => {
+        if (!user) {
+            alert("Você precisa fazer login para adicionar itens ao carrinho.");
+            navigate("/login", { state: { from: window.location.pathname } });
+            return;
+        }
+
+        const itemToAdd = {
+            id_api_externa: produto.id,
+            nome: produto.nome,
+            codigo_referencia: produto.codigoReferencia || produto.id,
+            url_imagem: produto.imagemReal,
+            preco_original: produto.precoOriginal,
+            preco_final: produto.preco,
+            desconto: produto.descontoPercentual,
+            marca: produto.marca,
+            quantidade: 1
+        };
+
+        try {
+            await cartAdd(itemToAdd);
+            fetchCartCount();
+
+            setNotification({
+                isVisible: true,
+                data: { ...itemToAdd, nomeProduto: itemToAdd.nome }
+            });
+
+        } catch (error) {
+            console.error("Erro ao adicionar item rápido:", error);
+            alert("Não foi possível adicionar o item. Tente novamente.");
+        }
+    };
+
     return (
         <div className="container">
             <Header />
@@ -186,11 +229,19 @@ function Carrinho() {
                         <ProdutoDestaque
                             produtoDestaque="pastilha"
                             handleLinhaClick={handleLinhaClick}
+                            handleQuickAdd={handleQuickAdd}
                         />
                     </section>
                 </div>
             </main>
             <Footer />
+
+            <CartNotification
+                isVisible={notification.isVisible}
+                onClose={() => setNotification(v => ({ ...v, isVisible: false }))}
+                productData={notification.data}
+            />
+
         </div>
     );
 }

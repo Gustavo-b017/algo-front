@@ -1,13 +1,13 @@
 // src/Componentes/CardsProdutos.jsx
 import React from 'react';
 import '/public/style/cardProduto.scss';
-import carrinho_icon from '../../public/imagens/icones/add-carrinho.png'; // Ou o caminho para o seu ícone
+import carrinho_icon from '../../public/imagens/icones/add-carrinho.png';
 
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
-function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage }) {
-  
+function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, handleLinhaClick, carregandoTabela, feedbackMessage, handleQuickAdd, actionText, onActionClick }) {
+
   if (carregandoTabela) {
     return (
       <div className="loader-container">
@@ -23,13 +23,24 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
   if (!resultados || resultados.length === 0) {
     return (
       <div className="empty-state-container">
-        <h1>Nenhum resultado encontrado...</h1>
-        <p>{feedbackMessage}</p>
-      </div>
+        {/* Mensagem principal minimalista */}
+        <h1>Ops! Não encontramos a peça.</h1>
+        {/* Mensagem de suporte/guia */}
+        <p>{feedbackMessage || "Tente refinar sua busca com menos palavras-chave ou verifique a ortografia. Você também pode limpar os filtros aplicados."}</p>
 
+        {/* NOVO: Botão de Ação Sugerida */}
+        {onActionClick && (
+          <button
+            className="empty-state-action-btn"
+            onClick={onActionClick}
+            aria-label={actionText}
+          >
+            {actionText || "Limpar Filtros"}
+          </button>
+        )}
+      </div>
     );
   }
-
 
   return (
     <>
@@ -55,7 +66,16 @@ function CardsProdutos({ resultados, paginaAtual, totalPaginas, buscarTratados, 
             <img src={item.imagemReal} alt={item.nome} className="produto-imagem" />
 
             {/* BOTÃO DO CARRINHO */}
-            <button className="add-carrinho-btn">
+            <button
+              className="add-carrinho-btn"
+              onClick={(e) => {
+                e.stopPropagation(); // Impede o clique no card (navegação)
+                if (handleQuickAdd) {
+                  handleQuickAdd(item);
+                }
+              }}
+              title="Adicionar 1 item ao carrinho"
+            >
               <img src={carrinho_icon} alt="Ícone de carrinho" />
             </button>
 

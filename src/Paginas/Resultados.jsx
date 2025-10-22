@@ -3,11 +3,14 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
+import { useAuth } from "../contexts/auth-context.jsx";
 import Header from "../Componentes/Header.jsx";
 import Categorias from "../Componentes/Categorias.jsx";
 import Filtro from "../Componentes/Filtro.jsx";
 import CardsProdutos from "../Componentes/CardsProdutos.jsx";
 import Footer from "../Componentes/Footer.jsx";
+import CartNotification from '../Componentes/CartNotification.jsx';
+import { cartAdd } from "../lib/api.js";
 
 import "/public/style/resultados.scss";
 
@@ -49,6 +52,12 @@ const mapParamsToUI = (ordenar_por, ordem) => {
 export default function Resultados() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user, fetchCartCount } = useAuth();
+
+  const [notification, setNotification] = useState({
+    isVisible: false,
+    data: null,
+  });
 
   // ------- URL state -------
   const [query, setQuery] = useState(searchParams.get("termo") || "");
@@ -318,99 +327,172 @@ export default function Resultados() {
     if (id) handleFamiliaChange(id, familyName || (listaFamilias.find(f => f.id === id)?.nome || ""));
   };
 
-  // ===== render ========================================================
+  // Handler para limpar todos os filtros aplicados
+  const handleClearAllFilters = () => {
+    // 1. Limpa os estados de filtro
+    setFamiliaSelecionada({ id: "", nome: "" });
+    setSubFamiliaSelecionada({ id: "", nome: "" });
+    setMarcaProdutoSelecionada("");
 
-  return (
-    <div className="container">
-      <Header
-        query={query}
-        setQuery={setQuery}
-        placa={placa}
-        setPlaca={setPlaca}
-        onSearchSubmit={handleSearchSubmit}
-      />
+    // 2. Limpa os parâmetros de filtro da URL, mantendo apenas o termo/placa se existirem
+    setSearchParams((prev) => {
+      const p = new URLSearchParams();
+      // Mantém o termo e placa se existirem
+      if (prev.get("termo")) p.set("termo", prev.get("termo"));
+      if (prev.get("placa")) p.set("placa", prev.get("placa"));
+      p.set("pagina", "1");
+      // Reinicia a ordenação para o default
+      p.set("ordenar_por", "score");
+      p.set("ordem", "desc");
+      return p;
+    });
 
-      <Categorias onCategoryClick={(name, id) => handleCategoryClick(name, id)} />
+  }
 
-      {/* BOTÃO FILTROS (visível só no mobile via CSS) */}
-      <div className="filters-mobile-bar">
-        <button
-          type="button"
-          className="btn-open-filters"
-          onClick={() => setShowFilters(true)}
-        >
-          Filtros
-        </button>
-      </div>
+    // ===== botão carrinho ========================================================
 
-      {/* BACKDROP + PAINEL LATERAL (só mobile) */}
-      {isMobile && showFilters && <div className="modal-backdrop" onClick={() => setShowFilters(false)} />}
-      {isMobile && (
-        <Filtro
-          /* mesmas props que o sidebar */
-          ordenacaoAtual={ordenacaoUI}
-          ordemAtual={ordemUI}
-          onOrdenacaoChange={handleOrdenacaoChange}
-          listaFamilias={listaFamilias}
-          familiaSelecionada={familiaSelecionada}
-          onFamiliaChange={handleFamiliaChange}
-          listaSubFamilias={listaSubFamilias}
-          subFamiliaSelecionada={subFamiliaSelecionada}
-          onSubFamiliaChange={handleSubFamiliaChange}
-          carregandoCascata={carregandoCascata}
-          carregandoSubFamilias={carregandoSubFamilias}
-          listaMarcasProduto={listaMarcasProduto}
-          marcaProdutoSelecionada={marcaProdutoSelecionada}
-          onMarcaProdutoChange={handleMarcaProdutoChange}
-          carregandoFacetas={carregandoFacetas}
-          className={showFilters ? "visivel" : ""}   // <<< abre o off-canvas
-          onClose={() => setShowFilters(false)}
+    // Lógica de Adicionar ao Carrinho Rápido (Quick Add)
+    const handleQuickAdd = async (produto) => {
+      // 1. Verificar Autenticação (UX/CRO)
+      if (!user) {
+        alert("Você precisa fazer login para adicionar itens ao carrinho.");
+        navigate("/login", { state: { from: window.location.pathname } });
+        return;
+      }
+
+      // 2. Preparar dados
+      const itemToAdd = {
+        id_api_externa: produto.id,
+        nome: produto.nome,
+        codigo_referencia: produto.codigoReferencia || produto.id,
+        url_imagem: produto.imagemReal,
+        preco_original: produto.precoOriginal,
+        preco_final: produto.preco,
+        desconto: produto.descontoPercentual,
+        marca: produto.marca,
+        quantidade: 1 // Quick Add adiciona apenas 1
+      };
+
+      // 3. Chamar API
+      try {
+        // Usa a rota /salvar_produto que é a rota funcional para adicionar
+        await cartAdd(itemToAdd);
+
+        fetchCartCount(); // Sincroniza o contador no cabeçalho
+
+        // 4. Exibir Notificação Personalizada
+        setNotification({
+          isVisible: true,
+          data: { ...itemToAdd, nomeProduto: itemToAdd.nome } // Garante que o nome do produto está como esperado
+        });
+
+      } catch (error) {
+        console.error("Erro ao adicionar item rápido:", error);
+        alert("Não foi possível adicionar o item. Tente novamente.");
+      }
+    };
+
+    return (
+      <div className="container">
+        <Header
+          query={query}
+          setQuery={setQuery}
+          placa={placa}
+          setPlaca={setPlaca}
+          onSearchSubmit={handleSearchSubmit}
         />
-      )}
 
-      <main className="search-page-container">
-        {/* SIDEBAR (só desktop) */}
-        {!isMobile && (
-          <aside className="filters-sidebar">
-            <Filtro
-              ordenacaoAtual={ordenacaoUI}
-              ordemAtual={ordemUI}
-              onOrdenacaoChange={handleOrdenacaoChange}
-              listaFamilias={listaFamilias}
-              familiaSelecionada={familiaSelecionada}
-              onFamiliaChange={handleFamiliaChange}
-              listaSubFamilias={listaSubFamilias}
-              subFamiliaSelecionada={subFamiliaSelecionada}
-              onSubFamiliaChange={handleSubFamiliaChange}
-              carregandoCascata={carregandoCascata}
-              carregandoSubFamilias={carregandoSubFamilias}
-              listaMarcasProduto={listaMarcasProduto}
-              marcaProdutoSelecionada={marcaProdutoSelecionada}
-              onMarcaProdutoChange={handleMarcaProdutoChange}
-              carregandoFacetas={carregandoFacetas}
-              className="pretty"
-            />
-          </aside>
+        <Categorias onCategoryClick={(name, id) => handleCategoryClick(name, id)} />
+
+        {/* BOTÃO FILTROS (visível só no mobile via CSS) */}
+        <div className="filters-mobile-bar">
+          <button
+            type="button"
+            className="btn-open-filters"
+            onClick={() => setShowFilters(true)}
+          >
+            Filtros
+          </button>
+        </div>
+
+        {/* BACKDROP + PAINEL LATERAL (só mobile) */}
+        {isMobile && showFilters && <div className="modal-backdrop" onClick={() => setShowFilters(false)} />}
+        {isMobile && (
+          <Filtro
+            /* mesmas props que o sidebar */
+            ordenacaoAtual={ordenacaoUI}
+            ordemAtual={ordemUI}
+            onOrdenacaoChange={handleOrdenacaoChange}
+            listaFamilias={listaFamilias}
+            familiaSelecionada={familiaSelecionada}
+            onFamiliaChange={handleFamiliaChange}
+            listaSubFamilias={listaSubFamilias}
+            subFamiliaSelecionada={subFamiliaSelecionada}
+            onSubFamiliaChange={handleSubFamiliaChange}
+            carregandoCascata={carregandoCascata}
+            carregandoSubFamilias={carregandoSubFamilias}
+            listaMarcasProduto={listaMarcasProduto}
+            marcaProdutoSelecionada={marcaProdutoSelecionada}
+            onMarcaProdutoChange={handleMarcaProdutoChange}
+            carregandoFacetas={carregandoFacetas}
+            className={showFilters ? "visivel" : ""}   // <<< abre o off-canvas
+            onClose={() => setShowFilters(false)}
+          />
         )}
 
-        {/* LISTA – por padrão já é 1 coluna; desktop vira 3 colunas */}
-        <section className="search-results">
-          <CardsProdutos
-            resultados={resultados}
-            paginaAtual={paginaAtual}
-            totalPaginas={totalPaginas}
-            buscarTratados={handlePageChange}
-            carregandoTabela={carregandoTabela}
-            feedbackMessage={feedbackMessage}
-            handleLinhaClick={(p) => {
-              const params = new URLSearchParams({ id: p.id, nomeProduto: p.nome });
-              navigate(`/produto?${params.toString()}`);
-            }}
-          />
-        </section>
-      </main>
+        <main className="search-page-container">
+          {/* SIDEBAR (só desktop) */}
+          {!isMobile && (
+            <aside className="filters-sidebar">
+              <Filtro
+                ordenacaoAtual={ordenacaoUI}
+                ordemAtual={ordemUI}
+                onOrdenacaoChange={handleOrdenacaoChange}
+                listaFamilias={listaFamilias}
+                familiaSelecionada={familiaSelecionada}
+                onFamiliaChange={handleFamiliaChange}
+                listaSubFamilias={listaSubFamilias}
+                subFamiliaSelecionada={subFamiliaSelecionada}
+                onSubFamiliaChange={handleSubFamiliaChange}
+                carregandoCascata={carregandoCascata}
+                carregandoSubFamilias={carregandoSubFamilias}
+                listaMarcasProduto={listaMarcasProduto}
+                marcaProdutoSelecionada={marcaProdutoSelecionada}
+                onMarcaProdutoChange={handleMarcaProdutoChange}
+                carregandoFacetas={carregandoFacetas}
+                className="pretty"
+              />
+            </aside>
+          )}
 
-      <Footer />
-    </div>
-  );
-}
+          {/* LISTA – por padrão já é 1 coluna; desktop vira 3 colunas */}
+          <section className="search-results">
+            <CardsProdutos
+              resultados={resultados}
+              paginaAtual={paginaAtual}
+              totalPaginas={totalPaginas}
+              buscarTratados={handlePageChange}
+              carregandoTabela={carregandoTabela}
+              feedbackMessage={feedbackMessage}
+              handleLinhaClick={(p) => {
+                const params = new URLSearchParams({ id: p.id, nomeProduto: p.nome });
+                navigate(`/produto?${params.toString()}`);
+              }}
+              handleQuickAdd={handleQuickAdd} // NOVO: Passa a função de Quick Add
+              actionText="Limpar Filtros Aplicados"
+              onActionClick={handleClearAllFilters}
+            />
+          </section>
+        </main>
+
+        <Footer />
+
+        {/* NOVO: Renderiza a notificação no final do container */}
+        <CartNotification
+          isVisible={notification.isVisible}
+          onClose={() => setNotification(v => ({ ...v, isVisible: false }))}
+          productData={notification.data}
+        />
+      </div>
+    );
+  }

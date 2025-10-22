@@ -2,13 +2,15 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
+import { useAuth } from '../contexts/auth-context';
+
 import Item from '../Componentes/Item';
 import Sugestoes from '../Componentes/Sugestoes';
 import Header from '../Componentes/Header';
 import ProdutoDestaque from '../Componentes/ProdutoDestaque';
 import Footer from '../Componentes/Footer';
 import Avaliacoes from '../Componentes/avaliacoes';
-import { useAuth } from '../contexts/auth-context';
+import { cartAdd } from "../lib/api";
 
 import CartNotification from '../Componentes/CartNotification';
 import "/public/style/cartNotification.scss";
@@ -19,7 +21,7 @@ function Produto() {
   const [erro, setErro] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const navigate = useNavigate();
-  const { fetchCartCount } = useAuth();
+  const { user, fetchCartCount } = useAuth();
 
   const [notification, setNotification] = useState({
     isVisible: false,
@@ -33,7 +35,7 @@ function Produto() {
 
       fetchCartCount();
 
-      // SUBSTITUIÇÃO DO ALERT: Ativa a notificação personalizada
+      // ALERT: Ativa a notificação personalizada
       setNotification({
         isVisible: true,
         // Passa os dados COMPLETOs do item para o pop-up
@@ -49,14 +51,49 @@ function Produto() {
     }
   };
 
-  const handleSugestaoClick = (produto) => {
-    const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
-    navigate(`/produto?${params.toString()}`);
-  };
+  // const handleSugestaoClick = (produto) => {
+  //   const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
+  //   navigate(`/produto?${params.toString()}`);
+  // };
 
   const handleLinhaClick = (produto) => {
     const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
     navigate(`/produto?${params.toString()}`);
+  };
+
+  // Lógica de Adicionar ao Carrinho Rápido (para ProdutoDestaque)
+  const handleQuickAdd = async (produto) => {
+    if (!user) {
+      alert("Você precisa fazer login para adicionar itens ao carrinho.");
+      navigate("/login", { state: { from: window.location.pathname } });
+      return;
+    }
+
+    const itemToAdd = {
+      id_api_externa: produto.id,
+      nome: produto.nome,
+      codigo_referencia: produto.codigoReferencia || produto.id,
+      url_imagem: produto.imagemReal,
+      preco_original: produto.precoOriginal,
+      preco_final: produto.preco,
+      desconto: produto.descontoPercentual,
+      marca: produto.marca,
+      quantidade: 1
+    };
+
+    try {
+      await cartAdd(itemToAdd);
+      fetchCartCount();
+
+      setNotification({
+        isVisible: true,
+        data: { ...itemToAdd, nomeProduto: itemToAdd.nome }
+      });
+
+    } catch (error) {
+      console.error("Erro ao adicionar item rápido:", error);
+      alert("Não foi possível adicionar o item. Tente novamente.");
+    }
   };
 
   useEffect(() => {
@@ -122,6 +159,10 @@ function Produto() {
     );
   }
 
+  const handleAddClick = (data) => {
+        salvarProduto(data);
+  };
+
   return (
     <div className="container">
       <Header />
@@ -133,7 +174,11 @@ function Produto() {
         onSugestaoClick={handleSugestaoClick}
       /> */}
 
-      <ProdutoDestaque produtoDestaque={dadosCompletos.item.nomeProduto} handleLinhaClick={handleLinhaClick} />
+      <ProdutoDestaque 
+        produtoDestaque={dadosCompletos.item.nomeProduto} 
+        handleLinhaClick={handleLinhaClick} 
+        handleQuickAdd={handleQuickAdd} 
+      />
       <Avaliacoes />
       <Footer />
 
@@ -143,7 +188,7 @@ function Produto() {
         onClose={() => setNotification(v => ({ ...v, isVisible: false }))}
         productData={notification.data}
       />
-      
+
     </div>
   );
 }

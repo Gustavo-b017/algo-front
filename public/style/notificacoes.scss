@@ -58,23 +58,24 @@
   justify-content: center;
   text-align: center;
   
-  // Padding ajustado para ser consistente.
   padding: 40px 1rem;
   margin: 40px auto;
 
-  border: 2px dashed var(--empty-state-border-color);
+  /* Reduzimos a borda para algo mais minimalista */
+  border: none; /* Remove a borda pontilhada */
   border-radius: 8px;
-  background-color: var(--empty-state-bg-color);
+  background-color: #fff; /* Fundo branco ou transparente */
   
-  // Ocupa a largura total com um padding lateral. O `max-width` será usado no desktop.
   width: calc(100% - 2rem);
+  max-width: 600px; /* Aumenta um pouco para desktop */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Adiciona uma sombra elegante */
   
   h1 {
     font-family: Arial, sans-serif;
-    // Tamanho da fonte adaptado para mobile.
     font-size: 1.2rem;
     color: var(--azul);
-    margin-top: 20px;
+    margin-top: 0px; 
+    margin-bottom: 10px;
     font-weight: bold;
   }
 
@@ -82,9 +83,34 @@
     font-family: Arial, sans-serif;
     font-size: 1rem;
     color: #555;
-    margin-top: 15px;
+    margin-top: 0px; 
+    margin-bottom: 20px;
     font-weight: 500;
   }
+}
+
+/* NOVO: Estilo para o botão de ação (UX) */
+.empty-state-action-btn {
+    padding: 10px 20px;
+    background-color: var(--vermelho); /* Cor de destaque para o CTA */
+    color: var(--branco); /* Usa branco para o texto */
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        background-color: #a80c25; /* Tonalidade um pouco mais escura */
+        transform: translateY(-1px);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &:focus {
+        outline: 2px solid var(--azul);
+        outline-offset: 2px;
+    }
 }
 
 /* =======================================
