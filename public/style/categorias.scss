@@ -14,23 +14,28 @@
 .carousel-wrapper {
   display: flex;
   width: 100%;
-  overflow-x: auto; /* Permite a rolagem horizontal */
+  overflow-x: auto;
+  /* Permite a rolagem horizontal */
   justify-content: flex-start;
   padding: 10px 0;
-  
+
   /* Oculta a barra de rolagem para um visual mais limpo */
-  -ms-overflow-style: none; /* IE e Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE e Edge */
+  scrollbar-width: none;
+
+  /* Firefox */
   &::-webkit-scrollbar {
-    display: none; /* Chrome e Safari */
+    display: none;
+    /* Chrome e Safari */
   }
 }
 
 /* Estilo do item de categoria no carrossel */
 .categorias_grid {
   display: flex;
-  flex-wrap: nowrap; 
-  gap: 10px; 
+  flex-wrap: nowrap;
+  gap: 10px;
 }
 
 .categorias_grid button {
@@ -38,13 +43,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 40px;
+  width: 54px;
   cursor: pointer;
   background: none;
   border: none;
   transition: transform 0.2s;
-  flex-shrink: 0; /* Impede que os itens encolham */
-  
+  flex-shrink: 0;
+  /* Impede que os itens encolham */
+
   &:hover {
     transform: scale(1.05);
     transition: transform 0.2s;
@@ -55,20 +61,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 54px;
+  height: 54px;
   background-color: var(--azul);
   border-radius: 50%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  
+
   img {
-    width: 25px;
-    height: 25px;
+    width: 34px;
+    height: 34px;
   }
 }
 
 .categorias_grid p {
-  width: 51px;
+  width: 60px;
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -91,28 +97,35 @@
 
   /* Desativa o carrossel e ativa o grid */
   .carousel-wrapper {
-    overflow-x: hidden; /* Remove a rolagem horizontal */
+    overflow-x: hidden;
+    /* Remove a rolagem horizontal */
   }
 
   .categorias_grid {
-    flex-wrap: wrap; /* Permite que os itens quebrem a linha */
-    justify-content: center; /* Centraliza o grid */
-    gap: 2rem; /* Espaçamento maior entre os itens */
+    flex-wrap: wrap;
+    /* Permite que os itens quebrem a linha */
+    justify-content: center;
+    /* Centraliza o grid */
+    gap: 2rem;
+    /* Espaçamento maior entre os itens */
   }
 
   .categorias_grid button {
-    width: 100px; /* Aumenta a largura dos botões */
-    flex-shrink: 1; /* Permite que os itens encolham, se necessário */
-    
+    width: 100px;
+    /* Aumenta a largura dos botões */
+    flex-shrink: 1;
+    /* Permite que os itens encolham, se necessário */
+
     &:hover {
-      transform: scale(1.1); /* Efeito de hover mais pronunciado */
+      transform: scale(1.1);
+      /* Efeito de hover mais pronunciado */
     }
   }
 
   .categoria_img {
-    width: 90px;
-    height: 90px;
-    
+    width: 95px;
+    height: 95px;
+
     img {
       width: 50%;
       height: 50%;
@@ -121,7 +134,7 @@
 
   .categorias_grid p {
     width: 100px;
-    font-size: 10px;
+    font-size: 0.1rem;
     padding-top: 15px;
   }
 }
@@ -129,15 +142,16 @@
 /* Media query para telas grandes (desktops) */
 @media (min-width: 1240px) {
   .categorias_grid {
-    gap: 3.5rem; /* Volta o espaçamento original para telas grandes */
+    margin: 0 auto;
+    gap: 1.5rem;
   }
 
   .categorias_grid button {
-    width: 5%; /* Usa a porcentagem original para alinhar */
+    width: auto;
   }
 
   .categorias_grid button p {
-    width: 90px;
+    width: 95px;
     font-size: 0.75rem;
   }
 }

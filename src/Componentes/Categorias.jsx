@@ -12,15 +12,15 @@ import estrutura_icon from "/public/imagens/icones/carroceria.png"
 
 const category_list = [
     { name: "Cambio", id: 1, src: wheel_icon },
-    { name: "Motor", id: 2, src: motor_icon },
+    { name: "Engrenagem", id: 2, src: motor_icon },
     { name: "Disco", id: 3, src: disc_icon },
     { name: "Pastilha", id: 4, src: ignicao_icon },
-    { name: "Filtro", id: 5, src: escape_icon },
-    { name: "Parafuso", id: 6, src: support_icon },
-    { name: "Oleo", id: 7, src: oil_icon },
-    { name: "Valvula", id: 8, src: estrutura_icon },
-    { name: "Radiador", id: 9, src: car_icon },
-    { name: "Embreagem", id: 10, src: car_icon }
+    { name: "Amortecedor", id: 5, src: escape_icon },
+    { name: "Vela", id: 6, src: support_icon },
+    { name: "Diferencial", id: 7, src: oil_icon },
+    { name: "Filtro", id: 8, src: estrutura_icon },
+    { name: "Oleo", id: 9, src: car_icon },
+    { name: "Combustível", id: 10, src: car_icon }
 ]
 
 function Categorias({ onCategoryClick }) {

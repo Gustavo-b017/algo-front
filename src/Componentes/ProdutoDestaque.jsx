@@ -125,7 +125,7 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque, handleQuickAdd }) 
                 </div>
               </div>
 
-              {/* NOVO: Botão de Quick Add separado para Feature Product */}
+              {/* Botão de Quick Add */}
               {handleQuickAdd && (
                 <button
                   className="add-carrinho-btn" // Reutiliza o estilo do cardProduto

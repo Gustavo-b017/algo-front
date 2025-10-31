@@ -150,8 +150,10 @@
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    filter: grayscale(100%);
+    filter: grayscale(100%) brightness(150%);
 
     img {
         width: 70%;
@@ -240,8 +242,7 @@
         .add-carrinho-btn {
             width: 40px;
             height: 40px;
-            bottom: 190px;
-            //display: none;
+            bottom: 160px;
         }
 
         .produto-info {
@@ -286,5 +287,4 @@
     .paginacao-info {
         flex: 0.2;
     }
-
 }
