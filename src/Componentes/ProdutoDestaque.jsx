@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import arrow_left from "/public/imagens/icones/arrow-left.png";
 import arrow_right from "/public/imagens/icones/arrow-right.png";
+import carrinho_icon from '/public/imagens/icones/carrinho.svg';
 
 const API_URL = import.meta.env.VITE_API_URL;
 // const API_URL = 'http://127.0.0.1:5000';
@@ -96,7 +97,7 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque, handleQuickAdd }) 
         </button>
         <div className="carousel-items" ref={carouselRef}>
           {itensParaExibir.map((item) => (
-            <div key={item.id} className="produto-card-detaque">
+            <div key={item.id} className="produto-card-destaque">
 
               {/* Container principal para clique na linha */}
               <div onClick={() => handleLinhaClick?.(item)}>
@@ -128,15 +129,14 @@ function ProdutoDestaque({ handleLinhaClick, produtoDestaque, handleQuickAdd }) 
               {/* Botão de Quick Add */}
               {handleQuickAdd && (
                 <button
-                  className="add-carrinho-btn" // Reutiliza o estilo do cardProduto
-                  style={{ position: 'absolute', bottom: '10px', right: '10px' }} // Posicionamento mais adequado para o destaque
+                  className="add-carr-btn" 
                   onClick={(e) => {
                     e.stopPropagation();
                     handleQuickAdd(item);
                   }}
                   title="Adicionar 1 item ao carrinho"
                 >
-                  <img src="/public/imagens/icones/add-carrinho.png" alt="Ícone de carrinho" />
+                  <img src={carrinho_icon} alt="Ícone de carrinho" />
                 </button>
               )}
             </div>
