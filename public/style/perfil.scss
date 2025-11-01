@@ -1,0 +1,257 @@
+/* public/style/perfil.scss */
+@use 'sass:color';
+
+/* ==============================
+   Tokens de Design (Consistência)
+   ============================== */
+:root {
+    --azul: #022e4c;
+    --vermelho: #ce0f2d;
+    --bg: #fff;
+    --text-1: #212121;
+    --text-2: #666666;
+    --border-100: #e0e0e0;
+    --campo-texto-bg: rgba(224, 224, 224, 1);
+    --shadow-100: rgba(3, 3, 3, 0.1);
+    --radius-md: 13px;
+    --radius-sm: 9px;
+}
+
+/* ==============================
+   Layout Base (Mobile-First)
+   ============================== */
+.perfil-page-container {
+    width: 100%;
+    background-color: var(--bg);
+    padding: 1.5rem 0;
+    font-family: Arial, sans-serif;
+}
+
+.perfil-content-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+}
+
+/* Container Grid (Mobile: 1 coluna) */
+.perfil-main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+/* ==============================
+   Sidebar (Avatar)
+   ============================== */
+.perfil-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .avatar-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--bg);
+        box-shadow: 0 4px 15px var(--shadow-100);
+    }
+
+    .avatar-greeting {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-1);
+        text-align: center;
+        word-break: break-word;
+    }
+}
+
+/* ==============================
+   Conteúdo do Formulário (Mobile)
+   ============================== */
+.perfil-form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    
+}
+
+/* Bloco/Card do Formulário */
+.perfil-form-block {
+    background: var(--campo-texto-bg);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 20px var(--shadow-100);
+
+    h4 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--azul);
+        margin: 0;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border-100);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 1rem;
+    }
+}
+
+/* ==============================
+   Estilo Elegante dos Campos (Form Group)
+   ============================== */
+.form-group-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-2);
+    }
+
+    input {
+        width: 100%;
+        border: 1px solid var(--border-100);
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        background-color: #fcfcfc;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-1);
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: var(--azul);
+            box-shadow: 0 0 0 3px rgba(2, 46, 76, 0.15);
+        }
+
+        /* Estilo para campos readonly (Email) */
+        &:read-only,
+        &[readonly] {
+            background-color: #f0f2f5;
+            color: #7a828a;
+            cursor: not-allowed;
+        }
+    }
+}
+
+/* ==============================
+   Botão (Consistente com cadastro.scss)
+   ============================== */
+.btn-perfil {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 10px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background-color: var(--text-1);
+    /* Cor principal do botão */
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        background-color: #000;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+/* Mensagem de Feedback (Sucesso/Erro) */
+.perfil-feedback {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.8rem;
+    border-radius: var(--radius-sm);
+
+    &.success {
+        background-color: color.adjust(#28a745, $alpha: -0.85);
+        color: #155724;
+    }
+
+    &.error {
+        background-color: color.adjust(#dc3545, $alpha: -0.85);
+        color: #721c24;
+    }
+}
+
+/* ==============================
+   Layout Desktop (>= 900px)
+   ============================== */
+@media (min-width: 900px) {
+    .perfil-page-container {
+        padding: 2.5rem 0;
+    }
+
+    .perfil-content-wrapper {
+        padding: 0 2rem;
+    }
+
+    .perfil-main-content {
+        /* Layout elegante de 2 colunas */
+        grid-template-columns: 280px 1fr;
+        gap: 2.5rem;
+        align-items: flex-start;
+    }
+
+    .perfil-sidebar {
+        /* "Gruda" a sidebar no topo ao rolar */
+        position: sticky;
+        top: 50px;
+        align-items: center;
+
+        .avatar-img {
+            width: 180px;
+            height: 180px;
+        }
+
+        .avatar-greeting {
+            text-align: left;
+        }
+    }
+
+    .perfil-form-content {
+        gap: 2rem;
+    }
+
+    .perfil-form-block {
+        h4 {
+            font-size: 1.3rem;
+        }
+
+        form {
+            padding: 2rem;
+        }
+    }
+
+    .form-group-perfil {
+        label {
+            font-size: 1rem;
+        }
+        input {
+            font-size: 1rem;
+        }
+    }
+
+    /* Limita o botão no desktop */
+    .btn-perfil {
+        font-size: 0.9rem;
+        width: auto;
+        min-width: 200px;
+        align-self: flex-end;
+    }
+}
