@@ -52,7 +52,7 @@ function CartNotification({ isVisible, onClose, productData }) {
             <div className="toast-body">
                 <img src={url_imagem} alt={nomeProduto} className="product-thumb" />
                 <div className="product-info">
-                    <strong>{nomeProduto}</strong>
+                    <p className="produto-nome"><strong>{nomeProduto}</strong></p>
                     <span>{quantidade}x | {formatBRL(preco_final)}</span>
                 </div>
             </div>
