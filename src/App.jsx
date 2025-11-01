@@ -11,8 +11,11 @@ import Perfil from './Paginas/Perfil.jsx';
 import RequireAuth from "./Componentes/RequireAuth.jsx";
 import "./index.scss";
 import "/public/style/notificacoes.scss";
+import { useAuth } from './contexts/auth-context'; // NOVO: Importa useAuth
+import AuthRequiredToast from './Componentes/AuthRequiredToast'; // NOVO: Importa o Toast
 
 function App() {
+  const { loginAlert } = useAuth();
   return (
     <div>
       <Routes>
@@ -22,7 +25,6 @@ function App() {
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/login" element={<Login />} />
         
-        {/* Proteja a rota do carrinho */}
         <Route
           path="/carrinho"
           element={
@@ -41,6 +43,7 @@ function App() {
           }
         />
       </Routes>
+
     </div>
   );
 }

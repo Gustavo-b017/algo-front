@@ -1,13 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authLogin, authMe, cartCount } from "../lib/api";
+import AuthRequiredToast from '../Componentes/AuthRequiredToast'; // NOVO: Importa o Toast
+import "/public/style/authRequiredToast.scss"; // NOVO: Importa o estilo
 
 const AuthCtx = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
-  // NOVO: Estado para a contagem do carrinho
   const [cartItemCount, setCartItemCount] = useState(0);
+
+  // NOVO: Estado para gerenciar o Toast de Login/Cadastro
+  const [loginAlert, setLoginAlert] = useState({ isVisible: false, redirectTo: null });
 
   // NOVO: Função para buscar e definir a contagem
   async function fetchCartCount() {
@@ -40,6 +44,13 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
+  // NOVO: Função exportada para disparar o toast de autenticação
+  const triggerLoginAlert = (redirectTo = '/login') => {
+    // Se já estiver visível, não faz nada (evita spam)
+    if (loginAlert.isVisible) return;
+    setLoginAlert({ isVisible: true, redirectTo });
+  };
+
   async function login(email, senha) {
     const r = await authLogin({ email, senha });
     if (r?.success) {
@@ -63,8 +74,20 @@ export function AuthProvider({ children }) {
   }, [user, ready]);
 
   return (
-    <AuthCtx.Provider value={{ user, ready, login, logout, setUser, cartItemCount, fetchCartCount}}>
+    <AuthCtx.Provider value={{
+      user, ready, login, logout, setUser,
+      cartItemCount, fetchCartCount,
+      triggerLoginAlert
+    }}>
       {children}
+
+      {/* NOVO: Renderiza o Toast globalmente aqui dentro. */}
+      {/* Ele usa o state e o setter locais (setLoginAlert) */}
+      <AuthRequiredToast
+          isVisible={loginAlert.isVisible}
+          onClose={() => setLoginAlert({ isVisible: false, redirectTo: null })}
+          redirectTo={loginAlert.redirectTo}
+      />
     </AuthCtx.Provider>
   );
 }

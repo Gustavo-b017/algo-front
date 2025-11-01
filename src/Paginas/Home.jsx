@@ -16,7 +16,7 @@ import { cartAdd } from "../lib/api.js";
 
 function Home() {
     const navigate = useNavigate();
-    const { user, fetchCartCount } = useAuth();
+    const { user, fetchCartCount, triggerLoginAlert } = useAuth();
 
     // Estado para a notificação
     const [notification, setNotification] = useState({
@@ -38,8 +38,7 @@ function Home() {
     // NOVO: Lógica de Adicionar ao Carrinho Rápido (Quick Add)
     const handleQuickAdd = async (produto) => {
         if (!user) {
-            alert("Você precisa fazer login para adicionar itens ao carrinho.");
-            navigate("/login", { state: { from: window.location.pathname } });
+            triggerLoginAlert();
             return;
         }
 

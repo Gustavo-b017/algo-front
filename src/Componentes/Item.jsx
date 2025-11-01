@@ -1,8 +1,8 @@
 // src/Paginas/Item.jsx
 import React, { useState } from 'react';
 import '/public/style/item.scss';
-import { useAuth } from '../contexts/auth-context'; // 1. Importe o hook de autenticação
-import { useNavigate } from 'react-router-dom'; // 2. Importe o useNavigate para redirecionar
+import { useAuth } from '../contexts/auth-context';
+import { useNavigate } from 'react-router-dom'; 
 
 
 const formatBRL = (v) =>
@@ -15,8 +15,8 @@ function Item({ dadosItem, onSave }) {
   const [hoverIndex, setHoverIndex] = useState(null);
   const [quantidade, setQuantidade] = useState(1);
 
-  const { user } = useAuth(); // 3. Obtenha o usuário do contexto de autenticação
-  const navigate = useNavigate(); // 4. Inicialize o hook de navegação
+  const { user, triggerLoginAlert } = useAuth(); 
+  const navigate = useNavigate(); 
 
   if (!dadosItem) {
     return <div className="empty-state-container"><h1>Informações do item não disponíveis.</h1></div>;
@@ -28,8 +28,7 @@ function Item({ dadosItem, onSave }) {
     // 5. Verifique se o usuário está logado ANTES de tentar salvar
     if (!user) {
       // Se não estiver logado, redirecione para a página de login
-      alert("Você precisa fazer login para adicionar itens ao carrinho.");
-      navigate('/login');
+      triggerLoginAlert();
       return; // Interrompe a execução da função
     }
 

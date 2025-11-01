@@ -52,7 +52,7 @@ const mapParamsToUI = (ordenar_por, ordem) => {
 export default function Resultados() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user, fetchCartCount } = useAuth();
+  const { user, fetchCartCount, triggerLoginAlert } = useAuth();
 
   const [notification, setNotification] = useState({
     isVisible: false,
@@ -355,8 +355,7 @@ export default function Resultados() {
     const handleQuickAdd = async (produto) => {
       // 1. Verificar Autenticação (UX/CRO)
       if (!user) {
-        alert("Você precisa fazer login para adicionar itens ao carrinho.");
-        navigate("/login", { state: { from: window.location.pathname } });
+        triggerLoginAlert();
         return;
       }
 

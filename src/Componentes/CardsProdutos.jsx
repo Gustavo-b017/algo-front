@@ -2,7 +2,6 @@
 import React from 'react';
 import '/public/style/cardProduto.scss';
 import carrinho_icon from '../../public/imagens/icones/carrinho.svg';
-import BotaoAdicionarCarrinho from './BotaoAdicionarCarrinho';
 
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';

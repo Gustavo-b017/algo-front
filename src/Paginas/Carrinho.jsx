@@ -25,7 +25,7 @@ function Carrinho() {
     const [erro, setErro] = useState("");
 
     const navigate = useNavigate();
-    const { user, fetchCartCount } = useAuth();
+    const { user, fetchCartCount, triggerLoginAlert } = useAuth();
 
     const [notification, setNotification] = useState({
         isVisible: false,
@@ -154,8 +154,7 @@ function Carrinho() {
     // Handler de Quick Add 
     const handleQuickAdd = async (produto) => {
         if (!user) {
-            alert("Você precisa fazer login para adicionar itens ao carrinho.");
-            navigate("/login", { state: { from: window.location.pathname } });
+            triggerLoginAlert();
             return;
         }
 

@@ -1,0 +1,133 @@
+/* public/style/authRequiredToast.scss */
+
+/* Reutiliza tokens do projeto */
+:root {
+  --azul: #022e4c;
+  --vermelho: #ce0f2d;
+  --bg-card: #ffffff;
+  --text-1: #212121;
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.1); 
+  --alert-yellow: #ffc107;
+}
+
+/* -------------------------------------------
+   ANIMAÇÕES (Consistente com cartNotification.scss)
+   ------------------------------------------- */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(100%); }
+}
+
+/* -------------------------------------------
+   CONTAINER PRINCIPAL (Toast)
+   ------------------------------------------- */
+.auth-required-toast {
+    position: fixed;
+    /* Posição acima do toast de sucesso, se ambos abrirem */
+    bottom: 120px; 
+    right: 20px;
+    z-index: 9998; 
+    
+    width: 90%;
+    max-width: 320px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--alert-yellow); /* Borda de alerta */
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    padding: 12px;
+    
+    font-family: Arial, sans-serif;
+    transition: all 0.3s ease-in-out;
+    
+    animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    
+    &.hiding {
+        animation: slideOut 0.3s forwards;
+    }
+}
+
+/* -------------------------------------------
+   HEADER
+   ------------------------------------------- */
+.toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+
+    .alert-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--alert-yellow); 
+        stroke: var(--alert-yellow);
+        margin-right: 8px;
+    }
+    
+    p {
+        flex-grow: 1;
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-1);
+    }
+    
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #999;
+        cursor: pointer;
+        transition: color 0.15s;
+        
+        &:hover { color: var(--vermelho); }
+    }
+}
+
+/* -------------------------------------------
+   BODY & ACTIONS
+   ------------------------------------------- */
+.toast-body p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+.toast-actions {
+    margin-top: 15px;
+    
+    .login-btn {
+        width: 100%;
+        padding: 8px;
+        /* Usa a cor de ação principal */
+        background-color: var(--vermelho); 
+        color: var(--bg-card);
+        border: none;
+        border-radius: 6px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.15s ease;
+        
+        &:hover {
+            background-color: #a80c25; 
+            transform: translateY(-1px);
+        }
+    }
+}
+
+/* Media query para mobile pequeno */
+@media (max-width: 500px) {
+    .auth-required-toast {
+        right: 10px;
+        left: 10px;
+        max-width: none; 
+        width: auto;
+    }
+}
