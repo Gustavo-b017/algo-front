@@ -8,6 +8,7 @@ import Carrinho from './Paginas/Carrinho.jsx';
 import Cadastro from './Paginas/Cadastro.jsx';
 import Login from './Paginas/Login.jsx';
 import Perfil from './Paginas/Perfil.jsx';
+import Suporte from './Paginas/Suporte.jsx';
 import RequireAuth from "./Componentes/RequireAuth.jsx";
 import "./index.scss";
 import "/public/style/notificacoes.scss";
@@ -24,6 +25,7 @@ function App() {
         <Route path="/resultados" element={<Resultados />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/suporte" element={<Suporte />} />
         
         <Route
           path="/carrinho"

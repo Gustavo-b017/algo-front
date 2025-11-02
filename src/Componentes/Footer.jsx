@@ -32,7 +32,7 @@ function Footer() {
                         <li><a href="/resultados">Início Catálogo de peças</a></li>
                         <li><a href="https://www.redeancora.com.br">Empresa parceira</a></li>
                         <li><a href="Projeto by G³">Quem somos?</a></li>
-                        <li><a href="#">Suporte</a></li>
+                        <li><a href="/suporte">Suporte</a></li>
                     </ul>
                 </div>
 

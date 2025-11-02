@@ -32,7 +32,7 @@ const category_list = [
 const info_links = [
     { name: "Rede Ancora", href: "https://www.redeancora.com.br/" }, 
     { name: "Quem somos?", href: "https://portifolio-g3.vercel.app/" },
-    { name: "Suporte", href: "#" }
+    { name: "Suporte", href: "/suporte" }
 ];
 
 function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit }) {

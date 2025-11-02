@@ -1,0 +1,281 @@
+/* public/style/suporte.scss */
+@use 'sass:color';
+
+:root {
+    --azul: #022e4c;
+    --vermelho: #ce0f2d;
+    --bg: #fff;
+    --text-1: #212121;
+    --text-2: #666666;
+    --border-100: #e0e0e0;
+    /* Fundo cinza dos cards, vindo do perfil.scss */
+    --campo-texto-bg: rgba(224, 224, 224, 1);
+    --shadow-100: rgba(3, 3, 3, 0.1);
+    --radius-md: 13px;
+    --radius-sm: 9px;
+}
+
+/* ==============================
+   Layout Base (Mobile-First)
+   ============================== */
+.suporte-page-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: var(--bg);
+    padding: 1.5rem 0;
+    font-family: Arial, sans-serif;
+}
+
+.suporte-content-wrapper {
+    max-width: 1000px;
+    padding: 0 0.5rem;
+}
+
+/* Título (h2) */
+.suporte-content-wrapper h2 {
+    font-family: "Poppins", system-ui, sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--azul);
+    text-align: left;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-100);
+}
+
+.suporte-main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.suporte-form-block,
+.suporte-faq-block {
+    background: var(--campo-texto-bg); /* Fundo cinza do card */
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 20px var(--shadow-100);
+    overflow: hidden;
+
+    h4 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--azul);
+        margin: 0;
+        padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+        border-bottom: 1px solid var(--border-100);
+    }
+
+    /* Parágrafo de descrição (só no form) */
+    >p {
+        padding: 0 1.5rem 0.5rem 1.5rem;
+        font-size: 0.95rem;
+        color: var(--text-2);
+    }
+
+    /* Container do form */
+    .form-suporte {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 0 1.5rem;
+        /* Padding interno do form */
+    }
+}
+
+/* ==============================
+   Estilo dos Campos (Form Group)
+   (Estilos do .form-group-perfil aplicados ao .form-group)
+   ============================== */
+.form-group-suporte {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--campo-texto-bg);
+    gap: 6px;
+
+    label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-2);
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        border: 1px solid var(--border-100);
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        background-color: #fcfcfc;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-1);
+        transition: border-color 0.2s, box-shadow 0.2s;
+        font-family: Arial, sans-serif;
+
+        &:focus {
+            outline: none;
+            border-color: var(--azul);
+            box-shadow: 0 0 0 3px rgba(2, 46, 76, 0.15);
+        }
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+}
+
+/* ==============================
+   Botão (Estilo .btn-perfil aplicado a .create-account-btn)
+   ============================== */
+.create-account-btn {
+    margin-bottom: 1.5rem;
+    padding: 10px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background-color: var(--text-1);
+    /* Botão preto */
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        background-color: #000;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+/* ==============================
+   FAQ Accordion (Mobile-First)
+   ============================== */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--border-100);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-1);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: rgba(2, 46, 76, 0.02);
+    }
+
+    /* Seta (Caret) */
+    &::after {
+        content: '›';
+        font-size: 1.8rem;
+        font-weight: 400;
+        color: var(--azul);
+        transition: transform 0.3s ease;
+        transform-origin: center;
+        transform: rotate(90deg);
+        /* Começa apontando para baixo */
+    }
+}
+
+.faq-answer-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.faq-answer {
+    /* Fundo levemente diferente para o texto da resposta */
+    background: rgba(255, 255, 255, 0.5);
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    font-size: 0.95rem;
+    color: var(--text-2);
+    line-height: 1.6;
+}
+
+/* Estilos de Abertura do Accordion */
+.faq-item.open {
+    .faq-question::after {
+        transform: rotate(270deg);
+        /* Aponta para cima */
+    }
+
+    .faq-answer-wrapper {
+        max-height: 200px;
+        /* Altura máxima para a animação */
+    }
+}
+
+/* ==============================
+   Layout Desktop (>= 900px)
+   ============================== */
+@media (min-width: 900px) {
+    .suporte-page-container {
+        padding: 2.5rem 0;
+    }
+
+    .suporte-content-wrapper {
+        padding: 0 2rem;
+    }
+
+    .suporte-main-content {
+        grid-template-columns: 1fr 1fr;
+        /* Duas colunas iguais */
+        gap: 2.5rem;
+        align-items: flex-start;
+    }
+
+    /* Ordem visual no desktop (FAQ primeiro) */
+    .suporte-faq-block {
+        order: 1;
+    }
+
+    .suporte-form-block {
+        order: 2;
+    }
+
+
+    .form-group-suporte {
+        label {
+            font-size: 1rem;
+        }
+
+        input,
+        textarea {
+            font-size: 1rem;
+            /* Reduz o input no desktop */
+        }
+    }
+
+    .create-account-btn {
+        font-size: 0.9rem;
+        width: auto;
+        margin: 1rem 0;
+        min-width: 200px;
+        align-self: flex-end;
+        /* Alinha o botão à direita */
+    }
+}
