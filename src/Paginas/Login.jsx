@@ -10,14 +10,13 @@ export default function Login() {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/perfil";
 
-  // >>> ESTADOS QUE FALTAVAM <<<
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (ready && user) navigate("/perfil", { replace: true });
+    if (ready && user) navigate("/", { replace: true });
   }, [ready, user, navigate]);
 
   async function onSubmit(e) {
