@@ -30,8 +30,8 @@ function Footer() {
                     <h4>Seções de Links</h4>
                     <ul>
                         <li><a href="/resultados">Início Catálogo de peças</a></li>
-                        <li><a href="https://www.redeancora.com.br/industrias/">Lojas parceiras</a></li>
-                        <li><a href="https://www.redeancora.com.br/quem_somos/">Quem somos?</a></li>
+                        <li><a href="https://www.redeancora.com.br">Empresa parceira</a></li>
+                        <li><a href="Projeto by G³">Quem somos?</a></li>
                         <li><a href="#">Suporte</a></li>
                     </ul>
                 </div>
@@ -52,7 +52,7 @@ function Footer() {
             </div>
 
             <div className="footer-bottom">
-                <p>© 2025 pecacerta.com | Design by Gabriel de Mendonça</p>
+                <p>© 2025 pecacerta.com | Projeto by G³ </p>
             </div>
 
         </footer>

@@ -217,7 +217,7 @@ function Cadastro() {
             </div>
 
             <div className="rodape-cadastro" role="contentinfo">
-                <p>© 2025 pecacerta.com | Design by Gabriel de Mendonça</p>
+                <p>© 2025 pecacerta.com | Projeto by G³ </p>
             </div>
         </div>
     );

@@ -6,6 +6,7 @@ import "/public/style/sideMenu.scss";
 import logo from "/public/imagens/logo_ancora.svg";
 import menu_icon from "/public/imagens/icones/menu.png";
 import user_icon from "/public/imagens/icones/user.svg";
+import user_avatar_placeholder from "/public/imagens/icones/userPlaceholder.png";
 import carrinho_icon from "/public/imagens/icones/carrinho.svg";
 import Pesquisa from "./Pesquisa.jsx";
 import instagram from "/public/imagens/icones/instagram.png";
@@ -30,8 +31,7 @@ const category_list = [
 
 const info_links = [
     { name: "Rede Ancora", href: "https://www.redeancora.com.br/" }, 
-    { name: "Quem somos?", href: "https://www.redeancora.com.br/quem_somos/" },
-    { name: "Parceiros", href: "https://www.redeancora.com.br/industrias/" },
+    { name: "Quem somos?", href: "https://portifolio-g3.vercel.app/" },
     { name: "Suporte", href: "#" }
 ];
 
@@ -107,7 +107,12 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
                                     <button type="button" onClick={logout} className="user-logout-btn">Sair</button>
                                 </div>
                                 <Link to="/perfil" className="user-link" title="Minha conta">
-                                    <img src={user_icon} alt="" aria-hidden="true" className="user-icon" />
+                                    <img 
+                                        src={user.avatar_url || user_avatar_placeholder} 
+                                        alt="Meu Perfil" 
+                                        className="user-avatar-icon" 
+                                        onError={(e) => { e.target.onerror = null; e.target.src = user_icon; }}
+                                    />
                                 </Link>
                             </div>
                         ) : (

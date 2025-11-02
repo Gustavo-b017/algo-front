@@ -138,6 +138,17 @@
         width: clamp(18px, 6vw, 30px);
         height: auto;
       }
+      .user-avatar-icon {
+        display: block;
+        /* Define um tamanho fixo e igual */
+        width: clamp(28px, 6vw, 34px);
+        height: clamp(28px, 6vw, 34px);
+        
+        border-radius: 50%;      /* Faz a imagem ficar redonda */
+        object-fit: cover;      /* Garante que a foto preencha o círculo */
+        border: 2px solid var(--azul); /* Borda sutil */
+        background-color: #f0f0f0; /* Fundo para o placeholder */
+      }
     }
 
     /* Visitante */

@@ -82,6 +82,7 @@
   width: 80%;
   max-width: 520px;
   background-color: #fff;
+  border: 1px solid var(--border-100);
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 20px var(--shadow-100);
   padding: 20px;
@@ -130,7 +131,7 @@
   }
 
   label {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-2);
     display: block;
     margin: 0px;
@@ -141,7 +142,7 @@
   .cadastro-senha {
     width: 100%;
     border: none;
-    font-size: 1.1rem;
+    font-size: 1rem;
     box-sizing: border-box;
     padding: 4px 0;
     color: var(--text-1);
@@ -184,7 +185,7 @@
   align-items: center;
   margin: 15px 0 2px;
   gap: 8px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-2);
 
   input[type="checkbox"] {
@@ -253,7 +254,7 @@
 /* Separador social */
 .separator {
   margin: 14px 0 10px;
-  font-size: var(--fs-12);
+  font-size: 0.9rem;
   color: var(--text-2);
   position: relative;
 
@@ -310,13 +311,13 @@
 /* Link para login */
 .login-link {
   margin-top: 10px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-2);
 
   a {
     color: var(--text-1);
-    font-size: 1.2rem;
-    font-weight: 800;
+    font-size: 1rem;
+    font-weight: 700;
     text-decoration: none;
 
     &:hover {
