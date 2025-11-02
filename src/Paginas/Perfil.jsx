@@ -2,28 +2,31 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/auth-context";
 import { authMe, authUpdateMe } from "../lib/api";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 // Componentes de layout
 import Header from '../Componentes/Header';
 import Footer from '../Componentes/Footer';
-
-// Imagem placeholder
 import avatarPlaceholder from '/public/imagens/perfil.jpeg'; //
 
-// Importar o novo estilo 
-import '../../public/style/perfil.scss'; 
+import ProfileSuccessToast from '../Componentes/ProfileSuccessToast';
+import '../../public/style/profileSuccessToast.scss';
+import '../../public/style/perfil.scss';
+
 
 export default function Perfil() {
   const { user, setUser, ready } = useAuth();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({ nome: "", email: "", telefone: "", avatar_url: "" });
   const [senha_atual, setSenhaAtual] = useState("");
   const [nova_senha, setNovaSenha] = useState("");
-  
+
   const [feedback, setFeedback] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
+
+  const [isToastVisible, setIsToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
     async function load() {
@@ -39,16 +42,16 @@ export default function Perfil() {
           });
         }
       } else {
-         setForm({
-            nome: user.nome || "",
-            email: user.email || "",
-            telefone: user.telefone || "",
-            avatar_url: user.avatar_url || "",
-         });
+        setForm({
+          nome: user.nome || "",
+          email: user.email || "",
+          telefone: user.telefone || "",
+          avatar_url: user.avatar_url || "",
+        });
       }
     }
     if (ready) {
-        load();
+      load();
     }
   }, [user, setUser, ready]);
 
@@ -57,15 +60,15 @@ export default function Perfil() {
       <div className="loader-circle"></div>
     </div>
   );
-  
-  if (!user) { 
+
+  if (!user) {
     useEffect(() => { navigate("/login"); }, [navigate]);
-    return null; 
+    return null;
   }
 
   async function salvar(e) {
     e.preventDefault();
-    setFeedback({ type: "", message: "" });
+    setFeedback({ type: "", message: "" }); // Limpa erros antigos
     setLoading(true);
 
     const payload = {
@@ -73,35 +76,47 @@ export default function Perfil() {
       telefone: form.telefone,
       avatar_url: form.avatar_url,
     };
-    
+
+    let isUpdatingPassword = false;
+
     if (senha_atual && nova_senha) {
+      isUpdatingPassword = true;
       if (nova_senha.length < 3) {
-           setFeedback({ type: "error", message: "A nova senha deve ter pelo menos 3 caracteres." });
-           setLoading(false);
-           return;
+        setFeedback({ type: "error", message: "A nova senha deve ter pelo menos 3 caracteres." });
+        setLoading(false);
+        return;
       }
       payload.senha_atual = senha_atual;
       payload.nova_senha = nova_senha;
     } else if (senha_atual || nova_senha) {
-        setFeedback({ type: "error", message: "Para trocar a senha, preencha a senha atual e a nova senha." });
-        setLoading(false);
-        return;
+      setFeedback({ type: "error", message: "Para trocar a senha, preencha a senha atual e a nova senha." });
+      setLoading(false);
+      return;
     }
 
     try {
       const r = await authUpdateMe(payload);
       if (r?.success) {
-        setUser(r.user); 
-        setFeedback({ type: "success", message: "Perfil atualizado com sucesso!" });
-        setSenhaAtual(""); 
+        setUser(r.user);
+
+        // SUBSTITUÍDO: Troca o feedback inline pelo TOAST
+        if (isUpdatingPassword) {
+          setToastMessage("Senha atualizada com sucesso!");
+        } else {
+          setToastMessage("Dados atualizados com sucesso!");
+        }
+        setIsToastVisible(true);
+
+        setSenhaAtual("");
         setNovaSenha("");
       } else {
+        // Mantém o feedback de ERRO inline
         setFeedback({ type: "error", message: r?.error || "Falha ao atualizar o perfil." });
       }
     } catch (error) {
-        setFeedback({ type: "error", message: error.message || "Erro de rede." });
+      setFeedback({ type: "error", message: error.message || "Erro de rede." });
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   }
   
@@ -110,21 +125,21 @@ export default function Perfil() {
   return (
     <div className="container">
       <Header />
-      
+
       {/* Container principal da página (fundo cinza) */}
       <div className="perfil-page-container">
-        
+
         {/* Wrapper de conteúdo (centralizado) */}
         <div className="perfil-content-wrapper">
-  
+
           {/* Grid de layout (Sidebar + Conteúdo) */}
           <div className="perfil-main-content">
-            
+
             {/* Coluna 1: Sidebar do Avatar */}
             <aside className="perfil-sidebar">
-              <img 
-                src={displayAvatar} 
-                alt="Avatar do usuário" 
+              <img
+                src={displayAvatar}
+                alt="Avatar do usuário"
                 className="avatar-img"
                 onError={(e) => { e.target.onerror = null; e.target.src = avatarPlaceholder; }}
               />
@@ -133,12 +148,12 @@ export default function Perfil() {
 
             {/* Coluna 2: Blocos de Formulário */}
             <main className="perfil-form-content">
-              
+
               {/* Bloco 1: Dados Pessoais */}
               <div className="perfil-form-block">
                 <form onSubmit={salvar}>
                   <h4>Dados Pessoais</h4>
-                  
+
                   <div className="form-group-perfil">
                     <label htmlFor="perfil-nome">Nome Completo</label>
                     <input id="perfil-nome" value={form.nome} onChange={e => setForm({ ...form, nome: e.target.value })} disabled={loading} />
@@ -155,9 +170,9 @@ export default function Perfil() {
                     <label htmlFor="perfil-avatar">URL do Avatar (Opcional)</label>
                     <input id="perfil-avatar" placeholder="https://..." value={form.avatar_url} onChange={e => setForm({ ...form, avatar_url: e.target.value })} disabled={loading} />
                   </div>
-                  
-                  {/* Feedback (movido para dentro do form para melhor posicionamento) */}
-                  {feedback.message && feedback.type === "success" && (
+
+                  {/* Feedback de ERRO (Dados Pessoais) */}
+                  {feedback.message && feedback.type === "error" && !senha_atual && !nova_senha && (
                     <div className={`perfil-feedback ${feedback.type}`}>
                       {feedback.message}
                     </div>
@@ -183,8 +198,8 @@ export default function Perfil() {
                     <input id="perfil-nova-senha" type="password" value={nova_senha} onChange={e => setNovaSenha(e.target.value)} disabled={loading} autoComplete="new-password" />
                   </div>
 
-                  {/* Feedback (Erros de senha aparecem aqui) */}
-                  {feedback.message && feedback.type === "error" && (
+                  {/* Feedback de ERRO (Senha) */}
+                  {feedback.message && feedback.type === "error" && (senha_atual || nova_senha) && (
                     <div className={`perfil-feedback ${feedback.type}`}>
                       {feedback.message}
                     </div>
@@ -201,8 +216,16 @@ export default function Perfil() {
           </div>
         </div>
       </div>
-      
+
       <Footer />
+
+      {/* NOVO: Renderiza o Toast de Sucesso */}
+      <ProfileSuccessToast
+        isVisible={isToastVisible}
+        onClose={() => setIsToastVisible(false)}
+        message={toastMessage}
+      />
+      
     </div>
   );
 }
