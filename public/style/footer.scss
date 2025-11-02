@@ -4,7 +4,8 @@
 /* Variáveis e Estilos Globais */
 /* -------------------------------------------------------------------------- */
 
-.body, html {
+.body,
+html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -18,7 +19,7 @@
     /* Margem padrão para mobile */
     box-sizing: border-box;
     color: #fff;
-    
+
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     /* Define a cor do texto para o container principal */
@@ -29,7 +30,7 @@
     background-color: #4a6c8b;
     text-align: center;
     padding: 5px 0;
-    
+
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -40,7 +41,9 @@
     font-size: 1.2rem;
     transition: color 0.3s;
 
-    &:hover { color: #c0c0c0; }
+    &:hover {
+        color: #c0c0c0;
+    }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -66,7 +69,11 @@
             text-transform: uppercase;
         }
 
-        p, a, li { font-size: 0.8rem; }
+        p,
+        a,
+        li {
+            font-size: 0.8rem;
+        }
     }
 }
 
@@ -90,7 +97,10 @@
 
             span {
                 margin-right: 5px;
-                img { width: 12px; }
+
+                img {
+                    width: 12px;
+                }
             }
         }
     }
@@ -107,7 +117,9 @@
         padding: 0;
     }
 
-    li { margin-bottom: 10px; }
+    li {
+        margin-bottom: 10px;
+    }
 
     a {
         color: #fff;
@@ -142,7 +154,9 @@
         color: #fff;
         font-size: 0.9rem;
 
-        &::placeholder { color: rgba(255, 255, 255, 0.7); }
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
     }
 
     textarea {
@@ -156,7 +170,20 @@
     gap: 15px;
     margin-top: 20px;
 
-    img { width: 30px; }
+    a {
+
+        transition: opacity 0.2s ease, transform 0.2s ease;
+
+        img {
+            width: 30px;
+        }
+
+        &:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+    }
+
 }
 
 /* Rodapé inferior */
@@ -177,9 +204,13 @@
 /* -------------------------------------------------------------------------- */
 @media (min-width: 769px) {
 
-    .footer-container { margin-top: 60px; }
+    .footer-container {
+        margin-top: 60px;
+    }
 
-    .back-to-top { font-size: 1rem; }
+    .back-to-top {
+        font-size: 1rem;
+    }
 
     .footer-main {
         flex-direction: row;
@@ -197,15 +228,19 @@
             text-align: left;
 
             /* A seção "Sobre nós" ocupa mais espaço */
-            &:nth-child(1) { flex: 2 1 60%; }
+            &:nth-child(1) {
+                flex: 2 1 60%;
+            }
 
-            h4 { margin-bottom: 20px; }
+            h4 {
+                margin-bottom: 20px;
+            }
 
             .about-us {
-                    p {
-                        font-size: 0.9rem;
-                        margin-bottom: 50px;
-                    }
+                p {
+                    font-size: 0.9rem;
+                    margin-bottom: 50px;
+                }
             }
 
             .contact-info {
@@ -217,17 +252,24 @@
                 span {
                     margin-right: 10px;
 
-                    img { width: 17px; }
+                    img {
+                        width: 17px;
+                    }
                 }
             }
-            
-            .social-links { justify-content: flex-start; }
+
+            .social-links {
+                justify-content: flex-start;
+            }
         }
     }
 
     .contact-form {
         display: block;
-        form { align-items: stretch; }
+
+        form {
+            align-items: stretch;
+        }
     }
 
     /* Rodapé inferior */

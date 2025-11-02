@@ -29,11 +29,10 @@ function Footer() {
                 <div className="footer-section links">
                     <h4>Seções de Links</h4>
                     <ul>
-                        <li><a href="#">Início Catálogo de peças</a></li>
-                        <li><a href="#">Lojas parceiras</a></li>
-                        <li><a href="#">Como funciona</a></li>
+                        <li><a href="/resultados">Início Catálogo de peças</a></li>
+                        <li><a href="https://www.redeancora.com.br/industrias/">Lojas parceiras</a></li>
+                        <li><a href="https://www.redeancora.com.br/quem_somos/">Quem somos?</a></li>
                         <li><a href="#">Suporte</a></li>
-                        <li><a href="#">Termos e condições</a></li>
                     </ul>
                 </div>
 
@@ -43,9 +42,9 @@ function Footer() {
                         <input type="email" placeholder="Digite o seu e-mail" />
                         <textarea placeholder="Escreva a sua mensagem..."></textarea>
                         <div className="social-links">
-                            <a href="#" aria-label="LinkedIn"><img src={linkeding} alt="Linkeding" /></a>
-                            <a href="#" aria-label="Facebook"><img src={facebook} alt="Facebook" /></a>
-                            <a href="#" aria-label="Instagram"><img src={instagram} alt="Instagram" /></a>
+                            <a href="https://www.linkedin.com/company/redeancorabr/" aria-label="LinkedIn"><img src={linkeding} alt="Linkeding" /></a>
+                            <a href="https://www.facebook.com/RedeAncora/" aria-label="Facebook"><img src={facebook} alt="Facebook" /></a>
+                            <a href="https://www.instagram.com/redeancorabr" aria-label="Instagram"><img src={instagram} alt="Instagram" /></a>
                         </div>
                     </form>
                 </div>

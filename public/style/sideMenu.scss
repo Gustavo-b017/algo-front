@@ -31,7 +31,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 50%; 
+    width: 60%; 
     max-width: 350px; 
     height: 100%;
     background-color: var(--azul); 
@@ -100,7 +100,7 @@
     .menu-divider {
         border: none;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
-        margin: 0.5rem 1.5rem; /* Alinha com o padding dos links */
+        margin: 0.5rem 1.5rem;
     }
 
     /* NOVO: Estilo para o BOTÃO de Categoria */
@@ -144,30 +144,21 @@
         }
     }
 
-   /* NOVO: Wrapper para a lista de categorias (controla o accordion) */
-    .side-menu-categories {
-        /* Escondido por padrão */
+  /* MODIFICADO: Classe genérica para conteúdo do Accordion */
+    .side-menu-accordion-content {
         max-height: 0; 
         overflow: hidden;
-        
-        /* Fundo sutil para diferenciar a sub-seção */
         background-color: rgba(0, 0, 0, 0.15); 
-        
-        /* Animação de abertura/fechamento */
         transition: max-height 0.3s ease-in-out;
 
-        /* Estado aberto */
         &.open {
-            /* Define uma altura máxima para a animação funcionar.
-               40vh = 40% da altura da tela. Ajuste se a lista for maior.
-            */
             max-height: 40vh; 
-            overflow-y: auto; /* Adiciona scroll se a lista for maior que 40vh */
+            overflow-y: auto;
         }
         
         .menu-category-link {
             display: block;
-            padding: 0.75rem 1.5rem 0.75rem 2.0rem; /* Padding menor e com indentação */
+            padding: 0.75rem 1.5rem 0.75rem 2.0rem; 
             color: var(--branco);
             text-decoration: none;
             font-size: 1rem; 
@@ -181,29 +172,35 @@
     }
 }
 
-/* =====================
-   FOOTER (BOTÃO LOGOUT)
-   ===================== */
+/* ==============================
+   FOOTER (MODIFICADO)
+   ============================== */
 .side-menu-footer {
     padding: 1.5rem; 
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto; 
+    flex-shrink: 0;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1.5rem; /* Espaço entre o botão (se existir) e os ícones */
 
+    /* Botão de Logout (Estilo mantido, agora no topo) */
     .menu-action-btn.logout {
-        width: 30%; 
-        padding: 0.3rem 1rem;
         
+        width: 20%; 
+        padding: 0.3rem 0; 
         background: none; 
         border: 2px solid var(--vermelho); 
         border-radius: 8px; 
-        
-        color: var(--vermelho);
+        color: var(--vermelho); 
         font-size: 1rem;
         font-weight: 700;
         text-align: center;
         cursor: pointer;
-        
         transition: all 0.2s ease-in-out;
-
+        
         &:hover {
             background-color: var(--vermelho);
             color: var(--branco);
@@ -215,5 +212,35 @@
             transform: translateY(0);
             opacity: 0.9;
         }
+    }
+
+    /* Estilos para Mídias Sociais (agora na base) */
+    .side-menu-social {
+        display: flex;
+        //justify-content: center;
+        align-items: center;
+        gap: 1.5rem; 
+        
+
+        a {
+            display: inline-block;
+            opacity: 0.7;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+
+            img {
+                width: 28px;
+                height: 28px;
+            }
+
+            &:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+    }
+    
+    /* O divisor antigo não é mais necessário neste layout */
+    .menu-divider {
+        display: none;
     }
 }

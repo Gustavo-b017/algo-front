@@ -8,6 +8,9 @@ import menu_icon from "/public/imagens/icones/menu.png";
 import user_icon from "/public/imagens/icones/user.svg";
 import carrinho_icon from "/public/imagens/icones/carrinho.svg";
 import Pesquisa from "./Pesquisa.jsx";
+import instagram from "/public/imagens/icones/instagram.png";
+import facebook from "/public/imagens/icones/facebook.png";
+import linkeding from "/public/imagens/icones/linkeding.png";
 
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/auth-context";
@@ -25,11 +28,19 @@ const category_list = [
     { name: "Embreagem", id: 10 }
 ];
 
+const info_links = [
+    { name: "Rede Ancora", href: "https://www.redeancora.com.br/" }, 
+    { name: "Quem somos?", href: "https://www.redeancora.com.br/quem_somos/" },
+    { name: "Parceiros", href: "https://www.redeancora.com.br/industrias/" },
+    { name: "Suporte", href: "#" }
+];
+
 function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit }) {
 
     const { user, logout, ready, cartItemCount } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+    const [isInfoOpen, setIsInfoOpen] = useState(false);
 
     // Função para abrir/fechar o menu
     const toggleMenu = () => {
@@ -50,6 +61,11 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
 
     const toggleCategories = () => {
         setIsCategoriesOpen(!isCategoriesOpen);
+    };
+
+    // Função para o accordion de "Sobre"
+    const toggleInfo = () => {
+        setIsInfoOpen(!isInfoOpen);
     };
 
     return (
@@ -135,7 +151,7 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
                     
                     <hr className="menu-divider" /> 
 
-                    {/* NOVO: Bloco de Categorias */}
+                    {/* Bloco de Categorias */}
                     <button 
                         className={`menu-subtitle-toggle ${isCategoriesOpen ? 'active' : ''}`}
                         onClick={toggleCategories}
@@ -143,7 +159,7 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
                     >
                         Categorias
                     </button>
-                    <div className={`side-menu-categories ${isCategoriesOpen ? 'open' : ''}`}>
+                    <div className={`side-menu-accordion-content ${isCategoriesOpen ? 'open' : ''}`}>
                         {category_list.map((category) => (
                             <Link 
                                 key={category.id} 
@@ -155,18 +171,53 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
                             </Link>
                         ))}
                     </div>
-                    {/* Fim do Bloco de Categorias */}
+
+                    {/* Bloco Institucional (Accordion 2) */}
+                    <hr className="menu-divider" />
+                    
+                    <button 
+                        className={`menu-subtitle-toggle ${isInfoOpen ? 'active' : ''}`}
+                        onClick={toggleInfo}
+                        aria-expanded={isInfoOpen}
+                    >
+                        Sobre
+                    </button>
+                    
+                    <div className={`side-menu-accordion-content ${isInfoOpen ? 'open' : ''}`}>
+                        {info_links.map((link) => (
+                            <Link 
+                                key={link.name} 
+                                to={link.href} 
+                                onClick={closeMenu}
+                                className="menu-category-link"
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
+                    </div>
 
                 </nav>
 
-                {/* Footer do Menu (Botão Sair) */}
-                {user && (
-                    <div className="side-menu-footer">
-                        <button className="menu-action-btn logout" onClick={handleLogout}>
-                            Sair
-                        </button>
+                {/* Footer do Menu (Mídias Sociais e Botão Sair) */}
+                <div className="side-menu-footer">
+
+                     {user && (
+                        <>
+                            <hr className="menu-divider" />
+                            <button className="menu-action-btn logout" onClick={handleLogout}>
+                                Sair
+                            </button>
+                        </>
+                    )}
+                    
+                    {/* NOVO: Links de Mídia Social */}
+                    <div className="side-menu-social">
+                        <a href="https://www.linkedin.com/company/redeancorabr/" aria-label="LinkedIn"><img src={linkeding} alt="LinkedIn" /></a>
+                        <a href="https://www.facebook.com/RedeAncora/" aria-label="Facebook"><img src={facebook} alt="Facebook" /></a>
+                        <a href="https://www.instagram.com/redeancorabr" aria-label="Instagram"><img src={instagram} alt="Instagram" /></a>
                     </div>
-                )}
+                    
+                </div>
             </div>
         </>
     );
