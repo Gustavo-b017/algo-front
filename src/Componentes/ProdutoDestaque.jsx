@@ -8,8 +8,7 @@ import arrow_left from "/public/imagens/icones/arrow-left.png";
 import arrow_right from "/public/imagens/icones/arrow-right.png";
 import carrinho_icon from '/public/imagens/icones/carrinho.svg';
 
-// const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'http://127.0.0.1:5000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
