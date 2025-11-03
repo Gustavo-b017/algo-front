@@ -109,8 +109,6 @@ function CardsProdutos({
                     {item.parcelas.qtd}x de {formatBRL(item.parcelas.valor)} sem juros
                   </p>
                 )}
-
-                <p className='produto-nome'>score: {item.score}</p>
               </div>
             </div>
           </div>
