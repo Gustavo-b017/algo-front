@@ -257,11 +257,6 @@ function Item({ dadosItem, onSave }) {
             <div className="tabela-valor">-{dados.comprimento}</div>
           </div>
 
-          {/* NOVO: linha explícita para o score da API */}
-          <div className="tabela-linha">
-            <div className="tabela-label">Score (API)</div>
-            <div className="tabela-valor">{formatScore(dados.score) ?? '-'}</div>
-          </div>
         </div>
       </div>
 

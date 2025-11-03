@@ -314,17 +314,10 @@ export default function Resultados() {
     navigate(`/resultados?${params.toString()}`);
   };
 
-  // clique nas categorias (atalho para família por nome)
-  const handleCategoryClick = (familyName, familyId) => {
-    // se vier só o nome, tente achar o id
-    let id = familyId;
-    if (!id) {
-      const f = listaFamilias.find(
-        (x) => (x.nome || "").toLowerCase() === (familyName || "").toLowerCase()
-      );
-      if (f) id = f.id;
-    }
-    if (id) handleFamiliaChange(id, familyName || (listaFamilias.find(f => f.id === id)?.nome || ""));
+  // Lidar com o clique em categoria
+  const handleCategoryClick = (categoryName) => {
+    const params = new URLSearchParams({ termo: categoryName });
+    navigate(`/resultados?${params.toString()}`);
   };
 
   // Handler para limpar todos os filtros aplicados
@@ -349,149 +342,149 @@ export default function Resultados() {
 
   }
 
-    // ===== botão carrinho ========================================================
+  // ===== botão carrinho ========================================================
 
-    // Lógica de Adicionar ao Carrinho Rápido (Quick Add)
-    const handleQuickAdd = async (produto) => {
-      // 1. Verificar Autenticação (UX/CRO)
-      if (!user) {
-        triggerLoginAlert();
-        return;
-      }
+  // Lógica de Adicionar ao Carrinho Rápido (Quick Add)
+  const handleQuickAdd = async (produto) => {
+    // 1. Verificar Autenticação (UX/CRO)
+    if (!user) {
+      triggerLoginAlert();
+      return;
+    }
 
-      // 2. Preparar dados
-      const itemToAdd = {
-        id_api_externa: produto.id,
-        nome: produto.nome,
-        codigo_referencia: produto.codigoReferencia || produto.id,
-        url_imagem: produto.imagemReal,
-        preco_original: produto.precoOriginal,
-        preco_final: produto.preco,
-        desconto: produto.descontoPercentual,
-        marca: produto.marca,
-        quantidade: 1 // Quick Add adiciona apenas 1
-      };
-
-      // 3. Chamar API
-      try {
-        // Usa a rota /salvar_produto que é a rota funcional para adicionar
-        await cartAdd(itemToAdd);
-
-        fetchCartCount(); // Sincroniza o contador no cabeçalho
-
-        // 4. Exibir Notificação Personalizada
-        setNotification({
-          isVisible: true,
-          data: { ...itemToAdd, nomeProduto: itemToAdd.nome } // Garante que o nome do produto está como esperado
-        });
-
-      } catch (error) {
-        console.error("Erro ao adicionar item rápido:", error);
-        alert("Não foi possível adicionar o item. Tente novamente.");
-      }
+    // 2. Preparar dados
+    const itemToAdd = {
+      id_api_externa: produto.id,
+      nome: produto.nome,
+      codigo_referencia: produto.codigoReferencia || produto.id,
+      url_imagem: produto.imagemReal,
+      preco_original: produto.precoOriginal,
+      preco_final: produto.preco,
+      desconto: produto.descontoPercentual,
+      marca: produto.marca,
+      quantidade: 1 // Quick Add adiciona apenas 1
     };
 
-    return (
-      <div className="container">
-        <Header
-          query={query}
-          setQuery={setQuery}
-          placa={placa}
-          setPlaca={setPlaca}
-          onSearchSubmit={handleSearchSubmit}
+    // 3. Chamar API
+    try {
+      // Usa a rota /salvar_produto que é a rota funcional para adicionar
+      await cartAdd(itemToAdd);
+
+      fetchCartCount(); // Sincroniza o contador no cabeçalho
+
+      // 4. Exibir Notificação Personalizada
+      setNotification({
+        isVisible: true,
+        data: { ...itemToAdd, nomeProduto: itemToAdd.nome } // Garante que o nome do produto está como esperado
+      });
+
+    } catch (error) {
+      console.error("Erro ao adicionar item rápido:", error);
+      alert("Não foi possível adicionar o item. Tente novamente.");
+    }
+  };
+
+  return (
+    <div className="container">
+      <Header
+        query={query}
+        setQuery={setQuery}
+        placa={placa}
+        setPlaca={setPlaca}
+        onSearchSubmit={handleSearchSubmit}
+      />
+
+      <Categorias onCategoryClick={handleCategoryClick} />
+
+      {/* BOTÃO FILTROS (visível só no mobile via CSS) */}
+      <div className="filters-mobile-bar">
+        <button
+          type="button"
+          className="btn-open-filters"
+          onClick={() => setShowFilters(true)}
+        >
+          Filtros
+        </button>
+      </div>
+
+      {/* BACKDROP + PAINEL LATERAL (só mobile) */}
+      {isMobile && showFilters && <div className="modal-backdrop" onClick={() => setShowFilters(false)} />}
+      {isMobile && (
+        <Filtro
+          /* mesmas props que o sidebar */
+          ordenacaoAtual={ordenacaoUI}
+          ordemAtual={ordemUI}
+          onOrdenacaoChange={handleOrdenacaoChange}
+          listaFamilias={listaFamilias}
+          familiaSelecionada={familiaSelecionada}
+          onFamiliaChange={handleFamiliaChange}
+          listaSubFamilias={listaSubFamilias}
+          subFamiliaSelecionada={subFamiliaSelecionada}
+          onSubFamiliaChange={handleSubFamiliaChange}
+          carregandoCascata={carregandoCascata}
+          carregandoSubFamilias={carregandoSubFamilias}
+          listaMarcasProduto={listaMarcasProduto}
+          marcaProdutoSelecionada={marcaProdutoSelecionada}
+          onMarcaProdutoChange={handleMarcaProdutoChange}
+          carregandoFacetas={carregandoFacetas}
+          className={showFilters ? "visivel" : ""}   // <<< abre o off-canvas
+          onClose={() => setShowFilters(false)}
         />
+      )}
 
-        <Categorias onCategoryClick={(name, id) => handleCategoryClick(name, id)} />
-
-        {/* BOTÃO FILTROS (visível só no mobile via CSS) */}
-        <div className="filters-mobile-bar">
-          <button
-            type="button"
-            className="btn-open-filters"
-            onClick={() => setShowFilters(true)}
-          >
-            Filtros
-          </button>
-        </div>
-
-        {/* BACKDROP + PAINEL LATERAL (só mobile) */}
-        {isMobile && showFilters && <div className="modal-backdrop" onClick={() => setShowFilters(false)} />}
-        {isMobile && (
-          <Filtro
-            /* mesmas props que o sidebar */
-            ordenacaoAtual={ordenacaoUI}
-            ordemAtual={ordemUI}
-            onOrdenacaoChange={handleOrdenacaoChange}
-            listaFamilias={listaFamilias}
-            familiaSelecionada={familiaSelecionada}
-            onFamiliaChange={handleFamiliaChange}
-            listaSubFamilias={listaSubFamilias}
-            subFamiliaSelecionada={subFamiliaSelecionada}
-            onSubFamiliaChange={handleSubFamiliaChange}
-            carregandoCascata={carregandoCascata}
-            carregandoSubFamilias={carregandoSubFamilias}
-            listaMarcasProduto={listaMarcasProduto}
-            marcaProdutoSelecionada={marcaProdutoSelecionada}
-            onMarcaProdutoChange={handleMarcaProdutoChange}
-            carregandoFacetas={carregandoFacetas}
-            className={showFilters ? "visivel" : ""}   // <<< abre o off-canvas
-            onClose={() => setShowFilters(false)}
-          />
+      <main className="search-page-container">
+        {/* SIDEBAR (só desktop) */}
+        {!isMobile && (
+          <aside className="filters-sidebar">
+            <Filtro
+              ordenacaoAtual={ordenacaoUI}
+              ordemAtual={ordemUI}
+              onOrdenacaoChange={handleOrdenacaoChange}
+              listaFamilias={listaFamilias}
+              familiaSelecionada={familiaSelecionada}
+              onFamiliaChange={handleFamiliaChange}
+              listaSubFamilias={listaSubFamilias}
+              subFamiliaSelecionada={subFamiliaSelecionada}
+              onSubFamiliaChange={handleSubFamiliaChange}
+              carregandoCascata={carregandoCascata}
+              carregandoSubFamilias={carregandoSubFamilias}
+              listaMarcasProduto={listaMarcasProduto}
+              marcaProdutoSelecionada={marcaProdutoSelecionada}
+              onMarcaProdutoChange={handleMarcaProdutoChange}
+              carregandoFacetas={carregandoFacetas}
+              className="pretty"
+            />
+          </aside>
         )}
 
-        <main className="search-page-container">
-          {/* SIDEBAR (só desktop) */}
-          {!isMobile && (
-            <aside className="filters-sidebar">
-              <Filtro
-                ordenacaoAtual={ordenacaoUI}
-                ordemAtual={ordemUI}
-                onOrdenacaoChange={handleOrdenacaoChange}
-                listaFamilias={listaFamilias}
-                familiaSelecionada={familiaSelecionada}
-                onFamiliaChange={handleFamiliaChange}
-                listaSubFamilias={listaSubFamilias}
-                subFamiliaSelecionada={subFamiliaSelecionada}
-                onSubFamiliaChange={handleSubFamiliaChange}
-                carregandoCascata={carregandoCascata}
-                carregandoSubFamilias={carregandoSubFamilias}
-                listaMarcasProduto={listaMarcasProduto}
-                marcaProdutoSelecionada={marcaProdutoSelecionada}
-                onMarcaProdutoChange={handleMarcaProdutoChange}
-                carregandoFacetas={carregandoFacetas}
-                className="pretty"
-              />
-            </aside>
-          )}
+        {/* LISTA – por padrão já é 1 coluna; desktop vira 3 colunas */}
+        <section className="search-results">
+          <CardsProdutos
+            resultados={resultados}
+            paginaAtual={paginaAtual}
+            totalPaginas={totalPaginas}
+            buscarTratados={handlePageChange}
+            carregandoTabela={carregandoTabela}
+            feedbackMessage={feedbackMessage}
+            handleLinhaClick={(p) => {
+              const params = new URLSearchParams({ id: p.id, nomeProduto: p.nome });
+              navigate(`/produto?${params.toString()}`);
+            }}
+            handleQuickAdd={handleQuickAdd} // NOVO: Passa a função de Quick Add
+            actionText="Limpar Filtros Aplicados"
+            onActionClick={handleClearAllFilters}
+          />
+        </section>
+      </main>
 
-          {/* LISTA – por padrão já é 1 coluna; desktop vira 3 colunas */}
-          <section className="search-results">
-            <CardsProdutos
-              resultados={resultados}
-              paginaAtual={paginaAtual}
-              totalPaginas={totalPaginas}
-              buscarTratados={handlePageChange}
-              carregandoTabela={carregandoTabela}
-              feedbackMessage={feedbackMessage}
-              handleLinhaClick={(p) => {
-                const params = new URLSearchParams({ id: p.id, nomeProduto: p.nome });
-                navigate(`/produto?${params.toString()}`);
-              }}
-              handleQuickAdd={handleQuickAdd} // NOVO: Passa a função de Quick Add
-              actionText="Limpar Filtros Aplicados"
-              onActionClick={handleClearAllFilters}
-            />
-          </section>
-        </main>
+      <Footer />
 
-        <Footer />
-
-        {/* NOVO: Renderiza a notificação no final do container */}
-        <CartNotification
-          isVisible={notification.isVisible}
-          onClose={() => setNotification(v => ({ ...v, isVisible: false }))}
-          productData={notification.data}
-        />
-      </div>
-    );
-  }
+      {/* NOVO: Renderiza a notificação no final do container */}
+      <CartNotification
+        isVisible={notification.isVisible}
+        onClose={() => setNotification(v => ({ ...v, isVisible: false }))}
+        productData={notification.data}
+      />
+    </div>
+  );
+}

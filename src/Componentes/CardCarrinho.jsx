@@ -3,6 +3,7 @@ import React from 'react';
 import '/public/style/cardCarrinho.scss';
 import trash_icon from '../../public/imagens/icones/trash.svg'
 import plus_icon from '../../public/imagens/icones/plus.svg'
+import minus_icon from '../../public/imagens/icones/menos.svg'
 
 const formatBRL = (v) =>
     typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
@@ -69,7 +70,7 @@ function CardCarrinho({ produtos, handleCardClick, handleRemoverItem, handleUpda
                                             handleUpdateQuantidade(item.id_api_externa, item.quantidade - 1);
                                         }}
                                     >
-                                        -
+                                        <img src={minus_icon} alt="Remover unidade" />
                                     </button>
                                 )}
                                 <span className="carrinho-quantidade">{item.quantidade}</span>
