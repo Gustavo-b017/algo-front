@@ -14,8 +14,8 @@ import { cartAdd } from "../lib/api.js";
 
 import "/public/style/Resultados.scss";
 
-const API_URL = import.meta.env.VITE_API_URL;
-// const API_URL = 'http://127.0.0.1:5000';
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = 'http://127.0.0.1:5000';
 
 // token opcional (se tiver o decorator ativo em dev/prod)
 const API_TOKEN = import.meta.env.VITE_API_TOKEN;

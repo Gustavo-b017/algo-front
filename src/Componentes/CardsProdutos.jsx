@@ -6,16 +6,16 @@ import carrinho_icon from '../../public/imagens/icones/carrinho.svg';
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
-function CardsProdutos({ 
-  resultados, 
-  paginaAtual, 
-  totalPaginas, 
-  buscarTratados, 
-  handleLinhaClick, 
-  carregandoTabela, 
-  feedbackMessage, 
-  handleQuickAdd, 
-  actionText, 
+function CardsProdutos({
+  resultados,
+  paginaAtual,
+  totalPaginas,
+  buscarTratados,
+  handleLinhaClick,
+  carregandoTabela,
+  feedbackMessage,
+  handleQuickAdd,
+  actionText,
   onActionClick }) {
 
   if (carregandoTabela) {
@@ -109,6 +109,8 @@ function CardsProdutos({
                     {item.parcelas.qtd}x de {formatBRL(item.parcelas.valor)} sem juros
                   </p>
                 )}
+
+                <p className='produto-nome'>score: {item.score}</p>
               </div>
             </div>
           </div>
