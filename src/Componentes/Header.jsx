@@ -17,17 +17,17 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/auth-context";
 
 const category_list = [
-    { name: "Cambio", id: 1 },
-    { name: "Motor", id: 2 },
-    { name: "Disco", id: 3 },
+    { name: "Cambio", id: 1},
+    { name: "Engrenagem", id: 2 },
+    { name: "Disco", id: 3},
     { name: "Pastilha", id: 4 },
-    { name: "Filtro", id: 5 },
-    { name: "Parafuso", id: 6 },
-    { name: "Oleo", id: 7 },
-    { name: "Valvula", id: 8 },
-    { name: "Radiador", id: 9 },
-    { name: "Embreagem", id: 10 }
-];
+    { name: "Amortecedor", id: 5 },
+    { name: "Vela", id: 6 },
+    { name: "Diferencial", id: 7 },
+    { name: "Filtro", id: 8 },
+    { name: "Oleo", id: 9 },
+    { name: "Combustível", id: 10 }
+]
 
 const info_links = [
     { name: "Rede Ancora", href: "https://www.redeancora.com.br/" }, 
@@ -118,8 +118,13 @@ function Header({ query, setQuery, placa, setPlaca, dropdownRef, onSearchSubmit 
                         ) : (
                             <Link to="/login" className="cadastro-btn">
                                 <span>Entre /{"\n"}Cadastro </span>
-                                <img src={user_icon} alt="" aria-hidden="true" className="user-icon" />
-
+                                
+                                <img 
+                                    src={user_icon} 
+                                    alt="Entrar ou Cadastrar" 
+                                    aria-hidden="true" 
+                                    className="user-avatar-icon"
+                                /> 
                             </Link>
                         )
                     )}
