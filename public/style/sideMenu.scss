@@ -1,7 +1,23 @@
 /* public/style/sideMenu.scss */
 
-/* Importa as variáveis de cor do projeto */
-@import '/public/style/variaveis.scss';
+// Variáveis para pontos de quebra (breakpoints)
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+// Variáveis de cores
+$azul_principal: #022e4c;
+$vermelho_secundario: #ce0f2d;
+$cinza_claro: #d7d8d8;
+$cinza_escuro: #666968;
+$branco: #ffffff;
+
+:root {
+  --azul: #022e4c;
+  --vermelho: #ce0f2d;
+  --cinza_claro: #d7d8d8;
+  --cinza_escuro: #666968;
+}
 
 /* ==============================
    BACKDROP (FUNDO)
