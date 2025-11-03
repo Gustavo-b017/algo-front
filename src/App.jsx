@@ -13,7 +13,8 @@ import RequireAuth from "./Componentes/RequireAuth.jsx";
 import "./index.scss";
 import "/public/style/notificacoes.scss";
 import { useAuth } from './contexts/auth-context'; // NOVO: Importa useAuth
-import AuthRequiredToast from './Componentes/AuthRequiredToast'; // NOVO: Importa o Toast
+import AuthRequiredToast from './Componentes/AuthRequiredToast';
+import "/public/style/starRating.scss";
 
 function App() {
   const { loginAlert } = useAuth();

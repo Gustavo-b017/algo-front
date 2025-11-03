@@ -108,8 +108,23 @@
 }
 
 .produto-rating {
-  font-size: 0.9rem;
-  color: #6b7280;
+  /* NOVO: Alinha as estrelas e o score-badge */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Permite quebrar a linha se não couber */
+  gap: 8px; /* Espaçamento entre estrelas e score */
+  margin: 6px 0;
+
+}
+
+/* NOVO: Estilo para o badge de score da API */
+.produto-score-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-2);
+    background-color: #f0f2f5;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
 .produto-codigo,

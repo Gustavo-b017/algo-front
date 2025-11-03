@@ -1,0 +1,70 @@
+/* public/style/starRating.scss (Refatorado) */
+
+:root {
+  --star-color-filled: #ffc107; /* Amarelo/Ouro */
+  --star-color-empty: #e0e0e0; /* Cinza claro */
+  --text-2: #666666;
+}
+
+.star-rating-container {
+    display: flex;
+    align-items: center;
+    gap: 6px; 
+    
+    /* Tamanho padrão das estrelas (controla o 'em' abaixo) */
+    font-size: 1.1rem; 
+}
+
+.stars-wrapper {
+    display: inline-flex; /* Alinha os dois contêineres (vazio e cheio) */
+    position: relative;
+}
+
+/* O ícone SVG (a estrela) */
+.star-icon {
+    width: 1em; /* 1em = 100% do font-size do container pai */
+    height: 1em;
+    display: block; /* Remove espaçamento extra */
+    
+    /* A CORREÇÃO:
+      Impede que a estrela encolha dentro do container flex.
+      Isso força as 5 estrelas a ficarem sempre em linha,
+      permitindo que o 'overflow: hidden' funcione.
+    */
+    flex-shrink: 0; 
+}
+
+/* Camada de Fundo (Vazias) */
+.stars-empty {
+    display: flex; /* Organiza as 5 estrelas vazias em linha */
+    color: var(--star-color-empty);
+    
+    .star-icon {
+        fill: currentColor;
+    }
+}
+
+/* Camada da Frente (Preenchidas) */
+.stars-filled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    
+    display: flex; /* Organiza as 5 estrelas cheias em linha */
+    color: var(--star-color-filled);
+    
+    overflow: hidden; /* Corta o preenchimento na porcentagem certa */
+    white-space: nowrap; 
+
+    .star-icon {
+        fill: currentColor;
+    }
+}
+
+/* Contagem de Avaliações (Opcional) */
+.review-count {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    font-weight: 600;
+}

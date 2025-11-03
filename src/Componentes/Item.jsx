@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '/public/style/item.scss';
 import { useAuth } from '../contexts/auth-context';
 import { useNavigate } from 'react-router-dom'; 
+import StarRating from './StarRating';
 
 
 const formatBRL = (v) =>
@@ -103,16 +104,23 @@ function Item({ dadosItem, onSave }) {
         <div className="produto-info-section">
           <h1 className="produto-titulo">{dados.nomeProduto}</h1>
           <div className="produto-rating">
+              {/* CORRIGIDO: Passa o 'dados.score' (0-12) para o componente
+                 O '|| 0' garante que não quebre se o score for nulo.
+              */}
+              <StarRating 
+                score={dados.score || 0} 
+                totalReviews={dados.totalAvaliacoes} // (Assumindo que este campo exista)
+              />
 
-            {/* NOVO: badge de relevância da API ao lado das estrelas */}
-            {formatScore(dados.score) !== null && (
-              <span
-                className="produto-score-badge"
-                title="Relevância da busca (score da API)"
-              >
-                Pontos: {formatScore(dados.score)}
-              </span>
-            )}
+              {/* Mantém o score numérico (0-12) se ele existir */}
+              {formatScore(dados.score) !== null && (
+                <span
+                  className="produto-score-badge"
+                  title="Pontuação de relevância (0-12)"
+                >
+                  (Score: {formatScore(dados.score)})
+                </span>
+              )}
           </div>
           <p className="produto-codigo">Código:{dados.id}</p>
           <p className="produto-marca">Marca: <strong>{dados.marca}</strong></p>
