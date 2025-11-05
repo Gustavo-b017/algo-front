@@ -2,7 +2,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../../public/style/banner.scss';
 
-import banner from "/public/imagens/banner1.svg";
+import banner1 from "../../public/imagens/banners/banner1.png";
+import banner2 from "../../public/imagens/banners/banner2.png";
+import banner3 from "../../public/imagens/banners/banner3.png";
 
 function Banner() {
     return (
@@ -16,13 +18,13 @@ function Banner() {
 
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                        <img className="d-block w-100" src={banner} alt="Primeiro Slide" />
+                        <img className="d-block w-100" src={banner1} alt="Primeiro Slide" />
                     </div>
                     <div className="carousel-item">
-                        <img className="d-block w-100" src={banner} alt="Segundo Slide" />
+                        <img className="d-block w-100" src={banner2} alt="Segundo Slide" />
                     </div>
                     <div className="carousel-item">
-                        <img className="d-block w-100" src={banner} alt="Terceiro Slide" />
+                        <img className="d-block w-100" src={banner3} alt="Terceiro Slide" />
                     </div>
                 </div>
 
