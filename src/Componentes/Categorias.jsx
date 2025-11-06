@@ -4,20 +4,25 @@ import dif_icon from "/public/imagens/icones/categorias/differential.png";
 import eng_icon from "/public/imagens/icones/categorias/settings.png";
 import gear_icon from "/public/imagens/icones/categorias/gearshift.png";
 import filt_icon from "/public/imagens/icones/categorias/oil-filter.png";
-import oil_icon from "/public/imagens/icones/categorias/oil.png";
+import comb_icon from "/public/imagens/icones/categorias/oil.png";
+import oil_icon from "/public/imagens/icones/categorias/engine-oil.png";
 import shock_icon from "/public/imagens/icones/categorias/shock-absorber.png";
+import vela_icon from "/public/imagens/icones/categorias/spark-plug.png";
+import brake_icon from "/public/imagens/icones/categorias/brake.png";
+import past_icon from "/public/imagens/icones/categorias/brake-pad.png";
+
 
 const category_list = [
     { name: "Cambio", id: 1, src: gear_icon },
     { name: "Engrenagem", id: 2, src: eng_icon },
-    //{ name: "Disco", id: 3, src:  },
-    //{ name: "Pastilha", id: 4, src: },
+    { name: "Disco", id: 3, src: brake_icon },
+    { name: "Pastilha", id: 4, src: past_icon},
     { name: "Amortecedor", id: 5, src: shock_icon },
-    //{ name: "Vela", id: 6, src:  },
+    { name: "Vela", id: 6, src: vela_icon },
     { name: "Diferencial", id: 7, src: dif_icon },
     { name: "Filtro", id: 8, src: filt_icon },
     { name: "Oleo", id: 9, src: oil_icon },
-    //{ name: "Combustível", id: 10, src: }
+    { name: "combustivel", id: 10, src: comb_icon}
 ]
 
 function Categorias({ onCategoryClick }) {
