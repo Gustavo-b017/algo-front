@@ -4,20 +4,23 @@ import axios from "axios";
 /**
  * Normalização da base:
  * - VITE_API_URL pode vir com / ou até com /health no final.
- * - Removemos sufixos e barras duplicadas para evitar 404/500 e "falso CORS".
+ * - Removemos sufixos e barras duplicadas para evitar 404/500 e “falso CORS”.
+ * - Mantém compatibilidade com qualquer chamada existente no projeto.
  */
 const RAW_BASE = import.meta.env.VITE_API_URL?.trim() ?? "";
 const BASE_NO_TRAIL = RAW_BASE.replace(/\/+$/, "");
 const ROOT_BASE = BASE_NO_TRAIL.replace(/\/health$/i, ""); // raiz (sem /health)
 
+/** Constrói URLs absolutas a partir da raiz normalizada. */
 function buildUrl(path = "") {
   const p = path.startsWith("/") ? path : `/${path}`;
   return `${ROOT_BASE}${p}`;
 }
 
-// ---- token helpers ---------------------------------------------------------
+// ---- Token helpers (persistência local) ------------------------------------
 const TOKEN_KEY = "access_token";
 
+/** Salva ou remove o token do localStorage. */
 export function setToken(token) {
   try {
     if (token) localStorage.setItem(TOKEN_KEY, token);
@@ -25,6 +28,7 @@ export function setToken(token) {
   } catch {}
 }
 
+/** Lê o token atual (ou string vazia). */
 export function getToken() {
   try {
     return localStorage.getItem(TOKEN_KEY) || "";
@@ -33,11 +37,12 @@ export function getToken() {
   }
 }
 
+/** Limpa o token atual. */
 export function clearToken() {
   setToken(null);
 }
 
-// ---- axios instance ---------------------------------------------------------
+// ---- Instância Axios centralizada ------------------------------------------
 export const api = axios.create({
   baseURL: ROOT_BASE,
   timeout: 20000,
@@ -47,19 +52,20 @@ export const api = axios.create({
 
 console.info("[API] baseURL normalizada:", ROOT_BASE);
 
+/**
+ * Interceptor de request:
+ * - injeta Authorization: Bearer <token> quando houver;
+ * - log leve dos parâmetros para diagnóstico (sem vazar credenciais).
+ */
 api.interceptors.request.use((config) => {
   const t = getToken();
   if (t) config.headers.Authorization = `Bearer ${t}`;
 
-  // Log leve de diagnóstico (mostra params/data sem vazar token)
   const preview = config.params ?? config.data ?? {};
   try {
-    // Evita prints gigantes e dados sensíveis
     const small =
       typeof preview === "object"
-        ? Object.fromEntries(
-            Object.entries(preview).slice(0, 12) // limita 12 chaves
-          )
+        ? Object.fromEntries(Object.entries(preview).slice(0, 12))
         : preview;
     // eslint-disable-next-line no-console
     console.debug(
@@ -72,10 +78,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+/**
+ * Interceptor de response:
+ * - padroniza mensagem em falhas de rede/timeout;
+ * - em 401 fora das rotas de auth, limpa token e redireciona para /login.
+ */
 api.interceptors.response.use(
   (r) => r,
   (err) => {
-    // Se não veio response, é erro de rede/timeout/CORS sintomático.
     if (!err?.response) {
       err.message =
         "Erro de rede ou servidor indisponível. Verifique a API/Internet (pré-flight/CORS pode falhar quando o servidor responde 500).";
@@ -83,8 +93,6 @@ api.interceptors.response.use(
     }
 
     const { status, config } = err.response;
-
-    // Evita redirecionar no fluxo de auth
     const isAuthRoute =
       config?.url?.includes("/auth/login") || config?.url?.includes("/auth/register");
 
@@ -98,43 +106,39 @@ api.interceptors.response.use(
   }
 );
 
-// ---- utilitários de params --------------------------------------------------
+// ---- Utilitários de parâmetros ---------------------------------------------
 
 /**
- * Converte strings numéricas para número e remove valores vazios (""/null/undefined).
- * Mantém booleanos e arrays tal como estão.
+ * Remove vazios (""/null/undefined) e converte strings numéricas para número.
+ * Mantém booleanos e arrays.
  */
 function normalizeParams(obj = {}) {
   const out = {};
   for (const [k, v] of Object.entries(obj)) {
-    if (v === "" || v == null) continue; // não enviar filtros vazios
-    if (typeof v === "string" && /^\d+$/.test(v)) {
-      out[k] = Number(v);
-    } else {
-      out[k] = v;
-    }
+    if (v === "" || v == null) continue;
+    if (typeof v === "string" && /^\d+$/.test(v)) out[k] = Number(v);
+    else out[k] = v;
   }
   return out;
 }
 
 /**
- * Mapeia diversas formas de entrada de "ordenação" para { sort, order } padronizados.
- * Retrocompatibilidade:
- *  - aceita chaves: ordenacao, ordenarPor, orderBy, sort e ordem/order/direction
- *  - aceita valores como: 'menor-preco', 'maior-preco', 'melhor-avaliacao', 'relevancia', 'nome'
- *  - aceita atalhos: 'precoAsc', 'precoDesc'
- *  - força { sort:'preco', order:'asc'|'desc' } quando o usuário escolhe menor/maior preço
+ * Mapeia ordenação da UI para parâmetros aceitos pelo backend.
+ * Mantém retrocompatibilidade:
+ *  - aceita: ordenacao, ordenarPor, orderBy, sort e ordem/order/direction;
+ *  - valores: 'menor-preco', 'maior-preco', 'melhor-avaliacao', 'relevancia', 'nome';
+ *  - exporta **ambos** pares:
+ *      - { ordenar_por, ordem } (preferido pelo backend atual)
+ *      - { sort, order }        (compatível com usos legados)
  */
 function withOrdering(params = {}) {
   const p = { ...params };
 
-  // Coleta possíveis campos vindos da UI
   const rawOrdenacao =
     p.ordenacao ?? p.ordenarPor ?? p.orderBy ?? p.sort ?? null;
   const rawOrdem =
     p.ordem ?? p.order ?? p.direction ?? null;
 
-  // Função auxiliar para normalizar direction
   const normDir = (x) => {
     if (!x) return undefined;
     const s = String(x).toLowerCase();
@@ -143,7 +147,6 @@ function withOrdering(params = {}) {
     return undefined;
   };
 
-  // Mapa de campos conhecidos
   const campoMap = {
     "menor-preco": "preco",
     "maior-preco": "preco",
@@ -156,50 +159,52 @@ function withOrdering(params = {}) {
     rating: "avaliacao",
   };
 
-  // Atalhos comuns
-  if (rawOrdenacao === "precoAsc") {
-    p.sort = "preco";
-    p.order = "asc";
-  } else if (rawOrdenacao === "precoDesc") {
-    p.sort = "preco";
-    p.order = "desc";
-  } else if (rawOrdenacao) {
+  let ordenar_por;
+  let ordem;
+
+  if (rawOrdenacao) {
     const key = String(rawOrdenacao).toLowerCase();
-    const campo = campoMap[key] || "relevancia";
-    let order = normDir(rawOrdem);
+    ordenar_por = campoMap[key] || "relevancia";
+    ordem = normDir(rawOrdem);
 
-    // Força direção coerente com "menor/maior preço"
-    if (key === "menor-preco") order = "asc";
-    if (key === "maior-preco") order = "desc";
-
-    p.sort = campo;
-    if (order) p.order = order;
-  } else {
-    // Se já veio sort/order "legados", apenas normaliza direção
-    if (p.sort) {
-      p.sort = campoMap[String(p.sort).toLowerCase()] || p.sort;
+    if (key === "menor-preco") ordem = "asc";
+    if (key === "maior-preco") ordem = "desc";
+    if (!ordem) {
+      // defaults coerentes
+      ordem =
+        ordenar_por === "nome" ? "asc" : "desc";
     }
-    const nd = normDir(rawOrdem);
-    if (nd) p.order = nd;
+  } else {
+    // Se veio sort/order diretamente, normaliza direção
+    const sortIn = p.sort ? String(p.sort).toLowerCase() : undefined;
+    ordenar_por = sortIn ? (campoMap[sortIn] || sortIn) : undefined;
+    ordem = normDir(rawOrdem) || (ordenar_por === "nome" ? "asc" : "desc");
+  }
+
+  // Aplica apenas se houver alguma ordenação definida
+  if (ordenar_por) {
+    p.ordenar_por = ordenar_por; // preferido pelo backend
+    p.ordem = ordem;
+    // Mantém também os campos legados para máxima compatibilidade
+    p.sort = ordenar_por;
+    p.order = ordem;
   }
 
   // Remove chaves não padronizadas para não poluir a query
   delete p.ordenacao;
   delete p.ordenarPor;
   delete p.orderBy;
-  delete p.ordem;
   delete p.direction;
 
   return p;
 }
 
-// ---- utilitário para sempre devolver .data ou lançar erro claro ------------
+/** Sempre devolve res.data ou lança Error com mensagem amigável. */
 async function unwrap(promise) {
   try {
     const res = await promise;
     return res.data;
   } catch (err) {
-    // padroniza mensagem para UI
     const msg =
       err?.response?.data?.error ||
       err?.message ||
@@ -208,22 +213,19 @@ async function unwrap(promise) {
   }
 }
 
-// ---- endpoints básicos ------------------------------------------------------
+// ---- Endpoints básicos ------------------------------------------------------
 export const ping = () => unwrap(api.get("/health"));
 
-// Busca/catálogo
+// Catálogo / Metadados
 export const getFamilias = () => unwrap(api.get("/familias"));
 export const getSubfamilias = (familiaId) =>
   unwrap(api.get(`/familias/${familiaId}/subfamilias`));
 export const getMontadoras = () => unwrap(api.get("/montadoras"));
 
 /**
- * pesquisar(params)
- * Aceita params da tela e:
- *  - normaliza ordenação (preço/direção) -> { sort, order }
- *  - remove vazios e converte números
- * Ex.: { ordenacao:'menor-preco', ordem:'DESC', familiaId:'12', subfamiliaId:'' }
- *      -> GET /pesquisar?sort=preco&order=asc&familiaId=12
+ * pesquisa(params)
+ * - normaliza filtros;
+ * - mapeia ordenação para { ordenar_por, ordem } (e mantém sort/order por compatibilidade).
  */
 export const pesquisar = (params) =>
   unwrap(
@@ -235,8 +237,7 @@ export const pesquisar = (params) =>
 export const autocomplete = (prefix) =>
   unwrap(api.get("/autocomplete", { params: { prefix } }));
 
-// ---- autenticação -----------------------------------------------------------
-// O back espera: { nome, email, senha }
+// ---- Autenticação -----------------------------------------------------------
 export async function authRegister({ nome, email, senha }) {
   return unwrap(api.post("/auth/register", { nome, email, senha }));
 }
@@ -254,43 +255,47 @@ export function authLogout() {
 export const authMe = () => unwrap(api.get("/auth/me"));
 export const authUpdateMe = (payload) => unwrap(api.put("/auth/me", payload));
 
-/**
- * Conveniência: cadastro -> login automático.
- * Útil para a tela de registro.
- */
+/** Conveniência: cadastro seguido de login. */
 export async function signUpAndLogin({ nome, email, senha }) {
   await authRegister({ nome, email, senha });
   return authLogin({ email, senha });
 }
 
-// ---- carrinho ---------------------------------------------------------------
-// Ajuste os paths abaixo se suas rotas forem diferentes no back.
+// ---- Carrinho ---------------------------------------------------------------
 export const cartGet = () => unwrap(api.get("/carrinho"));
-// export const cartAdd = ({ id_api_externa, quantidade = 1 }) =>
-//   unwrap(api.post("/carrinho/produto/adicionar", { id_api_externa, quantidade }));
+
+// Usa a rota ORIGINAL para salvar/adicionar item ao carrinho
+export const cartAdd = (dadosDoItem) =>
+  unwrap(api.post("/salvar_produto", dadosDoItem));
+
 export const cartUpdate = ({ id_api_externa, quantidade }) =>
-  unwrap(api.post("/carrinho/produto/atualizar-quantidade", { id_api_externa, quantidade }));
+  unwrap(
+    api.post("/carrinho/produto/atualizar-quantidade", {
+      id_api_externa,
+      quantidade,
+    })
+  );
+
 export const cartRemove = ({ id_api_externa }) =>
   unwrap(api.post("/carrinho/produto/remover", { id_api_externa }));
+
 export const cartClear = () => unwrap(api.post("/carrinho/limpar"));
-//export const cartCount = () => unwrap(api.get("/carrinho/count"));
 
-// CORRIGIDO: Usa a rota ORIGINAL do projeto para salvar/adicionar produto
-export const cartAdd = (dadosDoItem) =>
-  unwrap(api.post("/salvar_produto", dadosDoItem)); //
-
-// NOVO: Calcula a contagem no frontend (Compatível com GET /carrinho)
+/** Conta itens a partir do GET /carrinho (fallback robusto em caso de 401/erro). */
 export const cartCount = async () => {
   try {
     const data = await cartGet();
     if (data?.produtos) {
-      // Soma a quantidade de todos os produtos no carrinho
-      const count = data.produtos.reduce((acc, item) => acc + (Number(item.quantidade) || 0), 0);
+      const count = data.produtos.reduce(
+        (acc, item) => acc + (Number(item.quantidade) || 0),
+        0
+      );
       return { count };
     }
-  } catch (e) {
-    // Retorna 0 em caso de erro (ex: 401 Unauthenticated)
+  } catch {
     return { count: 0 };
   }
   return { count: 0 };
 };
+
+export const __internal = { buildUrl }; // opcional: útil em testes

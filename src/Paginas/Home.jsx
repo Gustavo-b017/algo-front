@@ -1,4 +1,62 @@
 // src/Paginas/Home.jsx
+// -----------------------------------------------------------------------------
+// Página inicial (Home) — visão geral e orientações de manutenção
+//
+// Objetivo do arquivo
+// - Renderiza a landing com seções-chave: Header, Banner, Categorias, dois blocos
+//   de ProdutoDestaque, Marcas, Footer e um componente de notificação (CartNotification).
+// - Concentra navegação rápida para resultados por categoria e deep-link para
+//   a página de detalhes de um produto.
+//
+// Fluxo funcional (resumo)
+// 1) O usuário acessa a Home e visualiza destaques e categorias.
+// 2) Ao clicar em uma categoria, é redirecionado para /resultados com o termo
+//    setado na URL (mantém padrão global de busca).
+// 3) Em ProdutoDestaque, o usuário pode:
+//    - Abrir detalhes do item (handleLinhaClick → /produto?id=...&nomeProduto=...)
+//    - Usar o “Quick Add” (handleQuickAdd) para inserir 1 unidade diretamente
+//      no carrinho, exigindo autenticação.
+// 4) Após “Quick Add”, o contador de itens do carrinho é sincronizado (fetchCartCount)
+//    e um toast/cart-notification é exibido.
+//
+// Estados locais
+// - notification: controla exibição e payload do CartNotification.
+//   { isVisible: boolean, data: objeto do produto adicionado }
+//
+// Handlers principais
+// - handleLinhaClick(produto): monta querystring com id/nome e navega para /produto.
+// - handleCategoryClick(categoryName): navega para /resultados?termo=<categoria>.
+// - handleQuickAdd(produto):
+//   • Se não autenticado: aciona triggerLoginAlert() do contexto de auth.
+//   • Se autenticado: monta o payload esperado pela rota /salvar_produto,
+//     chama cartAdd(), atualiza o contador global (fetchCartCount) e exibe a notificação.
+//
+// Integrações
+// - useAuth(): fornece user, fetchCartCount e triggerLoginAlert para fluxos de CRO/UX.
+// - cartAdd(): cliente da API que envia o item no formato esperado pelo backend.
+// - ProdutoDestaque: recebe callbacks handleLinhaClick e handleQuickAdd.
+// - CartNotification: recebe estado e dados do item para renderizar o pop-up.
+//
+// Acessibilidade e UX
+// - Notificação aparece e pode ser fechada (onClose no CartNotification).
+// - Navegação preserva parâmetros na URL, permitindo compartilhamento/volta ao estado.
+//
+// Boas práticas de manutenção
+// - Não acople lógica de API neste arquivo além do “Quick Add” mínimo.
+// - Componentizar novos destaques em <ProdutoDestaque /> para manter a Home enxuta.
+// - Caso surja necessidade de tracking, encapsular no handler para manter coesão.
+//
+// Erros comuns e diagnóstico
+// - 401 ao tentar quick add: esperado quando não autenticado — o fluxo já chama
+//   triggerLoginAlert(); verifique o interceptor global de API se precisar redirecionar.
+// - Falha no cartAdd(): exibe alert genérico e loga no console. Ajuste mensagens
+//   conforme políticas de UX do projeto.
+//
+// Pontos de extensão
+// - Adicionar carrosséis, seções editoriais, ou banners dinâmicos.
+// - Integrar recomendações personalizadas (ex.: baseadas em histórico do usuário).
+// -----------------------------------------------------------------------------
+
 import React, { useState } from 'react';
 import Header from '../Componentes/Header.jsx';
 import Banner from '../Componentes/Banner.jsx';

@@ -1,11 +1,36 @@
 // src/Paginas/Item.jsx
+// ============================================================================
+// Componente: Item
+// ----------------------------------------------------------------------------
+// Objetivo
+// - Página de detalhes do produto: exibe informações completas, variações de
+//   preço e permite ao usuário adicionar o item ao carrinho.
+//
+// Diretrizes arquiteturais (alinhadas ao back):
+// - Responsabilidade única: renderização de UI e coleta de inputs (quantidade).
+//   A gravação no carrinho é delegada via prop `onSave` (contrato de dados).
+// - Interoperabilidade front/back: o payload enviado em `onSave(...)` segue o
+//   contrato do endpoint /salvar_produto do back (chaves e tipos esperados).
+// - Segurança/Autenticação: antes de salvar, verifica sessão (useAuth). Caso
+//   não esteja autenticado, dispara um alerta/CTA (triggerLoginAlert) em vez de
+//   chamar o back sem credenciais.
+// - UX/Acessibilidade: textos alternativos em imagens, fallback de estados,
+//   labels claros e formatação local de moeda (pt-BR).
+// - Manutenção/Performance: funções utilitárias puras (formatBRL/formatScore),
+//   estado mínimo (quantidade/hover) e sem efeitos colaterais inesperados.
+// ============================================================================
+
 import React, { useState } from 'react';
 import '/public/style/item.scss';
 import { useAuth } from '../contexts/auth-context';
 import { useNavigate } from 'react-router-dom'; 
 import StarRating from './StarRating';
 
-
+// ---------------------------------------------------------------------------
+// Utilitários de formatação (somente apresentação)
+// - formatBRL: converte número para BRL com locale pt-BR
+// - formatScore: assegura 3 casas decimais quando score é numérico
+// ---------------------------------------------------------------------------
 const formatBRL = (v) =>
   typeof v === 'number' ? v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
 
@@ -13,27 +38,41 @@ const formatScore = (s) =>
   typeof s === 'number' && Number.isFinite(s) ? s.toFixed(3) : null;
 
 function Item({ dadosItem, onSave }) {
+  // hoverIndex: controla o “card” de aplicação destacado (efeito hover)
+  // quantidade: quantidade selecionada para adicionar ao carrinho
   const [hoverIndex, setHoverIndex] = useState(null);
   const [quantidade, setQuantidade] = useState(1);
 
+  // Contexto de autenticação para gate de ações protegidas (salvar/comprar)
   const { user, triggerLoginAlert } = useAuth(); 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate(); // Mantido para eventuais navegações futuras
 
+  // Guard-clause: caso o item não esteja disponível, evita quebras e informa o usuário
   if (!dadosItem) {
     return <div className="empty-state-container"><h1>Informações do item não disponíveis.</h1></div>;
   }
 
+  // Alias semântica para clareza no template
   const dados = dadosItem;
 
+  // -------------------------------------------------------------------------
+  // Fluxo “Adicionar à sacola”
+  // 1) Verifica autenticação; se ausente, exibe CTA de login/cadastro (toast).
+  // 2) Em caso de sessão válida, monta o payload compatível com /salvar_produto:
+  //    {
+  //      id_api_externa, nome, codigo_referencia, url_imagem,
+  //      preco_original, preco_final, desconto, marca, quantidade
+  //    }
+  // 3) Delega a persistência ao callback `onSave`, que deve consumir a API.
+  // -------------------------------------------------------------------------
   const handleSaveClick = () => {
-    // 5. Verifique se o usuário está logado ANTES de tentar salvar
     if (!user) {
-      // Se não estiver logado, redirecione para a página de login
+      // Garante que ações de carrinho só ocorram autenticadas
       triggerLoginAlert();
-      return; // Interrompe a execução da função
+      return;
     }
 
-    // Se o usuário estiver logado, chame a função onSave normalmente
+    // Contrato com o back (/salvar_produto) — chaves e tipos esperados:
     onSave({
       id_api_externa: dados.id,
       nome: dados.nomeProduto,
@@ -49,10 +88,14 @@ function Item({ dadosItem, onSave }) {
 
   return (
     <div className="item-page-container">
-      {/* Seção Principal do Produto (Lado Esquerdo e Direito) */}
+      {/* ------------------------------------------------------------------- */}
+      {/* Seção Principal (grid): galeria à esquerda, informações à direita   */}
+      {/* ------------------------------------------------------------------- */}
       <div className="produto-main-section">
 
-        {/* Lado Esquerdo: Imagem e Botões de Ação */}
+        {/* ----------------------- Galeria de Imagens ----------------------- */}
+        {/* Mantém uma imagem principal e miniaturas (thumbnails).            */}
+        {/* Sobreposições de “vídeo” são meramente visuais (sem player).      */}
         <div className="produto-image-gallery">
           <div className="main-image-container">
             <img src={dados.imagemReal} alt={dados.nomeProduto} className="main-product-image" />
@@ -64,7 +107,7 @@ function Item({ dadosItem, onSave }) {
             </div>
           </div>
           <div className="thumbnail-gallery">
-            {/* Usando a mesma imagem como exemplo para os thumbnails */}
+            {/* Reutiliza a mesma imagem como exemplo (mock); pode ser dinamizado futuramente */}
             <div className="thumbnail-wrapper">
               <img src={dados.imagemReal} alt="thumbnail 1" />
               <div className="video-thumbnail-overlay">
@@ -100,19 +143,24 @@ function Item({ dadosItem, onSave }) {
           </div>
         </div>
 
-        {/* Lado Direito: Informações e Compra */}
+        {/* ------------------- Bloco de Informações/Compra ------------------ */}
+        {/* Exibe título, rating, códigos, marca, preços e ações (comprar).   */}
         <div className="produto-info-section">
           <h1 className="produto-titulo">{dados.nomeProduto}</h1>
+
           <div className="produto-rating">
-              {/* CORRIGIDO: Passa o 'dados.score' (0-12) para o componente
-                 O '|| 0' garante que não quebre se o score for nulo.
+              {/* 
+                - StarRating: componente visual baseado em `score`.
+                - Aqui, `dados.score` é tratado como escala 0–12 (coerente com
+                  o motor de relevância do back); o fallback `|| 0` evita NaN.
+                - `totalReviews` é opcional; quando disponível, melhora a UX.
               */}
               <StarRating 
                 score={dados.score || 0} 
-                totalReviews={dados.totalAvaliacoes} // (Assumindo que este campo exista)
+                totalReviews={dados.totalAvaliacoes} // caso o campo exista
               />
 
-              {/* Mantém o score numérico (0-12) se ele existir */}
+              {/* Exposição opcional do score numérico (diagnóstico/UX avançada) */}
               {formatScore(dados.score) !== null && (
                 <span
                   className="produto-score-badge"
@@ -122,9 +170,12 @@ function Item({ dadosItem, onSave }) {
                 </span>
               )}
           </div>
+
+          {/* Metadados do item (IDs/marca) para identificação e suporte */}
           <p className="produto-codigo">Código:{dados.id}</p>
           <p className="produto-marca">Marca: <strong>{dados.marca}</strong></p>
 
+          {/* Preços: exibe “de/por” e parcelas quando disponíveis */}
           <div className="produto-precos">
             {typeof dados.precoOriginal === 'number' && dados.precoOriginal > (dados.preco ?? 0) && (
               <p className="preco-antigo">
@@ -146,6 +197,7 @@ function Item({ dadosItem, onSave }) {
             )}
           </div>
 
+          {/* Controles de compra: seleção de quantidade e call-to-actions */}
           <div className="compra-opcoes">
             <div className="quantidade-selector ">
               <span>Quantidade:</span>
@@ -158,11 +210,12 @@ function Item({ dadosItem, onSave }) {
               </select>
             </div>
 
-            {/* O botão agora usa a nova lógica handleSaveClick */}
+            {/* CTA protegido por autenticação (ver handleSaveClick) */}
             <button className="adicionar-sacola-btn" onClick={handleSaveClick}>Adicionar à sacola</button>
             <button className="comprar-agora-btn">Comprar Agora</button>
           </div>
 
+          {/* Placeholder de cálculo de frete (somente UI) */}
           <div className="frete-calc-container">
             <p>Calcular frete:</p>
             <div className="frete-input-wrapper">
@@ -170,6 +223,7 @@ function Item({ dadosItem, onSave }) {
             </div>
           </div>
 
+          {/* Bloco informativo estático do vendedor (pode ser dinamizado futuramente) */}
           <div className="vendedor-info">
             <p><strong>Vendido por:</strong> Loja Brigadeiro</p>
             <p>Av Brigadeiro Luis Antônio, 2000 - Bela Vista, São Paulo - SP</p>
@@ -178,7 +232,9 @@ function Item({ dadosItem, onSave }) {
         </div>
       </div>
 
-      {/* Seção de Informações do Produto */}
+      {/* ------------------------------------------------------------------- */}
+      {/* Informações adicionais em tabela semântica (labels/valores)        */}
+      {/* ------------------------------------------------------------------- */}
       <div className="produto-informacoes-adicionais">
         <h2 className="secao-titulo-tabela">Mais Informações</h2>
 
@@ -260,7 +316,9 @@ function Item({ dadosItem, onSave }) {
         </div>
       </div>
 
-      {/* Seção de Modelos Compatíveis */}
+      {/* ------------------------------------------------------------------- */}
+      {/* Modelos compatíveis (cards com hover para detalhes técnicos)        */}
+      {/* ------------------------------------------------------------------- */}
       <div className="item-aplicacoes">
         <h2 className="secao-titulo">Modelos Compatíveis</h2>
         <div className="aplicacoes-carousel-wrapper">

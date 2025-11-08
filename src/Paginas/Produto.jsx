@@ -1,4 +1,35 @@
 // src/Paginas/Produto.jsx
+// -----------------------------------------------------------------------------
+// Página de Detalhe do Produto
+// Responsabilidades principais:
+// - Ler parâmetros de rota (?id e opcionalmente ?nomeProduto) e buscar detalhes.
+// - Exibir o produto (componente <Item />) e blocos auxiliares (destaques/avaliações).
+// - Adicionar item ao carrinho (via API autenticada) e exibir notificação.
+// - Propagar atualização do contador de carrinho no Header via contexto (useAuth).
+//
+// Convenções e integração:
+// - As chamadas HTTP usam `api` (instância Axios centralizada) que injeta o
+//   token JWT do usuário e já trata 401 (ex.: redirecionamento para /login).
+// - `salvarProduto` adiciona o item ao carrinho pela rota POST /salvar_produto.
+// - `handleQuickAdd` é usado nos destaques para um “adicionar rápido” com
+//   montagem do payload local, reaproveitando a função `cartAdd`.
+// - A notificação visual usa <CartNotification /> e recebe o item adicionado.
+//
+// Parâmetros de rota esperados:
+// - id (obrigatório)   -> usado como chave principal para recuperar detalhes
+// - nomeProduto (opcional) -> repassado apenas para refinar request
+//
+// Estados locais:
+// - dadosCompletos: resposta do backend { item, similares }.
+// - erro / carregando: controle de fluxo para tela de loading e mensagens.
+// - notification: controla a visibilidade e dados do toast de carrinho.
+//
+// Observações de manutenção:
+// - Mantida a estrutura original. Apenas comentários descritivos foram inseridos.
+// - O bloco <Sugestoes /> permanece comentado como no original.
+// - Em caso de evolução, padronizar payloads entre `salvarProduto` e `handleQuickAdd`.
+// -----------------------------------------------------------------------------
+
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
@@ -28,6 +59,11 @@ function Produto() {
     data: null,
   });
 
+  /**
+   * Adiciona o produto ao carrinho usando a rota autenticada do backend.
+   * - Usa `api.post('/salvar_produto')`, que já inclui JWT via interceptor.
+   * - Atualiza o contador global de carrinho (Header) e mostra notificação.
+   */
   const salvarProduto = async (dadosDoItem) => {
     try {
       // Requisição agora usa a instância 'api' que injeta o token
@@ -56,12 +92,20 @@ function Produto() {
   //   navigate(`/produto?${params.toString()}`);
   // };
 
+  /**
+   * Navega para outra página de produto, preservando o padrão de querystring.
+   * Usado pelos destaques/sugestões.
+   */
   const handleLinhaClick = (produto) => {
     const params = new URLSearchParams({ id: produto.id, nomeProduto: produto.nome });
     navigate(`/produto?${params.toString()}`);
   };
 
-  // Lógica de Adicionar ao Carrinho Rápido (para ProdutoDestaque)
+  /**
+   * Adição rápida ao carrinho a partir do bloco de destaque.
+   * - Exige usuário autenticado; caso contrário, direciona ao login.
+   * - Monta payload consistente com o que o backend espera em /salvar_produto.
+   */
   const handleQuickAdd = async (produto) => {
     if (!user) {
       alert("Você precisa fazer login para adicionar itens ao carrinho.");
@@ -96,6 +140,12 @@ function Produto() {
     }
   };
 
+  /**
+   * Efeito de carregamento:
+   * - Exige `id` na URL; `nomeProduto` é opcional e apenas refina o request.
+   * - Busca os detalhes usando GET /produto_detalhes?id=...&nomeProduto=...
+   * - Controle de loading/erro para feedback de UI.
+   */
   useEffect(() => {
     const id = searchParams.get('id');
     const nomeProduto = searchParams.get('nomeProduto');
@@ -133,6 +183,7 @@ function Produto() {
     carregarDetalhes();
   }, [searchParams]);
 
+  // Tela de carregamento integral
   if (carregando) {
     return (
       <div className="loader-container" style={{ height: '100vh' }}>
@@ -142,6 +193,7 @@ function Produto() {
     );
   }
 
+  // Estado de erro (ex.: id ausente ou falha na API)
   if (erro) {
     return (
       <div className="empty-state-container">
@@ -150,7 +202,7 @@ function Produto() {
     );
   }
 
-  // Renderização segura caso dadosCompletos ou item ainda seja nulo
+  // Guarda extra para evitar acesso a propriedades indefinidas
   if (!dadosCompletos || !dadosCompletos.item) {
     return (
       <div className="empty-state-container">
@@ -159,6 +211,7 @@ function Produto() {
     );
   }
 
+  // Encapsula a chamada de salvar para manter a assinatura esperada pelo <Item />
   const handleAddClick = (data) => {
         salvarProduto(data);
   };
@@ -167,22 +220,29 @@ function Produto() {
     <div className="container">
       <Header />
 
+      {/* Componente principal que renderiza o card detalhado do produto */}
       <Item dadosItem={dadosCompletos.item} onSave={salvarProduto} />
 
+      {/* Listagem de itens semelhantes/ofertas complementares (mantida comentada) */}
       {/* <Sugestoes
         dadosSimilares={dadosCompletos.similares}
         onSugestaoClick={handleSugestaoClick}
       /> */}
 
+      {/* Bloco de destaques relacionado ao produto atual,
+          com suporte a navegação por linha e adição rápida ao carrinho */}
       <ProdutoDestaque 
         produtoDestaque={dadosCompletos.item.nomeProduto} 
         handleLinhaClick={handleLinhaClick} 
         handleQuickAdd={handleQuickAdd} 
       />
+
+      {/* Seção de avaliações mock/demonstrativas */}
       <Avaliacoes />
+
       <Footer />
 
-      {/* NOVO: Renderiza a notificação no final do container */}
+      {/* Toast de confirmação de item adicionado ao carrinho */}
       <CartNotification
         isVisible={notification.isVisible}
         onClose={() => setNotification(v => ({ ...v, isVisible: false }))}
