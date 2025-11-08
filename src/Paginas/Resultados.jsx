@@ -1,4 +1,41 @@
 // src/Paginas/Resultados.jsx
+// -----------------------------------------------------------------------------
+// Página de Lista de Resultados / Busca
+// Objetivo:
+// - Ler parâmetros de URL (termo, placa, família, subfamília, marca, ordenação,
+//   página) e consultar o backend para obter a lista paginada.
+// - Disponibilizar filtros em cascata (Família → Subfamília) e facetas (marcas).
+// - Exibir a coleção de produtos, com suporte a Quick Add no carrinho.
+// - Sincronizar estado da UI com a URL para permitir compartilhamento de links.
+//
+// Convenções de integração:
+// - As consultas usam a API do backend (VITE_API_URL). Em dev, um token opcional
+//   (VITE_API_TOKEN) pode ser enviado no header Authorization (Bearer ...).
+// - O mapeamento de ordenação UI ↔ parâmetros de API é centralizado em
+//   mapOrdenacaoToParams / mapParamsToUI.
+// - A função fetchFacetas consulta /facetas-produto e consolida marcas e
+//   subprodutos válidos para o contexto da família/subfamília selecionadas.
+//
+// Estados principais:
+// - Filtros de URL (termo/placa/família/subfamília/marca/ordenar/página).
+// - Listas para os controles (famílias, subfamílias, marcas) e indicadores
+//   de carregamento (carregandoCascata/carregandoSubFamilias/carregandoFacetas).
+// - Resultados paginados (resultados/paginaAtual/totalPaginas) e mensagem de
+//   feedback do backend (feedbackMessage).
+//
+// UX/Responsividade:
+// - Em telas pequenas, o painel de filtros vira um off-canvas; o corpo recebe
+//   a classe no-scroll enquanto o painel está aberto.
+// - A listagem já nasce em 1 coluna (mobile-first); no desktop, CSS alterna
+//   para 3 colunas.
+//
+// Manutenção:
+// - O componente foi mantido fiel ao original; apenas comentários explicativos
+//   foram adicionados.
+// - Para evoluções, preserve o contrato de URLSearchParams e os nomes dos campos
+//   esperados pelo backend.
+// -----------------------------------------------------------------------------
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -14,12 +51,14 @@ import { cartAdd } from "../lib/api.js";
 
 import "/public/style/Resultados.scss";
 
+// Base de API (fornecida via .env) e token opcional para ambientes de dev
 const API_URL = import.meta.env.VITE_API_URL;
 
 // token opcional (se tiver o decorator ativo em dev/prod)
 const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 if (API_TOKEN) axios.defaults.headers.common["Authorization"] = `Bearer ${API_TOKEN}`;
 
+// ---------- Mapeamentos de ordenação UI ↔ API --------------------------------
 // UI -> params da API
 const mapOrdenacaoToParams = (uiValue, ascDesc) => {
   // ascDesc: 'asc' | 'desc'
@@ -49,6 +88,9 @@ const mapParamsToUI = (ordenar_por, ordem) => {
 };
 
 export default function Resultados() {
+  // ----------------------------------------------------------------------------
+  // Leitura/controle de parâmetros de URL e estados de filtro/ordenação/página
+  // ----------------------------------------------------------------------------
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, fetchCartCount, triggerLoginAlert } = useAuth();
@@ -103,6 +145,7 @@ export default function Resultados() {
   const [carregandoSubFamilias, setCarregandoSubFamilias] = useState(false);
   const [carregandoFacetas, setCarregandoFacetas] = useState(false);
 
+  // Responsividade (off-canvas de filtros no mobile)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -116,7 +159,7 @@ export default function Resultados() {
     document.body.classList.toggle("no-scroll", isMobile && showFilters);
   }, [isMobile, showFilters]);
 
-  // -------- load famílias ----------
+  // -------- Carregar famílias na montagem -------------------------------------
   useEffect(() => {
     (async () => {
       setCarregandoCascata(true);
@@ -131,7 +174,7 @@ export default function Resultados() {
     })();
   }, []);
 
-  // -------- subfamílias "cruas" (cascata) quando muda família ----------
+  // -------- Subfamílias "cruas" ao mudar família ------------------------------
   useEffect(() => {
     const famId = familiaSelecionada.id;
     if (!famId) {
@@ -147,7 +190,7 @@ export default function Resultados() {
       .finally(() => setCarregandoSubFamilias(false));
   }, [familiaSelecionada.id]);
 
-  // -------- facetas (marcas + subprodutos válidos) ----------
+  // -------- Facetas (marcas + subprodutos válidos) ----------------------------
   const fetchFacetas = async (famId, famNome, subId) => {
     if (!famId || !famNome) {
       setListaMarcasProduto([]);
@@ -182,16 +225,16 @@ export default function Resultados() {
     }
   };
 
-  // buscar facetas quando família/sub mudar
+  // Buscar facetas quando família/sub mudar
   useEffect(() => {
     if (!familiaSelecionada.id || !familiaSelecionada.nome) return;
     fetchFacetas(familiaSelecionada.id, familiaSelecionada.nome, subFamiliaSelecionada.id);
   }, [familiaSelecionada.id, familiaSelecionada.nome, subFamiliaSelecionada.id]);
 
-  // -------- busca principal ----------
+  // -------- Busca principal (dados paginados) ---------------------------------
   useEffect(() => {
     const paramsObj = Object.fromEntries(searchParams.entries());
-    // somente dispara se houver termo OU (família + opção)
+    // Dispara se houver termo OU (família + nome)
     const hasTermo = !!paramsObj.termo;
     const hasFamilia = !!paramsObj.familia_id && !!paramsObj.familia_nome;
 
@@ -216,9 +259,9 @@ export default function Resultados() {
       .finally(() => setCarregandoTabela(false));
   }, [searchParams]);
 
-  // ===== handlers ======================================================
+  // ===== Handlers (ordenar/filtros/paginação/busca) ===========================
 
-  // ordenação
+  // ordenação (UI → URL params → backend)
   const handleOrdenacaoChange = (novaOrdenacaoUI, novaOrdemUI) => {
     const { ordenar_por, ordem } = mapOrdenacaoToParams(novaOrdenacaoUI, novaOrdemUI);
     setOrdenacaoUI(novaOrdenacaoUI);
@@ -235,7 +278,7 @@ export default function Resultados() {
 
   // família
   const handleFamiliaChange = (id, nome) => {
-    // zera sub e marca
+    // Zera sub e marca ao mudar a família
     setFamiliaSelecionada({ id, nome });
     setSubFamiliaSelecionada({ id: "", nome: "" });
     setMarcaProdutoSelecionada("");
@@ -250,7 +293,7 @@ export default function Resultados() {
         ordem,
       });
     } else {
-      // limpou
+      // Limpo: remove filtros/família da URL
       setSearchParams({});
     }
   };
@@ -301,7 +344,7 @@ export default function Resultados() {
     });
   };
 
-  // busca pelo header/pesquisa (termo e/ou placa)
+  // busca pelo cabeçalho
   const handleSearchSubmit = (termo, placaVal) => {
     const { ordenar_por, ordem } = mapOrdenacaoToParams(ordenacaoUI, ordemUI);
     const params = new URLSearchParams();
@@ -313,45 +356,40 @@ export default function Resultados() {
     navigate(`/resultados?${params.toString()}`);
   };
 
-  // Lidar com o clique em categoria
+  // clique em categoria (atalho para iniciar uma busca por termo)
   const handleCategoryClick = (categoryName) => {
     const params = new URLSearchParams({ termo: categoryName });
     navigate(`/resultados?${params.toString()}`);
   };
 
-  // Handler para limpar todos os filtros aplicados
+  // Limpa todos os filtros mantendo, se existirem, termo e placa
   const handleClearAllFilters = () => {
     // 1. Limpa os estados de filtro
     setFamiliaSelecionada({ id: "", nome: "" });
     setSubFamiliaSelecionada({ id: "", nome: "" });
     setMarcaProdutoSelecionada("");
 
-    // 2. Limpa os parâmetros de filtro da URL, mantendo apenas o termo/placa se existirem
+    // 2. Limpa os parâmetros de filtro da URL, mantendo apenas o termo/placa
     setSearchParams((prev) => {
       const p = new URLSearchParams();
-      // Mantém o termo e placa se existirem
       if (prev.get("termo")) p.set("termo", prev.get("termo"));
       if (prev.get("placa")) p.set("placa", prev.get("placa"));
       p.set("pagina", "1");
-      // Reinicia a ordenação para o default
       p.set("ordenar_por", "score");
       p.set("ordem", "desc");
       return p;
     });
+  };
 
-  }
-
-  // ===== botão carrinho ========================================================
-
-  // Lógica de Adicionar ao Carrinho Rápido (Quick Add)
+  // ===== Quick Add (botão de carrinho em cards) ===============================
   const handleQuickAdd = async (produto) => {
-    // 1. Verificar Autenticação (UX/CRO)
+    // 1) Autenticação obrigatória
     if (!user) {
       triggerLoginAlert();
       return;
     }
 
-    // 2. Preparar dados
+    // 2) Monta payload esperado pelo backend
     const itemToAdd = {
       id_api_externa: produto.id,
       nome: produto.nome,
@@ -364,17 +402,14 @@ export default function Resultados() {
       quantidade: 1 // Quick Add adiciona apenas 1
     };
 
-    // 3. Chamar API
+    // 3) Chama a API e sincroniza contador + notificação
     try {
-      // Usa a rota /salvar_produto que é a rota funcional para adicionar
       await cartAdd(itemToAdd);
+      fetchCartCount(); // atualiza o badge do Header
 
-      fetchCartCount(); // Sincroniza o contador no cabeçalho
-
-      // 4. Exibir Notificação Personalizada
       setNotification({
         isVisible: true,
-        data: { ...itemToAdd, nomeProduto: itemToAdd.nome } // Garante que o nome do produto está como esperado
+        data: { ...itemToAdd, nomeProduto: itemToAdd.nome }
       });
 
     } catch (error) {
@@ -383,6 +418,9 @@ export default function Resultados() {
     }
   };
 
+  // ----------------------------------------------------------------------------
+  // Renderização
+  // ----------------------------------------------------------------------------
   return (
     <div className="container">
       <Header
@@ -478,7 +516,7 @@ export default function Resultados() {
 
       <Footer />
 
-      {/* NOVO: Renderiza a notificação no final do container */}
+      {/* Notificação visual de “adicionado ao carrinho” */}
       <CartNotification
         isVisible={notification.isVisible}
         onClose={() => setNotification(v => ({ ...v, isVisible: false }))}

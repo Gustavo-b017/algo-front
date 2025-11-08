@@ -1,8 +1,46 @@
 // src/Componentes/Ordenar.jsx
+// ============================================================================
+// Componente: Ordenar
+// ----------------------------------------------------------------------------
+// Objetivo
+// - Exibir e gerenciar as opções de ordenação da busca (UI).
+// - Emite para o pai apenas a "chave" de ordenação escolhida,
+//   sem falar com a API diretamente.
+//
+// Diretrizes (alinhadas ao back):
+// - Este componente expõe valores canônicos esperados pela camada de integração:
+//     • 'relevancia'
+//     • 'menor-preco'
+//     • 'maior-preco'
+//     • 'melhor-avaliacao'
+// - O mapeamento para os parâmetros do backend é responsabilidade do pai,
+//   que deve convertê-los para { ordenar_por, ordem } (e, se necessário,
+//   também { sort, order }, conforme utilitário withOrdering do api.js).
+//   Ex.: 'menor-preco' => { ordenar_por: 'preco', ordem: 'asc' }.
+// - Não há acoplamento ao axios nem à URL da API neste componente.
+//
+// UX / Comportamento:
+// - Mantém estado local para refletir visualmente a seleção.
+// - Sincroniza quando a prop externa 'ordenacaoAtual' mudar.
+// - Em dispositivos móveis (<= 767px), fecha o modal após a seleção.
+// - A acessibilidade é respeitada via inputs type="radio" com 'label for'.
+//
+// Contratos esperados pelo pai:
+// - prop `ordenacaoAtual`: string, uma das opções válidas.
+// - prop `onMudarOrdenacao(novaOrdenacao: string)`: notifica mudança.
+// - prop `onClose()`: fecha o modal (usado no mobile/off-canvas).
+// - prop `visivel`: classe CSS para controle de visibilidade.
+//
+// Testes sugeridos:
+// - Trocar entre todas as opções e verificar a emissão para o pai.
+// - Alterar 'ordenacaoAtual' externamente e observar sincronização.
+// - Em mobile, ao selecionar, o modal deve fechar via onClose().
+// ============================================================================
+
 import React, { useState, useEffect } from 'react';
 import '/public/style/ordenar.scss';
 
-// Opções de ordenação
+// Opções de ordenação (valores canônicos consumidos pelo mapeamento no pai)
 const opcoesOrdenacao = [
     { value: 'relevancia', label: 'Mais Relevantes' },
     { value: 'menor-preco', label: 'Menor Preço' },
@@ -12,25 +50,28 @@ const opcoesOrdenacao = [
 
 /**
  * Componente para exibir e gerenciar as opções de ordenação.
- * @param {string} ordenacaoAtual - A opção de ordenação atualmente selecionada.
- * @param {function} onMudarOrdenacao - Função para ser chamada quando a ordenação for alterada.
- * @param {function} onClose - Função para fechar o modal (em mobile).
- * @param {string} visivel - Classe para controlar a visibilidade.
+ * @param {string} ordenacaoAtual - A opção de ordenação atualmente selecionada (controlada pelo pai).
+ * @param {function(string):void} onMudarOrdenacao - Callback para notificar o pai sobre a mudança de ordenação.
+ * @param {function():void} onClose - Callback para fechar o modal (utilizado em mobile/off-canvas).
+ * @param {string} visivel - Classe CSS para controlar a visibilidade (p.ex. 'visivel').
  */
 function Ordenar({ ordenacaoAtual, onMudarOrdenacao, onClose, visivel}) {
-    // Estado para controlar a opção selecionada localmente
+    // Estado local espelha a prop para feedback visual imediato.
+    // Observação: a fonte da verdade permanece com o pai.
     const [ordenacaoSelecionada, setOrdenacaoSelecionada] = useState(ordenacaoAtual || 'relevancia');
 
-    // Sincroniza o estado local com a prop externa
+    // Mantém sincronismo quando o pai alterar a seleção externamente.
     useEffect(() => {
         setOrdenacaoSelecionada(ordenacaoAtual);
     }, [ordenacaoAtual]);
 
+    // Handler: altera seleção local, notifica o pai e (em mobile) fecha o modal
+    // O pai é responsável por converter a seleção para os parâmetros do backend.
     const handleChange = (e) => {
         const novaOrdenacao = e.target.value;
         setOrdenacaoSelecionada(novaOrdenacao);
         onMudarOrdenacao(novaOrdenacao);
-        // Fecha o modal após a seleção, se estiver em mobile
+        // Heurística simples para mobile: largura <= 767px
         if (window.innerWidth <= 767) {
             onClose();
         }
@@ -40,7 +81,7 @@ function Ordenar({ ordenacaoAtual, onMudarOrdenacao, onClose, visivel}) {
         <div className={`ordenar-modal ${visivel}`}>
             <div className="ordenar-header">
                 <h3>Ordenar</h3>
-                {/* Botão de fechar visível apenas em mobile */}
+                {/* Botão de fechar (útil para mobile/off-canvas) */}
                 <button className="fechar-modal-btn" onClick={onClose}>&times;</button>
             </div>
             
