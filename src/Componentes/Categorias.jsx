@@ -21,7 +21,6 @@ const category_list = [
     { name: "Vela", id: 6, src: vela_icon },
     { name: "Diferencial", id: 7, src: dif_icon },
     { name: "Filtro", id: 8, src: filt_icon },
-    { name: "Oleo", id: 9, src: oil_icon },
     { name: "combustivel", id: 10, src: comb_icon}
 ]
 
